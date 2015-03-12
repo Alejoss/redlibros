@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form class="form-horizontal" action="{% url 'perfiles:registro' %}" method="post">
+	{% csrf_token %}
+	<fieldset>
+		<div class = "col-md-10 col-md-offset-1">
+			<!-- Form Name -->
+			<legend>Registro Usuario</legend>
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="textinput">Nombre</label>  
+			  <div class="col-md-4">
+			  <input id="textinput" name="textinput" placeholder="placeholder" class="form-control input-md" type="text">  
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="textinput">Apellido</label>  
+			  <div class="col-md-4">
+			  <input id="textinput" name="textinput" placeholder="placeholder" class="form-control input-md" type="text">
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="textinput">Email</label>  
+			  <div class="col-md-4">
+			  <input id="textinput" name="textinput" placeholder="placeholder" class="form-control input-md" type="text">  
+			  </div>
+			</div>
+
+			<!-- Text input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="textinput">Nombre de Usuario</label>  
+			  <div class="col-md-4">
+			  <input id="textinput" name="textinput" placeholder="placeholder" class="form-control input-md" type="text">
+			  <span class="help-block">Sobrenombre visible en la página web</span>  
+			  </div>
+			</div>
+
+			<!-- Password input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="passwordinput">Contraseña</label>
+			  <div class="col-md-4">
+			    <input id="passwordinput" name="passwordinput" placeholder="placeholder" class="form-control input-md" type="password">    
+			  </div>
+			</div>
+
+			<!-- Password input-->
+			<div class="form-group">
+			  <label class="col-md-4 control-label" for="passwordinput">Repetición Contraseña</label>
+			  <div class="col-md-4">
+			    <input id="passwordinput" name="passwordinput" placeholder="placeholder" class="form-control input-md" type="password">    
+			  </div>
+			</div>
+		<input type="submit" value="Submit">
+	</fieldset>
+	</form>
+<div>
+
+<script type="text/javascript">	
+</script>
+
+{% endblock content %}
+
+
+
