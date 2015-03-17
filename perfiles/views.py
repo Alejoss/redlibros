@@ -1,9 +1,11 @@
-from django.shortcuts import render
+from djagno.shortcuts import render
 
 # Create your views here.
 def registro(request):
 
 	if request.method == "POST":
+		pass
+	else:		
 		
 	template = "perfiles/registro.html"
 	return render(request, template)
