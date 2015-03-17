@@ -14,7 +14,7 @@ def main(request):
 	
 	libros = LibrosDisponibles.objects.all()
 	context = {'libros':libros}
-	return render(request, template, context)
+	return render(request, template, context)g
 
 def libros_ciudad(request):
 	"""
