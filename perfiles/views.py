@@ -1,12 +1,15 @@
 from django.shortcuts import render
 
+from forms import formRegistro
+
 # Create your views here.
 def registro(request):
 
-	if request.method == "POST":
-		
 	template = "perfiles/registro.html"
-	return render(request, template)
+	form = formRegistro()
+	context = {'form' : form}
+	return render(request, template, context)
+	
 
 def login(request):
 	template = "perfiles/login.html"
