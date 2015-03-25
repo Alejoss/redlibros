@@ -10,8 +10,7 @@ class formRegistro(UserCreationForm):
 	username = forms.RegexField(label=("Username"), max_length=30,
         regex=r'^[\w.@+-]+$',        
         error_messages={
-            'invalid': ("This value may contain only letters, numbers and "
-                         "@/./+/-/_ characters.")},
+            'invalid': ("This value may contain only letters, numbers and " "@/./+/-/_ characters.")},
             widget=forms.TextInput(attrs={'class': 'form-control'})
             )
 

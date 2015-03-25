@@ -26,10 +26,14 @@ def registro(request):
 def perfil_propio(request):
 	template = "perfiles/perfil_propio.html"
 	datos_perfil = ""
-	return render(request, template)
+
+	context = {'datos_perfil': datos_perfil}
+	return render(request, template, context)
 
 
 def perfil_usuario(request):
 	template = "perfiles/perfil.html"
 	datos_perfil = ""
-	return render(request, template)
+
+	context = {'datos_perfil': datos_perfil}
+	return render(request, template, context)
