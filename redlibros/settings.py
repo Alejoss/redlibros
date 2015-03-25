@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'libros',
+    'cities_light',
+    'libros',   
     'perfiles'
 )
 
@@ -86,3 +87,11 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (BASE_DIR + "/templates/",)
 STATICFILES_DIRS = (BASE_DIR + "/static/",)
+
+
+# Extra Settings
+LOGIN_REDIRECT_URL = "/perfil/mi_perfil"
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['EC']
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es', 'abbr']
+
+

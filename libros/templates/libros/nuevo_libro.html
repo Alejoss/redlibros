@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class = "col-md-6 col-md-offset-1">
-	<form class="form-horizontal" action="{% url 'perfiles:registro' %}" method="post">
+	<form class="form-horizontal" action="{% url 'libros:nuevo_libro' %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
 				{{form}}
@@ -15,6 +16,3 @@
 </script>
 
 {% endblock content %}
-
-
-

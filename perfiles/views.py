@@ -1,14 +1,19 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 
 from forms import formRegistro
 
-# Create your views here.
+
 def registro(request):
 	template = "perfiles/registro.html"
 
 	if request.method == "POST":
-		pass
-	else:
+		form = formRegistro(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponse("Usuario Guardado", status=201)
+	
+	else:		
 		form = formRegistro()
 
 	context = {
@@ -16,10 +21,6 @@ def registro(request):
 	}
 	
 	return render(request, template, context)
-
-def login(request):
-	template = "perfiles/login.html"
-	return render(request, template)
 
 
 def perfil_propio(request):
