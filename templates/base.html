@@ -20,9 +20,10 @@
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 	      <ul class="nav navbar-nav">
-	        <li><a href="#">Tu Biblioteca</a></li>
 	        <li><a href="#">Libros disponibles cerca de ti</a></li>	        
-	        <li><a href="{% url 'libros:nuevo_libro' %}">Nuevo Libro</a></li>
+	      	{% if user.is_authenticated %}
+	        <li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
+	        {% endif %}
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="{% url 'perfiles:login' %}">Login</a></li>

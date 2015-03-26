@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "col-md-8">
+	<h2> Libros Disponibles </h2>
+	{% for libro in libros_disponibles %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p>{{libro.titulo}}</p>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+<div class = "col-md-4">
+	<h2> Sidebar </h2>
+</div>
+
+{% endblock content %}
