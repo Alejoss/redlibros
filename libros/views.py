@@ -26,9 +26,22 @@ def nuevo_libro(request):
     if request.method == "POST":
         form = FormNuevoLibro(request.POST)
         
-        if form.is_valid():
+        if form.is_valid():            
+            titulo = form.cleaned_data.get("titulo", "")
+            autor = form.cleaned_data.get("autor", "")
+            imagen = form.cleaned_data.get("imagen", "")
+            descripcion = form.cleaned_data.get("descripcion", "")
+            disponible = form.cleaned_data.get("disponible", "")
 
-            form.save()
+            nuevo_libro = Libro(titulo=titulo, autor=autor, imagen=imagen, descripcion=descripcion)
+            nuevo_libro.save()
+
+            if disponible:
+                # !!! Falta opcionalidad para cambiar ciudad
+                perfil_usuario = obtener_perfil(request.user)
+                libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=perfil_usuario.ciudad)
+                libro_disponible_obj.save()
+            
             return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
  
     else:
