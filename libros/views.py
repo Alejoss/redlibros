@@ -45,7 +45,7 @@ def mi_biblioteca(request):
     template = "libros/mi_biblioteca.html"
     perfil_usuario = obtener_perfil(request.user)
     libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario)
-    libros_prestados = LibrosPrestados.objects.filter(perfil=perfil_usuario)
+    libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario)
 
     context = {
         'libros_disponibles': libros_disponibles,
