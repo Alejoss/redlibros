@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "col-md-8">
+	<h2> Libros Disponibles en Quito </h2>
+	{% for l in libros_disponibles %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p>{{l.libro.titulo}}</p>
+		</div>
+	</div>
+	{% endfor %}
+</div>
+<div class = "col-md-4">
+	<h2> Sidebar </h2>
+</div>
+
+
+{% endblock content %}

@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro
 from forms import FormNuevoLibro
 from redlibros.utils import obtener_perfil
@@ -68,17 +69,17 @@ def mi_biblioteca(request):
     return render(request, template, context)
 
 
-def libros_ciudad(request, slug_ciudad):
+def libros_ciudad(request, slug_ciudad, id_ciudad):
     """
     Recibe como parametro una ciudad y un pais
     """
     template = "libros/libros_ciudad.html"
-    ciudad = City.objects.get(slug=slug_ciudad)
-    libros = LibrosDisponibles.objects.filter(ciudad=ciudad)
+    ciudad = City.objects.get(pk=id_ciudad)
+    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad)
 
     context = {
         'ciudad': ciudad,
-        'libros': libros
+        'libros_disponibles': libros_disponibles
         }
 
     return render(request, template, context)

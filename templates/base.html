@@ -21,7 +21,8 @@
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 	      <ul class="nav navbar-nav">
 	      	{% if user.is_authenticated %}
-		        <li><a href="#">Libros disponibles en {{perfil_usuario.ciudad.name}} </a></li>
+		        <li><a href="{% url 'libros:libros_ciudad' perfil_usuario.ciudad.slug perfil_usuario.ciudad.id %}">
+		        Libros disponibles en {{perfil_usuario.ciudad.name}} </a></li>
 		        <li><a href="{% url 'libros:nuevo_libro' %}">Compartir un Libro</a></li>
 	        {% endif %}
 	      </ul>
