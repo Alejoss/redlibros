@@ -15,19 +15,24 @@
 	        <span class="icon-bar"></span>
 	        <span class="icon-bar"></span>
 	      </button>
-	      <a class="navbar-brand" href="#">Red de Libros</a>
+	      <a class="navbar-brand" href="{% url 'libros:main' %} ">Red de Libros</a>
 	    </div>
 
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
 	      <ul class="nav navbar-nav">
-	        <li><a href="#">Libros disponibles cerca de ti</a></li>	        
 	      	{% if user.is_authenticated %}
-	        <li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
+		        <li><a href="#">Libros disponibles en {{perfil_usuario.ciudad.name}} </a></li>
+		        <li><a href="{% url 'libros:nuevo_libro' %}">Compartir un Libro</a></li>
 	        {% endif %}
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
+	      	{% if user.is_authenticated %}
+	      	<li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
+	      	<li><a href="{% url 'perfiles:perfil_propio' %}">{{user.username}}</a></li>
+	      	{% else %}
 	        <li><a href="{% url 'perfiles:login' %}">Login</a></li>
 	        <li><a href="{% url 'perfiles:registro' %}">Registro</a></li>
+	        {% endif %}
 	      </ul>
 	    </div>
 	  </div>

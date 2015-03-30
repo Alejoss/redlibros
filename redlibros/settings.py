@@ -1,12 +1,5 @@
-"""
-Django settings for redlibros project.
 
-For more information on this file, see
-https://docs.djangoproject.com/en/1.7/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.7/ref/settings/
-"""
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -26,6 +19,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+# Context Processors
+TEMPLATE_CONTEXT_PROCESSORS += ('perfiles.context_processors.procesar_perfil',)
 
 # Application definition
 
