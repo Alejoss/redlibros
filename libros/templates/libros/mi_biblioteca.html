@@ -3,17 +3,23 @@
 {% block content %}
 
 <div class = "col-md-8">
-	<h2> Libros Disponibles </h2>
+	<h2> En tu biblioteca </h2>
 	{% for l in libros_disponibles %}
 	<div class = "panel panel-primary">
 		<div class = "panel-body">
 			<p>{{l.libro.titulo}}</p>
+			<button class = "btn btn-warning"> Marcar como no disponible </button>
 		</div>
 	</div>
 	{% endfor %}
-</div>
-<div class = "col-md-4">
-	<h2> Sidebar </h2>
+	<h2> Libros prestados </h2>
+	{% for l in libros_prestados %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p>{{l.libro.titulo}}</p>			
+		</div>
+	</div>
+	{% endfor %}
 </div>
 
 {% endblock content %}

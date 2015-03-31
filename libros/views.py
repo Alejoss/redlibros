@@ -96,9 +96,21 @@ def libro(request, slug):
 def libros_usuario(request, username):
     template = "libros/libros_usuario.html"
 
-    libros_disponibles = LibrosDisponibles.objects.filter(username= username)
+    libros_disponibles = LibrosDisponibles.objects.filter(username=username)
     libros_prestados = LibrosPrestados.objects.filter(username=username)
 
     context = {'libros_disponibles': libros_disponibles, 'libros_prestados': libros_prestados}
+
+    return render(request, template, context)
+
+
+def pedir_libro(request, id_libro):
+    template = "libros/pedir_libro.html"
+    """
+    Recibe un id de un objeto LibrosDisponibles, renderiza un form con un mensaje editable que le va a llegar
+    al dueño del libro
+    """
+    libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro)
+    context = {'libro_disponible': libro_disponible_obj}
 
     return render(request, template, context)
