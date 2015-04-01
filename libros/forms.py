@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.forms import TextInput, URLInput, Textarea, CheckboxInput, NumberInput
+from django.forms import TextInput, URLInput, Textarea, CheckboxInput
 
 
 class FormNuevoLibro(forms.Form):
@@ -13,12 +13,8 @@ class FormNuevoLibro(forms.Form):
 	disponible = forms.BooleanField(initial=True, help_text="Este libro está disponible en tu ciudad", widget=CheckboxInput())
 
 
-class FormPrestarLibro(forms.Form):
+class FormPedirLibro(forms.Form):
 
 	mensaje = forms.CharField(max_length=500, required=False, widget=Textarea(attrs={'class': 'form-control'}))
-	telefono = forms.IntegerField(required=False, widget=NumberInput(attrs={'class': 'form-control'}))
-	
-
-
-
+	telefono = forms.IntegerField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
 

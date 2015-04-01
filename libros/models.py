@@ -32,3 +32,14 @@ class LibrosPrestados(models.Model):
 	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_dueno")
 	perfil_receptor = models.ForeignKey(Perfil, related_name="perfil_receptor")
 	fecha_limite_devolucion = models.DateTimeField(null=True)
+
+
+class LibrosRequest(models.Model):
+	libro = models.ForeignKey(Libro)
+	perfil_envio = models.ForeignKey(Perfil, related_name="perfil_envio")
+	perfil_recepcion = models.ForeignKey(Perfil, related_name="perfil_recepcion")
+	fecha_request = models.DateTimeField(auto_now=True)
+	mensaje = models.CharField(max_length=500, blank=True)
+	telefono = models.CharField(max_length=150, blank=True)
+	aceptado = models.BooleanField(default=False)
+	eliminado = models.BooleanField(default=False)

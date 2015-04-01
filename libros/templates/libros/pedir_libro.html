@@ -4,8 +4,20 @@
 
 <div class = "col-md-8">
 	<h2> Pedir prestado {{libro_disponible.libro.titulo}} de {{libro_disponible.libro.autor}} a {{libro_disponible.perfil.usuario}}</h2>
+
+	<h3> {{perfil_usuario.usuario}} - {{perfil_usuario.ciudad.name}} - {{perfil_usuario.}} </h3>
+
+	<div class = "col-md-6 col-md-offset-1">
+		<form class="form-horizontal" action="{% url 'perfiles:registro' %}" method="post">
+			{% csrf_token %}		
+				<fieldset>
+
+					{{form_pedir_libro}}
+				</fieldset>
+				<br>
+				<input class = "btn btn-success pull-right" type="submit" value="Submit">
+		</form>
+	</div>	
 </div>
-
-
 
 {% endblock content %}

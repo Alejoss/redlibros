@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro
-from forms import FormNuevoLibro
+from forms import FormNuevoLibro, FormPedirLibro
 from redlibros.utils import obtener_perfil
 
 
@@ -110,7 +110,20 @@ def pedir_libro(request, id_libro):
     Recibe un id de un objeto LibrosDisponibles, renderiza un form con un mensaje editable que le va a llegar
     al dueño del libro
     """
-    libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro)
-    context = {'libro_disponible': libro_disponible_obj}
+
+    if request.method == "POST":
+
+        form = form_pedir_libro(request.POST)
+
+        if form.is_valid():
+            mensaje = form.cleaned_data.get("mensaje", "")
+            telefono = form.cleaned_data.get("telefono", "")
+
+    else:
+
+        libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro)
+    
+    form_pedir_libro = FormPedirLibro()
+    context = {'libro_disponible': libro_disponible_obj, 'form_pedir_libro': form_pedir_libro}
 
     return render(request, template, context)
