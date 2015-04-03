@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1> Has prestado un libro. Gracias por compartir tu biblioteca con el mundo </h1>
+
+<p> 
+
+Has prestado el libro {{libro_request.libro.titulo}} a {{libro_request.perfil_envio.usuario}},
+
+{% if datos_contacto %}
+<p> Se le ha enviado los siguientes datos de contacto </p>
+
+	{% if datos_contacto.telefono %}
+		<p> telefono: {{datos_contacto.telefono}} </p>
+	{% else %}
+		<p> No has enviado ningun numero de telefono </p>
+	{% endif %}
+
+	{% if datos_contacto.email %}
+		<p> email: {{datos_contacto.email}} </p>
+	{% else %}
+		<p> No has enviado ningun email de contacto </p>
+	{% endif %}
+
+{% else %}
+
+<p> No se le ha enviado ningún dato de contacto </p>
+
+{% endif %}
+
+</p>
+
+
+{% endblock content %}

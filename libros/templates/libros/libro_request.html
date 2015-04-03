@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "col-md-6 col-md-offset-1">
+	<p>
+	{{libro_request.perfil_envio.usuario}}
+	{{libro_request.fecha_request}}
+	{{libro_request.mensaje}}
+	{{libro_request.telefono}}
+	{{libro_request.email}}
+	{{libro_request.libro.titulo}}
+	</p>
+
+	<a href="{% url 'libros:prestar_libro' libro_request.id %}"> Aceptar </a>
+	<a href=""> No puedo prestarlo este momento </a>
+</div>
+
+{% endblock content %}
