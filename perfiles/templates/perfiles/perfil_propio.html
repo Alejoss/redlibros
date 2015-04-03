@@ -3,6 +3,28 @@
 {% block content %}
 <div class = "col-md-8">
 
+	{% if tiene_libros_prestados %}
+		{% for l in libros_prestados %}
+		<div class = "panel panel-primary">
+			<div class = "panel-body">
+				<p> {{l.libro.titulo}} | {{l.perfil_dueno}} | {{l.fecha_limite}} </p>				
+			</div>
+		</div>
+		{% endfor %}	
+	{% endif %}
+
+	{% if tiene_requests_pendientes %}
+		<h3> Tienes requests pendientes </h3>
+		{% for r in libros_requests %}
+		<div class = "panel panel-primary">
+			<div class = "panel-body">
+				<p> {{r.perfil_envio.usuario}} | {{r.libro.titulo}} | {{r.fecha_request}} </p>
+				<a href="{% url 'libros:mensaje_request' r.id %}">Ver Mensaje</a>
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+
 	<h1> Actividad Reciente </h1>
 		<p> Dejó un Libro en Tal Sitio </p>
 		<p> Recibió Tal Libro de Tal Usuario </p>

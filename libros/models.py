@@ -41,5 +41,6 @@ class LibrosRequest(models.Model):
 	fecha_request = models.DateTimeField(auto_now=True)
 	mensaje = models.CharField(max_length=500, blank=True)
 	telefono = models.CharField(max_length=150, blank=True)
+	email = models.CharField(max_length=255, blank=True)
 	aceptado = models.BooleanField(default=False)
 	eliminado = models.BooleanField(default=False)

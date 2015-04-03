@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 
 from cities_light.models import City
-from libros.models import LibrosDisponibles, LibrosPrestados, Libro
+from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest
 from forms import FormNuevoLibro, FormPedirLibro
 from redlibros.utils import obtener_perfil
 
@@ -104,26 +104,73 @@ def libros_usuario(request, username):
     return render(request, template, context)
 
 
-def pedir_libro(request, id_libro):
+def pedir_libro(request, id_libro_disponible):
     template = "libros/pedir_libro.html"
     """
     Recibe un id de un objeto LibrosDisponibles, renderiza un form con un mensaje editable que le va a llegar
     al dueño del libro
+    !!! id_libro es un bug pues puede que un libro este disponible en la biblioteca de 2 personas diferentes
     """
 
     if request.method == "POST":
 
-        form = form_pedir_libro(request.POST)
+        form = FormPedirLibro(request.POST)
 
         if form.is_valid():
             mensaje = form.cleaned_data.get("mensaje", "")
             telefono = form.cleaned_data.get("telefono", "")
+            email = form.cleaned_data.get("email", "")
+            libro_id = form.cleaned_data.get("libro_id", "")
 
+            libro_request = Libro.objects.get(id=libro_id)
+            perfil_envio = obtener_perfil(request.user)
+            perfil_recepcion = LibrosDisponibles.objects.get(id=id_libro_disponible).perfil
+
+            request_libro = LibrosRequest(libro=libro_request, perfil_envio=perfil_envio, perfil_recepcion=perfil_recepcion, 
+                                          mensaje=mensaje, telefono=telefono, email=email)
+            request_libro.save()
+            
+            return HttpResponse("proceso el form")
     else:
 
-        libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro)
+        libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
     
-    form_pedir_libro = FormPedirLibro()
+    form_pedir_libro = FormPedirLibro(initial={'libro_id': libro_disponible_obj.libro.id})
+
     context = {'libro_disponible': libro_disponible_obj, 'form_pedir_libro': form_pedir_libro}
+
+    return render(request, template, context)
+
+
+def mensaje_request(request, libro_request_id):
+    """
+    view en la que el usuario acepta o niega el pedido de préstamo de libro
+    """
+    template = "libros/libro_request.html"
+        
+    libro_request = LibrosRequest.objects.get(id=libro_request_id)    
+
+    context = {'libro_request': libro_request}
+
+    return render(request, template, context)
+
+
+def prestar_libro(request, libro_request_id):
+    """
+    view que muestra un mensaje al usuario que ha aceptado prestar un libro
+    """
+    template = "libros/prestar_libro.html"
+
+    libro_request = LibrosRequest.objects.get(id=libro_request_id)
+    libro_request.aceptado = True
+    libro_request.save()
+
+    libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio, 
+                                     perfil_dueno=libro_request.perfil_recepcion)
+    libro_prestado.save()
+
+    datos_contacto = libro_request.perfil_recepcion.datos_contacto()
+
+    context = {'libro_request': libro_request, 'datos_contacto': datos_contacto}
 
     return render(request, template, context)

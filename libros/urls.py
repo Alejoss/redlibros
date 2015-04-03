@@ -9,5 +9,7 @@ urlpatterns = patterns('',
     url(r'^libro/(?P<slug_libro>\w+)/(?P<id_libro>\d+)/$', views.libro, name="libro"),
     url(r'^libro/(?P<username>\w+)/$', views.libros_usuario, name="libros_usuario"),
 
-    url(r'^pedirlibro/(?P<id_libro>\d+)/$', views.pedir_libro, name="pedir_libro")
+    url(r'^pedirlibro/(?P<id_libro_disponible>\d+)/$', views.pedir_libro, name="pedir_libro"),
+    url(r'^prestame/(?P<libro_request_id>\d+)/$', views.mensaje_request, name="mensaje_request"),
+    url(r'^prestar_libro/(?P<libro_request_id>\d+)/$', views.prestar_libro, name="prestar_libro")
 )
