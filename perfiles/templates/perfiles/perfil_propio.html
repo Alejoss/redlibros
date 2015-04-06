@@ -4,10 +4,11 @@
 <div class = "col-md-8">
 
 	{% if tiene_libros_prestados %}
+		<h3> Tienes libros prestados </h3>
 		{% for l in libros_prestados %}
 		<div class = "panel panel-primary">
 			<div class = "panel-body">
-				<p> {{l.libro.titulo}} | {{l.perfil_dueno}} | {{l.fecha_limite}} </p>				
+				<p> {{l.libro.titulo}} | {{l.perfil_dueno.usuario}} | {{l.fecha_limite}} </p>
 			</div>
 		</div>
 		{% endfor %}	

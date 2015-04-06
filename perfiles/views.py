@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 
 from forms import formRegistro
 from libros.models import LibrosRequest, LibrosPrestados
@@ -25,11 +28,14 @@ def registro(request):
 	return render(request, template, context)
 
 
+@login_required
 def perfil_propio(request):
 	template = "perfiles/perfil_propio.html"
 	perfil_usuario = obtener_perfil(request.user)
 	tiene_requests_pendientes = False
 	tiene_libros_prestados = False
+	libros_requests = []
+	libros_prestados = []
 
 	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario).exists():
 		tiene_libros_prestados = True
@@ -51,3 +57,10 @@ def perfil_usuario(request):
 
 	context = {'datos_perfil': datos_perfil}
 	return render(request, template, context)
+
+
+@login_required
+def logout_view(request):
+	logout(request)
+
+	return HttpResponseRedirect(reverse('libros:main'))

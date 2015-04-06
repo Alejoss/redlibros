@@ -2,6 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest
@@ -21,6 +22,7 @@ def main(request):
     return render(request, template, context)
 
 
+@login_required
 def nuevo_libro(request):
     template = "libros/nuevo_libro.html"
 
@@ -52,6 +54,7 @@ def nuevo_libro(request):
     return render(request, template, context)
 
 
+@login_required
 def mi_biblioteca(request):
     """
     Muestra los libros que ha subido el usuario, tanto prestados como disponibles
@@ -104,6 +107,7 @@ def libros_usuario(request, username):
     return render(request, template, context)
 
 
+@login_required
 def pedir_libro(request, id_libro_disponible):
     template = "libros/pedir_libro.html"
     """
@@ -142,6 +146,7 @@ def pedir_libro(request, id_libro_disponible):
     return render(request, template, context)
 
 
+@login_required
 def mensaje_request(request, libro_request_id):
     """
     view en la que el usuario acepta o niega el pedido de préstamo de libro
@@ -155,6 +160,7 @@ def mensaje_request(request, libro_request_id):
     return render(request, template, context)
 
 
+@login_required
 def prestar_libro(request, libro_request_id):
     """
     view que muestra un mensaje al usuario que ha aceptado prestar un libro

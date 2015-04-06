@@ -21,7 +21,7 @@ ALLOWED_HOSTS = []
 
 
 # Context Processors
-TEMPLATE_CONTEXT_PROCESSORS += ('perfiles.context_processors.procesar_perfil',)
+TEMPLATE_CONTEXT_PROCESSORS += ('perfiles.context_processors.procesar_perfil', 'perfiles.context_processors.procesar_ciudad')
 
 # Application definition
 
@@ -86,8 +86,7 @@ STATICFILES_DIRS = (BASE_DIR + "/static/",)
 
 
 # Extra Settings
-LOGIN_REDIRECT_URL = "/perfil/mi_perfil"
+LOGIN_REDIRECT_URL = "perfiles:perfil_propio"
+LOGIN_URL = "libros:main"
 CITIES_LIGHT_INCLUDE_COUNTRIES = ['EC']
 CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es', 'abbr']
-
-
