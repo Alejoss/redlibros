@@ -4,6 +4,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+from models import Perfil
+
 
 class formRegistro(UserCreationForm):
 
@@ -27,4 +29,16 @@ class formRegistro(UserCreationForm):
 				'first_name': forms.TextInput(attrs={'class': 'form-control'}),
 				'last_name': forms.TextInput(attrs={'class': 'form-control'}),
 				'email': forms.TextInput(attrs={'class': 'form-control'})
+		}
+
+
+class formEditarPerfil(forms.ModelForm):
+
+	class Meta:
+		model = Perfil
+		fields = ("descripcion", "ciudad", "numero_telefono_contacto")
+		widgets = {
+				'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+				'ciudad': forms.Select(attrs={'class': 'form-control'}),
+				'numero_telefono_contacto': forms.TextInput(attrs={'class': 'form-control'}),				
 		}

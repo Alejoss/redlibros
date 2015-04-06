@@ -4,7 +4,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
-from forms import formRegistro
+from forms import formRegistro, formEditarPerfil
 from libros.models import LibrosRequest, LibrosPrestados
 from redlibros.utils import obtener_perfil
 
@@ -64,3 +64,41 @@ def logout_view(request):
 	logout(request)
 
 	return HttpResponseRedirect(reverse('libros:main'))
+
+
+@login_required
+def editar_perfil(request):
+	template = "perfiles/editar_perfil.html"
+	perfil_usuario = obtener_perfil(request.user)
+
+	if request.method == "POST":
+		form = formEditarPerfil(request.POST, instance=perfil_usuario)
+
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
+
+	else:		
+		form = formEditarPerfil(
+			initial={
+				'descripcion': perfil_usuario.descripcion,
+				'ciudad': perfil_usuario.ciudad,
+				'numero_telefono_contacto': perfil_usuario.numero_telefono_contacto
+			})
+
+	context = {'form': form}
+
+	return render(request, template, context)
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,7 +18,6 @@ class Perfil(models.Model):
 	libros_propios = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="libros_propios")
 	libros_recibidos = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="libros_recibidos")
 
-
 	def datos_contacto(self):
 
 		if not self.numero_telefono_contacto and not self.usuario.email:
@@ -26,4 +25,3 @@ class Perfil(models.Model):
 		else:
 			datos_contacto = {'telefono': self.numero_telefono_contacto, 'email': self.usuario.email}
 			return datos_contacto
-	
