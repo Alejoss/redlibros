@@ -3,17 +3,46 @@
 {% block content %}
 
 <div class = "col-md-6 col-md-offset-1">
+	<h4>
+		{{libro_request.perfil_envio.usuario}} te ha pedido que le prestes el libro {{libro_request.libro.titulo}}
+	</h4>
+	
 	<p>
-	{{libro_request.perfil_envio.usuario}}
-	{{libro_request.fecha_request}}
-	{{libro_request.mensaje}}
-	{{libro_request.telefono}}
-	{{libro_request.email}}
-	{{libro_request.libro.titulo}}
+		{{libro_request.perfil_envio.usuario}} - Datos de contacto:
 	</p>
-
-	<a href="{% url 'libros:prestar_libro' libro_request.id %}"> Aceptar </a>
-	<a href=""> No puedo prestarlo este momento </a>
+		
+	<p>
+		Mensaje : {{libro_request.mensaje}} <br>
+		Teléfono : {{libro_request.telefono}} <br>
+		Email : {{libro_request.email}} </br>
+		<br>
+		<small>fecha: {{libro_request.fecha_request}}</small>
+	</p>
+	<hr>
+	<p>
+		Tus datos de contacto:
+	</p>
+	<p>
+		Teléfono : {{perfil_usuario.numero_telefono_contacto}} <br>
+		Email : {{perfil_usuario.usuario.email}} </br>
+		<br>		
+	</p>
+	<form class="form-horizontal" action="{% url 'libros:mensaje_request' libro_request.id %}" method="post">
+			{% csrf_token %}
+			<div class="control-group">			  
+			  <div class="controls">
+			    <label class="radio" for="radios-0">
+			      <input name="prestar" id="" value="prestado" checked="checked" type="radio">
+			      Aceptar - Prestar Libro. Se enviaran tus datos de contacto
+			    </label>
+			    <label class="radio" for="radios-1">
+			      <input name="prestar" id="" value="no_prestado" type="radio">
+			      No puedo prestarlo en este momento.
+			    </label>
+			  </div>
+			</div>
+			<input class = "btn btn-success pull-right" type="submit" value="Enviar">
+	</form>	
 </div>
 
 {% endblock content %}

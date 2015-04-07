@@ -61,7 +61,7 @@ def mi_biblioteca(request):
     """
     template = "libros/mi_biblioteca.html"
     perfil_usuario = obtener_perfil(request.user)
-    libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario)
+    libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True)
     libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario)
 
     context = {
@@ -78,7 +78,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad):
     """
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
-    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad)
+    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True)
 
     context = {
         'ciudad': ciudad,
@@ -134,7 +134,7 @@ def pedir_libro(request, id_libro_disponible):
                                           mensaje=mensaje, telefono=telefono, email=email)
             request_libro.save()
             
-            return HttpResponse("proceso el form")
+            return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
     else:
 
         libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
@@ -152,8 +152,43 @@ def mensaje_request(request, libro_request_id):
     view en la que el usuario acepta o niega el pedido de préstamo de libro
     """
     template = "libros/libro_request.html"
-        
-    libro_request = LibrosRequest.objects.get(id=libro_request_id)    
+
+    libro_request = LibrosRequest.objects.get(id=libro_request_id)
+
+    if request.method == "POST":
+        print request.POST.get("prestar", "")
+        decision = request.POST.get("prestar", "")
+        if decision == "prestado":
+            libro_request.aceptado = True
+            libro_request.save()
+
+            libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio,
+                                     perfil_dueno=libro_request.perfil_recepcion)
+            libro_prestado.save()
+
+            libros_disponibles = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion)
+
+            counter = 0
+            for libro in libros_disponibles:
+                if counter != 0:
+                    break
+                else:
+                    libro.disponible = False
+                    libro.save()
+                    counter += 1
+
+            return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
+
+        elif decision == "no_prestar":
+            libro_request.aceptado = False
+            libro_request.eliminado = True
+            libro_request.save()
+
+            return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
+    else:
+        pass
+
+    libro_request = LibrosRequest.objects.get(id=libro_request_id)
 
     context = {'libro_request': libro_request}
 
@@ -168,23 +203,7 @@ def prestar_libro(request, libro_request_id):
     template = "libros/prestar_libro.html"
 
     libro_request = LibrosRequest.objects.get(id=libro_request_id)
-    libro_request.aceptado = True
-    libro_request.save()
-
-    libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio, 
-                                     perfil_dueno=libro_request.perfil_recepcion)
-    libro_prestado.save()
-
-    libros_disponibles = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion)
-
-    counter = 0
-    for libro in libros_disponibles:
-        if counter != 0:
-            break
-        else:
-            libro.disponible = False
-
-    datos_contacto = libro_request.perfil_recepcion.datos_contacto()
+    datos_contacto = libro_request.perfil_envio.datos_contacto()
 
     context = {'libro_request': libro_request, 'datos_contacto': datos_contacto}
 
