@@ -175,6 +175,15 @@ def prestar_libro(request, libro_request_id):
                                      perfil_dueno=libro_request.perfil_recepcion)
     libro_prestado.save()
 
+    libros_disponibles = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion)
+
+    counter = 0
+    for libro in libros_disponibles:
+        if counter != 0:
+            break
+        else:
+            libro.disponible = False
+
     datos_contacto = libro_request.perfil_recepcion.datos_contacto()
 
     context = {'libro_request': libro_request, 'datos_contacto': datos_contacto}

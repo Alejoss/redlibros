@@ -89,16 +89,3 @@ def editar_perfil(request):
 	context = {'form': form}
 
 	return render(request, template, context)
-
-
-
-
-
-
-
-
-
-
-
-
-
