@@ -147,7 +147,7 @@ def pedir_libro(request, id_libro_disponible):
 
 
 @login_required
-def mensaje_request(request, libro_request_id):
+def libro_request(request, libro_request_id):
     """
     view en la que el usuario acepta o niega el pedido de préstamo de libro
     """
@@ -155,8 +155,7 @@ def mensaje_request(request, libro_request_id):
 
     libro_request = LibrosRequest.objects.get(id=libro_request_id)
 
-    if request.method == "POST":
-        print request.POST.get("prestar", "")
+    if request.method == "POST":        
         decision = request.POST.get("prestar", "")
         if decision == "prestado":
             libro_request.aceptado = True

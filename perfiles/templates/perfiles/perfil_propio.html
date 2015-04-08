@@ -4,6 +4,22 @@
 <div class = "col-md-8">
 
 	{% if tiene_libros_prestados %}
+		<h3> Tienes requests pendientes </h3>
+		{% for r in libros_pedidos %}
+		<div class = "panel panel-primary">
+			<div class = "panel-body">
+				<p> {{r.libro.titulo}} | {{r.fecha_request}}</p>				
+				{% if r.eliminado %}
+					<p>{{r.libro.perfil_recepcion.usuario}} no puede prestart este libro por ahora. <br>
+						Este mensaje se borrará en una semana. Puedes pedirle el libro de nuevo si deseas.
+					<p>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+
+	{% if tiene_libros_prestados %}
 		<h3> Tienes libros prestados </h3>
 		{% for l in libros_prestados %}
 		<div class = "panel panel-primary">

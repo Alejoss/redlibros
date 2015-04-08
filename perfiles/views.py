@@ -34,8 +34,14 @@ def perfil_propio(request):
 	perfil_usuario = obtener_perfil(request.user)
 	tiene_requests_pendientes = False
 	tiene_libros_prestados = False
+	tiene_libros_pedidos = False
 	libros_requests = []
 	libros_prestados = []
+	libros_pedidos = []
+
+	if LibrosRequest.objects.filter(perfil_envio=perfil_usuario).exists():
+		tiene_libros_pedidos = True
+		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario)
 
 	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario).exists():
 		tiene_libros_prestados = True
@@ -46,7 +52,8 @@ def perfil_propio(request):
 		libros_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario)
 
 	context = {'tiene_requests_pendientes': tiene_requests_pendientes, 'libros_requests': libros_requests,
-	           'tiene_libros_prestados': tiene_libros_prestados, 'libros_prestados': libros_prestados}
+	           'tiene_libros_prestados': tiene_libros_prestados, 'libros_prestados': libros_prestados, 
+	           'tiene_libros_pedidos': tiene_libros_pedidos}
 	
 	return render(request, template, context)
 
