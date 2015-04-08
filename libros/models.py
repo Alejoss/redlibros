@@ -5,7 +5,6 @@ from cities_light.models import City
 from perfiles.models import Perfil
 
 
-# Create your models here.
 class Libro(models.Model):
 	titulo = models.CharField(max_length=255, blank=True)
 	slug = models.SlugField(null=True, blank=True)
@@ -44,3 +43,27 @@ class LibrosRequest(models.Model):
 	email = models.CharField(max_length=255, blank=True)
 	aceptado = models.BooleanField(default=False)
 	eliminado = models.BooleanField(default=False)
+
+
+class PuntoBiblioteca(models.Model):
+	perfil_admin = models.ForeignKey(Perfil)
+	ciudad = models.ForeignKey(City)
+	punto_google_maps = models.CharField(max_length=500, blank=True)
+	hora_apertura = models.PositiveSmallIntegerField(null=True)
+	hora_cierre = models.PositiveSmallIntegerField(null=True)
+
+
+class LibrosPuntoBiblioteca(models.Model):
+	libro = models.ForeignKey(Libro)
+	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	disponible = models.BooleanField(default=True)
+	perfil_dueno = models.ForeignKey(Perfil)
+	perfil_tiene_actualmente = models.ForeignKey(Perfil)
+
+
+class LibroPrestadosPunto(models.Model):
+	libro = models.ForeignKey(Libro)
+	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	fecha_prestamo = models.DateTimeField(null=True)
+	fecha_devolucion = models.DateTimeField(null=True)
+	perfil_prestamo = models.ForeignKey(Perfil)
