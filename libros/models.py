@@ -63,7 +63,7 @@ class LibrosPuntoBiblioteca(models.Model):
 
 class LibroPrestadosPunto(models.Model):
 	libro = models.ForeignKey(Libro)
+	perfil_prestamo = models.ForeignKey(Perfil)
 	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)
-	perfil_prestamo = models.ForeignKey(Perfil)
