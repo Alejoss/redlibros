@@ -49,6 +49,7 @@ class PuntoBiblioteca(models.Model):
 	perfil_admin = models.ForeignKey(Perfil)
 	ciudad = models.ForeignKey(City)
 	punto_google_maps = models.CharField(max_length=500, blank=True)
+	descripcion_direccion = models.CharField(max_length=500, blank=True)
 	hora_apertura = models.PositiveSmallIntegerField(null=True)
 	hora_cierre = models.PositiveSmallIntegerField(null=True)
 
@@ -57,8 +58,8 @@ class LibrosPuntoBiblioteca(models.Model):
 	libro = models.ForeignKey(Libro)
 	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
 	disponible = models.BooleanField(default=True)
-	perfil_dueno = models.ForeignKey(Perfil)
-	perfil_tiene_actualmente = models.ForeignKey(Perfil)
+	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_original")
+	perfil_tiene_actualmente = models.ForeignKey(Perfil, related_name="perfil_actual")
 
 
 class LibroPrestadosPunto(models.Model):
