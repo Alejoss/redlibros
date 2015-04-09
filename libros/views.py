@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest
-from forms import FormNuevoLibro, FormPedirLibro
+from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida
 from redlibros.utils import obtener_perfil
 
 
@@ -205,5 +205,31 @@ def prestar_libro(request, libro_request_id):
     datos_contacto = libro_request.perfil_envio.datos_contacto()
 
     context = {'libro_request': libro_request, 'datos_contacto': datos_contacto}
+
+    return render(request, template, context)
+
+@login_required
+def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
+
+    template = "libros/nueva_biblioteca_compartida.html"
+
+    ciudad = get_object_or_404(City, id=id_ciudad)
+
+    if request.method == "POST":
+        form = NuevaBibliotecaCompartida(request.POST)
+
+        if form.is_valid():
+            
+            biblioteca_compartida = form.save(commit=False)
+            biblioteca_compartida.perfil_admin = obtener_perfil(request.user)
+            biblioteca_compartida.ciudad = ciudad
+            biblioteca_compartida.save()
+
+            return HttpResponse("creo biblioteca compartida")
+
+    else:
+        form = NuevaBibliotecaCompartida()
+
+    context = {'ciudad': ciudad, 'form': form}
 
     return render(request, template, context)

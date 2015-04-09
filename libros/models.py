@@ -45,7 +45,9 @@ class LibrosRequest(models.Model):
 	eliminado = models.BooleanField(default=False)
 
 
-class PuntoBiblioteca(models.Model):
+class BibliotecaCompartida(models.Model):
+	nombre = models.CharField(max_length=150, blank=True, unique=True)
+	slug = models.SlugField(blank=True)
 	perfil_admin = models.ForeignKey(Perfil)
 	ciudad = models.ForeignKey(City)
 	punto_google_maps = models.CharField(max_length=500, blank=True)
@@ -56,7 +58,7 @@ class PuntoBiblioteca(models.Model):
 
 class LibrosPuntoBiblioteca(models.Model):
 	libro = models.ForeignKey(Libro)
-	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	punto_biblioteca = models.ForeignKey(BibliotecaCompartida)
 	disponible = models.BooleanField(default=True)
 	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_original")
 	perfil_tiene_actualmente = models.ForeignKey(Perfil, related_name="perfil_actual")
@@ -65,6 +67,6 @@ class LibrosPuntoBiblioteca(models.Model):
 class LibroPrestadosPunto(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil_prestamo = models.ForeignKey(Perfil)
-	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	punto_biblioteca = models.ForeignKey(BibliotecaCompartida)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)

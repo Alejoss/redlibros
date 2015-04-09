@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class = "col-md-6 col-md-offset-1">
+	<form class="form-horizontal" action="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}" method="post">
+		{% csrf_token %}		
+			<fieldset>
+				{{form}}
+			<br>
+			<input class = "btn btn-success pull-right" type="submit" value="Submit">
+	</form>
+</div>
+<script type="text/javascript">	
+</script>
+
+{% endblock content %}

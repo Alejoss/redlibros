@@ -16,8 +16,7 @@
 <div class = "col-md-4">
 	<h2> Bibliotecas Compartidas en {{ciudad.name}} </h2>
 	<p> ¿Qué es una Biblioteca Compartida - dropdown simple </p>
-	<a href="">Registrar una Biblioteca Compartida en {{ciudad.name}}</a>
+	<a href="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}">Registrar una Biblioteca Compartida en {{ciudad.name}}</a>
 </div>
-
 
 {% endblock content %}

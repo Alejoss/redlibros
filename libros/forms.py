@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.forms import TextInput, URLInput, Textarea, CheckboxInput, HiddenInput
+from django.forms import TextInput, URLInput, Textarea, CheckboxInput, HiddenInput, NumberInput
+
+from models import BibliotecaCompartida
 
 
 class FormNuevoLibro(forms.Form):
@@ -19,3 +21,17 @@ class FormPedirLibro(forms.Form):
 	mensaje = forms.CharField(max_length=500, required=False, widget=Textarea(attrs={'class': 'form-control'}))
 	telefono = forms.IntegerField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
 	email = forms.CharField(max_length=500, required=False, widget=TextInput(attrs={'class': 'form-control'}))
+
+
+class NuevaBibliotecaCompartida(forms.ModelForm):
+	
+	class Meta:
+		model = BibliotecaCompartida
+		fields = ['nombre', 'descripcion_direccion', 'hora_apertura', 'hora_cierre']
+
+		widgets = {
+					'nombre': TextInput(attrs={'class': 'form-control'}),
+					'descripcion_direccion': Textarea(attrs={'class': 'form-control'}),
+					'hora_apertura': NumberInput(attrs={'class': 'form-control', 'max': '24'}),
+					'hora_cierre': NumberInput(attrs={'class': 'form-control', 'max': '24'})
+				}
