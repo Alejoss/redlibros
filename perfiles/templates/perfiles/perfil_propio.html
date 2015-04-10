@@ -36,7 +36,7 @@
 		<div class = "panel panel-primary">
 			<div class = "panel-body">
 				<p> {{r.perfil_envio.usuario}} | {{r.libro.titulo}} | {{r.fecha_request}} </p>
-				<a href="{% url 'libros:mensaje_request' r.id %}">Ver Mensaje</a>
+				<a href="{% url 'libros:libro_request' r.id %}">Ver Mensaje</a>
 			</div>
 		</div>
 		{% endfor %}
