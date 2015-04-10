@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{biblioteca_compartida.nombre}}</h1>
+<p>
+
+{{biblioteca_compartida.direccion}}<br>
+{{biblioteca_compartida.hora_apertura}}<br>
+{{biblioteca_compartida.hora_cierre}}<br>
+
+<img src="{{biblioteca_compartida.imagen}}">
+
+</p>
+
+
+
+
+{% endblock content %}

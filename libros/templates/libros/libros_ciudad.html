@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <div class = "col-md-8">
 	<h2> Libros Disponibles en {{ciudad.name}} </h2>
 	{% for l in libros_disponibles %}
@@ -13,10 +12,13 @@
 	</div>
 	{% endfor %}
 </div>
-<div class = "col-md-4">
-	<h2> Bibliotecas Compartidas en {{ciudad.name}} </h2>
-	<p> ¿Qué es una Biblioteca Compartida - dropdown simple </p>
-	<a href="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}">Registrar una Biblioteca Compartida en {{ciudad.name}}</a>
-</div>
 
+<div class = "col-md-4">
+	<h2> Bibliotecas Compartidas en {{ciudad.name}}</h2>
+	<p> ¿Qué es una Biblioteca Compartida - dropdown simple</p>
+	<a href="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}">Registrar una Biblioteca Compartida en {{ciudad.name}}</a>
+	{% for biblioteca in bibliotecas_compartidas %}
+		<p><a href="{% url 'libros:biblioteca_compartida' biblioteca.slug %}">{{biblioteca.nombre}}</a></p>
+	{% endfor %}
+</div>
 {% endblock content %}

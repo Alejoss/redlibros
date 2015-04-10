@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
-from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest
+from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida
 from redlibros.utils import obtener_perfil
 
@@ -79,10 +79,13 @@ def libros_ciudad(request, slug_ciudad, id_ciudad):
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
     libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True)
+    bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)
+    print bibliotecas_compartidas
 
     context = {
         'ciudad': ciudad,
-        'libros_disponibles': libros_disponibles
+        'libros_disponibles': libros_disponibles,
+        'bibliotecas_compartidas': bibliotecas_compartidas
         }
 
     return render(request, template, context)
@@ -208,6 +211,7 @@ def prestar_libro(request, libro_request_id):
 
     return render(request, template, context)
 
+
 @login_required
 def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
 
@@ -231,5 +235,16 @@ def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
         form = NuevaBibliotecaCompartida()
 
     context = {'ciudad': ciudad, 'form': form}
+
+    return render(request, template, context)
+
+
+def biblioteca_compartida(request, slug_biblioteca_compartida):
+
+    template = "libros/biblioteca_compartida.html"
+
+    biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
+
+    context = {'biblioteca_compartida': biblioteca_compartida}
 
     return render(request, template, context)

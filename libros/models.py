@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.utils.text import slugify
 
 from cities_light.models import City
 from perfiles.models import Perfil
@@ -51,9 +52,18 @@ class BibliotecaCompartida(models.Model):
 	perfil_admin = models.ForeignKey(Perfil)
 	ciudad = models.ForeignKey(City)
 	punto_google_maps = models.CharField(max_length=500, blank=True)
-	descripcion_direccion = models.CharField(max_length=500, blank=True)
+	direccion = models.CharField(max_length=500, blank=True)
+	imagen = models.URLField(blank=True)
 	hora_apertura = models.PositiveSmallIntegerField(null=True)
 	hora_cierre = models.PositiveSmallIntegerField(null=True)
+	eliminada = models.BooleanField(default=False)
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			# nuevo objecto, crear slug
+			self.slug = slugify(self.nombre)
+
+			super(BibliotecaCompartida, self).save(*args, **kwargs)
 
 
 class LibrosPuntoBiblioteca(models.Model):
