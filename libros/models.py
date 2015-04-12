@@ -66,17 +66,17 @@ class BibliotecaCompartida(models.Model):
 		super(BibliotecaCompartida, self).save(*args, **kwargs)
 
 
-class LibrosPuntoBiblioteca(models.Model):
+class LibrosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
-	punto_biblioteca = models.ForeignKey(BibliotecaCompartida)
+	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
 	disponible = models.BooleanField(default=True)
 	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_original")
 	perfil_tiene_actualmente = models.ForeignKey(Perfil, related_name="perfil_actual")
 
 
-class LibroPrestadosPunto(models.Model):
+class LibroPrestadosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil_prestamo = models.ForeignKey(Perfil)
-	punto_biblioteca = models.ForeignKey(BibliotecaCompartida)
+	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)

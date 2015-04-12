@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
-from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida
+from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida
 from redlibros.utils import obtener_perfil
 
@@ -244,17 +244,22 @@ def biblioteca_compartida(request, slug_biblioteca_compartida):
 
     template = "libros/biblioteca_compartida.html"
 
+    perfil_usuario = obtener_perfil(request.user)
     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
+    usuario_es_administrador = False
+    
+    if biblioteca_compartida.perfil_admin == perfil_usuario:
+        usuario_es_administrador = True
 
-    context = {'biblioteca_compartida': biblioteca_compartida}
+    context = {'biblioteca_compartida': biblioteca_compartida, 'usuario_es_administrador': usuario_es_administrador}
 
     return render(request, template, context)
 
 
 @login_required
-def editar_biblioteca_compartida(request, slug_biblioteca_compartida):
+def editar_info_bcompartida(request, slug_biblioteca_compartida):
 
-    template = "libros/editar_biblioteca_compartida.html"
+    template = "libros/editar_info_bcompartida.html"
 
     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
 
@@ -285,5 +290,18 @@ def editar_biblioteca_compartida(request, slug_biblioteca_compartida):
             })
 
     context = {'biblioteca_compartida': biblioteca_compartida, 'form': form}
+
+    return render(request, template, context)
+
+
+@login_required
+def editar_libros_bcompartida(request, slug_biblioteca_compartida):
+
+    template = "libros/editar_libros_bcompartida.html"
+    
+    biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
+    libros = LibrosBibliotecaCompartida(biblioteca_compartida=biblioteca_compartida)
+
+    context = {'biblioteca_compartida': biblioteca_compartida, 'libros': libros}
 
     return render(request, template, context)
