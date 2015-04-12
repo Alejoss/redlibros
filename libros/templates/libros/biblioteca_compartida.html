@@ -10,10 +10,9 @@
 {{biblioteca_compartida.hora_cierre}}<br>
 
 <img src="{{biblioteca_compartida.imagen}}">
-
 </p>
 
-
+<a href="{% url 'libros:editar_biblioteca_compartida' biblioteca_compartida.slug %}">Editar Información</a>
 
 
 {% endblock content %}

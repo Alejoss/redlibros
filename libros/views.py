@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida
-from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida
+from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida
 from redlibros.utils import obtener_perfil
 
 
@@ -246,5 +247,43 @@ def biblioteca_compartida(request, slug_biblioteca_compartida):
     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
 
     context = {'biblioteca_compartida': biblioteca_compartida}
+
+    return render(request, template, context)
+
+
+@login_required
+def editar_biblioteca_compartida(request, slug_biblioteca_compartida):
+
+    template = "libros/editar_biblioteca_compartida.html"
+
+    biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
+
+    perfil_usuario = obtener_perfil(request.user)    
+
+    if biblioteca_compartida.perfil_admin != perfil_usuario:
+        raise PermissionDenied
+    else:
+        pass
+
+    if request.method == "POST":
+        form = EditarBibliotecaCompartida(request.POST, instance=biblioteca_compartida)
+
+        if form.is_valid():
+            form.save()
+
+            return HttpResponseRedirect(reverse('libros:biblioteca_compartida', 
+                kwargs={'slug_biblioteca_compartida': biblioteca_compartida.slug}))
+        else:
+            print form.errors
+    else:
+        form = EditarBibliotecaCompartida(initial={
+                'nombre': biblioteca_compartida.nombre,
+                'direccion': biblioteca_compartida.direccion,
+                'imagen': biblioteca_compartida.imagen,
+                'hora_apertura': biblioteca_compartida.hora_apertura,
+                'hora_cierre': biblioteca_compartida.hora_cierre
+            })
+
+    context = {'biblioteca_compartida': biblioteca_compartida, 'form': form}
 
     return render(request, template, context)

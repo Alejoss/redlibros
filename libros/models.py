@@ -57,13 +57,13 @@ class BibliotecaCompartida(models.Model):
 	hora_apertura = models.PositiveSmallIntegerField(null=True)
 	hora_cierre = models.PositiveSmallIntegerField(null=True)
 	eliminada = models.BooleanField(default=False)
-
+	
 	def save(self, *args, **kwargs):
 		if not self.id:
 			# nuevo objecto, crear slug
 			self.slug = slugify(self.nombre)
 
-			super(BibliotecaCompartida, self).save(*args, **kwargs)
+		super(BibliotecaCompartida, self).save(*args, **kwargs)
 
 
 class LibrosPuntoBiblioteca(models.Model):
