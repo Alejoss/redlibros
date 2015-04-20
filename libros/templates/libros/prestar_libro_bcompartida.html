@@ -3,8 +3,9 @@
 {% block content %}
 
 <div class = "col-md-6 col-md-offset-1">
-	<form class="form-horizontal" action="{% url 'libros:nuevo_libro' tipo_dueno slug %}" method="post">
-		{% csrf_token %}		
+	<form class="form-horizontal" action="{% url 'libros:prestar_libro_bcompartida' libro_compartido.id %}" 
+	method="post">
+		{% csrf_token %}
 			<fieldset>
 				{{form}}
 			<br>
@@ -12,7 +13,5 @@
 	</form>
 </div>
 
-<script type="text/javascript">	
-</script>
 
 {% endblock content %}

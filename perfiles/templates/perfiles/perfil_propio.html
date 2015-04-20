@@ -27,6 +27,14 @@
 				<p> {{l.libro.titulo}} | {{l.perfil_dueno.usuario}} | {{l.fecha_limite}} </p>
 			</div>
 		</div>
+		{% endfor %}
+
+		{% for l in libros_prestados_bcompartida %}
+		<div class = "panel panel-primary">
+			<div class = "panel-body">
+				<p> {{l.libro.titulo}} | {{l.biblioteca_compartida.nombre}} | {{l.fecha_max_devolucion}}</p>
+			</div>
+		</div>
 		{% endfor %}	
 	{% endif %}
 

@@ -4,7 +4,7 @@
 
 <div class = "col-md-6 col-md-offset-1">
 	<h2>Edita la información de {{biblioteca_compartida.nombre}}</h2>
-	<form class="form-horizontal" action="{% url 'libros:editar_biblioteca_compartida' biblioteca_compartida.slug %}" method="post">
+	<form class="form-horizontal" action="{% url 'libros:editar_info_bcompartida' biblioteca_compartida.slug %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
 				{{form}}

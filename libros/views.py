@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
@@ -6,9 +8,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from cities_light.models import City
-from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida
-from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida
-from redlibros.utils import obtener_perfil
+from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
+from perfiles.models import Perfil
+from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida, FormPrestarLibroBCompartida
+from redlibros.utils import obtener_perfil, definir_fecha_devolucion
 
 
 def main(request):
@@ -24,7 +27,7 @@ def main(request):
 
 
 @login_required
-def nuevo_libro(request):
+def nuevo_libro(request, tipo_dueno, slug):
     template = "libros/nuevo_libro.html"
 
     if request.method == "POST":
@@ -41,17 +44,25 @@ def nuevo_libro(request):
             nuevo_libro.save()
 
             if disponible:
-                # !!! Falta opcionalidad para cambiar ciudad
-                perfil_usuario = obtener_perfil(request.user)
-                libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=perfil_usuario.ciudad)
-                libro_disponible_obj.save()
-            
-            return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
- 
+                if tipo_dueno == "perfil":
+                    # !!! Falta opcionalidad para cambiar ciudad
+                    perfil_usuario = obtener_perfil(request.user)
+                    libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=perfil_usuario.ciudad)
+                    libro_disponible_obj.save()
+                    
+                    return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
+                
+                elif tipo_dueno == "biblioteca_compartida":
+                    biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug)
+                    libro_disponible_obj = LibrosBibliotecaCompartida(biblioteca_compartida=biblioteca_compartida, libro=nuevo_libro)
+                    libro_disponible_obj.save()
+
+                    return HttpResponseRedirect(reverse('libros:biblioteca_compartida', kwargs={'slug_biblioteca_compartida': slug}))
+
     else:
         form = FormNuevoLibro()
 
-    context = {'form': form}
+    context = {'form': form, 'tipo_dueno': tipo_dueno, 'slug': slug}
     return render(request, template, context)
 
 
@@ -300,8 +311,48 @@ def editar_libros_bcompartida(request, slug_biblioteca_compartida):
     template = "libros/editar_libros_bcompartida.html"
     
     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
-    libros = LibrosBibliotecaCompartida(biblioteca_compartida=biblioteca_compartida)
+    libros_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=True)
+    libros_no_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=False)
+    libros_prestados = LibrosPrestadosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida)
 
-    context = {'biblioteca_compartida': biblioteca_compartida, 'libros': libros}
+    context = {'biblioteca_compartida': biblioteca_compartida, 'libros_prestados': libros_prestados, 'libros_disponibles': libros_disponibles, 
+                'libros_no_disponibles': libros_no_disponibles}
+
+    return render(request, template, context)
+
+
+@login_required
+def prestar_libro_bcompartida(request, id_libro_compartido):
+
+    template = "libros/prestar_libro_bcompartida.html"
+
+    libro_disponible_obj = LibrosBibliotecaCompartida.objects.get(id=id_libro_compartido)
+
+    if request.method == "POST":
+        form = FormPrestarLibroBCompartida(request.POST)
+
+        if form.is_valid():
+            username = form.cleaned_data.get('usuario', '')
+            tiempo_prestamo = form.cleaned_data.get('tiempo_entrega', '')
+            
+            # crear LibrosPrestadosBibliotecaCompartida object
+            perfil_usuario_prestamo = Perfil.objects.get(usuario__username=username)
+            fecha_prestamo = datetime.today()
+            fecha_max_devolucion = definir_fecha_devolucion(fecha_prestamo, tiempo_prestamo)
+            libro_prestado = LibrosPrestadosBibliotecaCompartida(libro=libro_disponible_obj.libro, perfil_prestamo=perfil_usuario_prestamo, 
+                                                                 fecha_max_devolucion=fecha_max_devolucion, biblioteca_compartida=libro_disponible_obj.biblioteca_compartida)
+            libro_prestado.save()
+
+            # poner no disponible a LibrosBibliotecaCompartida object
+            libro_disponible_obj.disponible = False
+            libro_disponible_obj.prestado = True
+            libro_disponible_obj.save()
+
+            return HttpResponseRedirect(reverse('libros:editar_libros_bcompartida', kwargs={'slug_biblioteca_compartida': libro_disponible_obj.biblioteca_compartida.slug}))
+
+    else:
+        form = FormPrestarLibroBCompartida()
+
+    context = {'form': form, 'libro_compartido': libro_disponible_obj}
 
     return render(request, template, context)

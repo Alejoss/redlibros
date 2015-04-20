@@ -13,6 +13,13 @@ class Libro(models.Model):
 	imagen = models.CharField(max_length=255, blank=True)
 	descripcion = models.TextField(null=True, blank=True, max_length=2500)
 
+	def save(self, *args, **kwargs):
+		if not self.id:
+			# nuevo objecto, crear slug
+			self.slug = slugify(self.titulo)
+
+		super(Libro, self).save(*args, **kwargs)
+
 
 class LibrosLeidos(models.Model):
 	perfil = models.ForeignKey(Perfil)
@@ -70,13 +77,13 @@ class LibrosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
 	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
 	disponible = models.BooleanField(default=True)
-	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_original")
-	perfil_tiene_actualmente = models.ForeignKey(Perfil, related_name="perfil_actual")
+	prestado = models.BooleanField(default=False)
 
 
-class LibroPrestadosBibliotecaCompartida(models.Model):
+class LibrosPrestadosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil_prestamo = models.ForeignKey(Perfil)
 	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
+	fecha_max_devolucion = models.DateTimeField(null=True)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)

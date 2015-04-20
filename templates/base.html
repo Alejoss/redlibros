@@ -26,7 +26,7 @@
 		        {% else %}
 		        <li><a href="">Busca un libro disponible en tu ciudad</a></li>
 		        {% endif %}		        
-		        <li><a href="{% url 'libros:nuevo_libro' %}">Compartir un Libro</a></li>
+		        <li><a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}">Compartir un Libro</a></li>
 	        {% endif %}
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">

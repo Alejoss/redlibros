@@ -2,4 +2,49 @@
 
 {% block content %}
 
+<h1>{{biblioteca_compartida.nombre}} <small>administrar libros</small></h1>
+
+<h3>Libros de {{biblioteca_compartida.nombre}}</h3>
+
+{% for l in libros_disponibles %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>		
+			<a href="{% url 'libros:libro_request' l.id %}">Marcar como No Disponible</a>
+			<a href="{% url 'libros:prestar_libro_bcompartida' l.id %}">Prestar Libro</a>	
+		</div>
+	</div>
+{% endfor %}
+
+{% for l in libros_no_disponibles %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>
+			
+			{% if l.prestado %}
+				<p> Este libro fue prestado </p>
+			{% else %}
+				<a href="{% url 'libros:libro_request' l.id %}">Marcar como Disponible</a>
+			{% endif %}
+
+		</div>
+	</div>
+{% endfor %}
+
+<a href="{% url 'libros:nuevo_libro' 'biblioteca_compartida' biblioteca_compartida.slug  %}">Nuevo Libro</a>
+
+<hr>
+
+<h3>Libros Prestados</h3>
+
+{% for l in libros_prestados%}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>
+			<a href="{% url 'libros:libro_request' l.id %}">Marcar como Devuelto</a>
+		</div>
+	</div>
+{% endfor %}
+
+
 {% endblock content %}
