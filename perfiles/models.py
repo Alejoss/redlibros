@@ -25,3 +25,6 @@ class Perfil(models.Model):
 		else:
 			datos_contacto = {'telefono': self.numero_telefono_contacto, 'email': self.usuario.email}
 			return datos_contacto
+
+	def __unicode__(self):
+		return "Perfil: %s" % (self.usuario.username)
