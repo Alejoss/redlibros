@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{biblioteca_compartida.nombre}} <small>administrar libros</small></h1>
+<p>
+
+{{biblioteca_compartida.direccion}}<br>
+{{biblioteca_compartida.hora_apertura}}<br>
+{{biblioteca_compartida.hora_cierre}}<br>
+
+<img src="{{biblioteca_compartida.imagen}}">
+</p>
+
+{% if usuario_es_administrador %}
+	<a href="{% url 'libros:editar_info_bcompartida' biblioteca_compartida.slug %}">Editar Información</a>
+	<a href="{% url 'libros:editar_libros_bcompartida' biblioteca_compartida.slug  %} ">Administrar Libros</a>
+{% endif %}
+
+
+{% endblock content %}

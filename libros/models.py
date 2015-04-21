@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.utils.text import slugify
 
 from cities_light.models import City
 from perfiles.models import Perfil
@@ -11,6 +12,13 @@ class Libro(models.Model):
 	autor = models.CharField(max_length=255, blank=True)
 	imagen = models.CharField(max_length=255, blank=True)
 	descripcion = models.TextField(null=True, blank=True, max_length=2500)
+
+	def save(self, *args, **kwargs):
+		if not self.id:
+			# nuevo objecto, crear slug
+			self.slug = slugify(self.titulo)
+
+		super(Libro, self).save(*args, **kwargs)
 
 
 class LibrosLeidos(models.Model):
@@ -45,26 +53,37 @@ class LibrosRequest(models.Model):
 	eliminado = models.BooleanField(default=False)
 
 
-class PuntoBiblioteca(models.Model):
+class BibliotecaCompartida(models.Model):
+	nombre = models.CharField(max_length=150, blank=True, unique=True)
+	slug = models.SlugField(blank=True)
 	perfil_admin = models.ForeignKey(Perfil)
 	ciudad = models.ForeignKey(City)
 	punto_google_maps = models.CharField(max_length=500, blank=True)
-	descripcion_direccion = models.CharField(max_length=500, blank=True)
+	direccion = models.CharField(max_length=500, blank=True)
+	imagen = models.URLField(blank=True)
 	hora_apertura = models.PositiveSmallIntegerField(null=True)
 	hora_cierre = models.PositiveSmallIntegerField(null=True)
+	eliminada = models.BooleanField(default=False)
+	
+	def save(self, *args, **kwargs):
+		if not self.id:
+			# nuevo objecto, crear slug
+			self.slug = slugify(self.nombre)
+
+		super(BibliotecaCompartida, self).save(*args, **kwargs)
 
 
-class LibrosPuntoBiblioteca(models.Model):
+class LibrosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
-	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
 	disponible = models.BooleanField(default=True)
-	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_original")
-	perfil_tiene_actualmente = models.ForeignKey(Perfil, related_name="perfil_actual")
+	prestado = models.BooleanField(default=False)
 
 
-class LibroPrestadosPunto(models.Model):
+class LibrosPrestadosBibliotecaCompartida(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil_prestamo = models.ForeignKey(Perfil)
-	punto_biblioteca = models.ForeignKey(PuntoBiblioteca)
+	biblioteca_compartida = models.ForeignKey(BibliotecaCompartida)
+	fecha_max_devolucion = models.DateTimeField(null=True)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)

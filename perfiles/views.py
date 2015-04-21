@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from forms import formRegistro, formEditarPerfil
-from libros.models import LibrosRequest, LibrosPrestados
+from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida
 from redlibros.utils import obtener_perfil
 
 
@@ -37,23 +37,28 @@ def perfil_propio(request):
 	tiene_libros_pedidos = False
 	libros_requests = []
 	libros_prestados = []
+	libros_prestados_bcompartida = []
 	libros_pedidos = []
 
 	if LibrosRequest.objects.filter(perfil_envio=perfil_usuario).exists():
 		tiene_libros_pedidos = True
 		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario)
 
-	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario).exists():
-		tiene_libros_prestados = True
-		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario)
-
 	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario).exists():
 		tiene_requests_pendientes = True
 		libros_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario)
 
+	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario).exists():
+		tiene_libros_prestados = True
+		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario)
+
+	if LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario).exists():
+		tiene_libros_prestados = True
+		libros_prestados_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario)
+
 	context = {'tiene_requests_pendientes': tiene_requests_pendientes, 'libros_requests': libros_requests,
 	           'tiene_libros_prestados': tiene_libros_prestados, 'libros_prestados': libros_prestados, 
-	           'tiene_libros_pedidos': tiene_libros_pedidos}
+	           'tiene_libros_pedidos': tiene_libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida}
 	
 	return render(request, template, context)
 
