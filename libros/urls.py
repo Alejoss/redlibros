@@ -22,6 +22,5 @@ urlpatterns = [
     url(r'^editar_libros_bcompartida/(?P<slug_biblioteca_compartida>\w+)/$', views.editar_libros_bcompartida, 
         name="editar_libros_bcompartida"),
     url(r'^prestar_libro_biblioteca_compartida/(?P<id_libro_compartido>\d+)/$', views.prestar_libro_bcompartida, 
-        name="prestar_libro_bcompartida"),
-
-)
+        name="prestar_libro_bcompartida")
+]
