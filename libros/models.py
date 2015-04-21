@@ -30,7 +30,7 @@ class LibrosLeidos(models.Model):
 	fecha_lectura = models.DateTimeField(null=True)
 
 	def __unicode__(self):
-		return "Libros Leidos object: %s - %s" % (self.perfil, self.libro)
+		return "Libros Leidos object: %s - %s" % (self.perfil.usuario, self.libro.titulo)
 
 
 class LibrosDisponibles(models.Model):
@@ -40,7 +40,7 @@ class LibrosDisponibles(models.Model):
 	ciudad = models.ForeignKey(City)
 
 	def __unicode__(self):
-		return "Libro Disponible object: %s - %s" % (self.libro, self.perfil)
+		return "Libro Disponible object: %s - %s" % (self.libro.titulo, self.perfil.usuario)
 
 
 class LibrosPrestados(models.Model):
@@ -50,7 +50,7 @@ class LibrosPrestados(models.Model):
 	fecha_limite_devolucion = models.DateTimeField(null=True)
 
 	def __unicode__(self):
-		return "Libro Prestado object: %s - %s - %s" % (self.libro, self.perfil_dueno, self.perfil_receptor)
+		return "Libro Prestado object: %s - %s - %s" % (self.libro, self.perfil_dueno.usuario, self.perfil_receptor.usuario)
 
 
 class LibrosRequest(models.Model):
@@ -65,7 +65,7 @@ class LibrosRequest(models.Model):
 	eliminado = models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return "Libro Request object: %s - %s - %s" % (self.libro, self.perfil_envio, self.perfil_recepcion)
+		return "Libro Request object: %s - %s - %s" % (self.libro.titulo, self.perfil_envio.usuario, self.perfil_recepcion.titulo)
 
 
 class BibliotecaCompartida(models.Model):
@@ -88,7 +88,7 @@ class BibliotecaCompartida(models.Model):
 		super(BibliotecaCompartida, self).save(*args, **kwargs)
 
 	def __unicode__(self):
-		return "Biblioteca Compartida: %s - %s" % (self.nombre)
+		return "Biblioteca Compartida: %s" % (self.nombre)
 
 
 class LibrosBibliotecaCompartida(models.Model):
@@ -98,7 +98,7 @@ class LibrosBibliotecaCompartida(models.Model):
 	prestado = models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return "Libro BibliotecaCompartida: %s - %s" % (self.libro, self.biblioteca_compartida)
+		return "Libro BibliotecaCompartida: %s - %s" % (self.libro.titulo, self.biblioteca_compartida.nombre)
 
 
 class LibrosPrestadosBibliotecaCompartida(models.Model):
@@ -110,4 +110,4 @@ class LibrosPrestadosBibliotecaCompartida(models.Model):
 	fecha_devolucion = models.DateTimeField(null=True)
 
 	def __unicode__(self):
-		return "Libro Biblioteca Compartida: %s - %s" % (self.libro, self.biblioteca_compartida)
+		return "Libro Biblioteca Compartida: %s - %s" % (self.libro.titulo, self.biblioteca_compartida.nombre)

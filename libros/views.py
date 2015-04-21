@@ -241,7 +241,7 @@ def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
             biblioteca_compartida.ciudad = ciudad
             biblioteca_compartida.save()
 
-            return HttpResponse("creo biblioteca compartida")
+            return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id}))
 
     else:
         form = NuevaBibliotecaCompartida()
