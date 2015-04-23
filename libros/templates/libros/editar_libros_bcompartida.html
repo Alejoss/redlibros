@@ -10,7 +10,7 @@
 	<div class = "panel panel-primary">
 		<div class = "panel-body">
 			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>		
-			<a href="{% url 'libros:libro_request' l.id %}">Marcar como No Disponible</a>
+			<a class = "marcar_no_disponible" href="{% url 'libros:libro_request' l.id %}" data-id="{{l.id}}">Marcar como No Disponible</a>
 			<a href="{% url 'libros:prestar_libro_bcompartida' l.id %}">Prestar Libro</a>	
 		</div>
 	</div>
@@ -24,7 +24,7 @@
 			{% if l.prestado %}
 				<p> Este libro fue prestado </p>
 			{% else %}
-				<a href="{% url 'libros:libro_request' l.id %}">Marcar como Disponible</a>
+				<a class = "marcar_disponible" href="{% url 'libros:libro_request' l.id %}" data-id="{{l.id}}" >Marcar como Disponible</a>
 			{% endif %}
 
 		</div>
@@ -45,6 +45,40 @@
 		</div>
 	</div>
 {% endfor %}
+
+
+<script>
+
+$(document).ready(function(){
+
+	$(".marcar_no_disponible").on("click", function(){
+		var id_libro_disp = $(this).data("id");
+		$.ajax({
+			url: "/libros/marcar_no_disponible/",
+			method: "POST",
+			data: {
+				'id_libro_disp': id_libro_disp,
+				'tipo': "biblioteca",
+				'csrfmiddlewaretoken': '{{ csrf_token }}'
+			}
+		});
+	});
+
+	$(".marcar_disponible").on("click", function(){
+		var id_libro = $(this).data("id");
+		$.ajax({
+			url: "/libros/marcar_disponible/",
+			method: "POST",
+			data: {
+				'id_libro': id_libro,
+				'tipo': "biblioteca",
+				'csrfmiddlewaretoken': '{{ csrf_token }}'
+			}
+		});
+	});
+});
+
+</script>
 
 
 {% endblock content %}

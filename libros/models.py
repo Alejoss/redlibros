@@ -48,8 +48,9 @@ class LibrosPrestados(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil_dueno = models.ForeignKey(Perfil, related_name="perfil_dueno")
 	perfil_receptor = models.ForeignKey(Perfil, related_name="perfil_receptor")
-	fecha_limite_devolucion = models.DateTimeField(null=True)
-	devuelto = models.BooleanField(default=False)
+	fecha_max_devolucion = models.DateTimeField(null=True)
+	fecha_prestamo = models.DateTimeField(null=True)
+	fecha_devolucion = models.DateTimeField(null=True)
 
 	def __unicode__(self):
 		return "Libro Prestado object: %s - %s - %s" % (self.libro, self.perfil_dueno.usuario, self.perfil_receptor.usuario)

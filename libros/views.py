@@ -375,7 +375,8 @@ def marcar_no_disponible(request):
             libro_disponible.save()
 
         elif tipo == "biblioteca":
-            pass
+            libro_disponible_obj = get_object_or_404(LibrosBibliotecaCompartida, id=id_libro_disponible)
+            libro_disponible_obj.disponible = False
 
         return HttpResponse("libro marcado como no disponible", status=200)
     else:
@@ -398,7 +399,9 @@ def marcar_disponible(request):
             libro_no_disponible.save()
 
         elif tipo == "biblioteca":
-            pass
+            libro_bcompartida_obj = get_object_or_404(LibrosBibliotecaCompartida, id=id_libro)
+            libro_bcompartida_obj.disponible = True
+            libro_bcompartida_obj.save
 
         return HttpResponse("libro marcado como disponible", status=200)
     else:
@@ -426,7 +429,8 @@ def marcar_devuelto(request):
             libro_no_disponible.save()
 
         elif tipo == "biblioteca":
-            pass
+            libro_prestado = get_object_or_404(LibrosPrestadosBibliotecaCompartida, id=id_libro_prestado)
+            
 
         return HttpResponse("libro marcado como devuelto", status=200)
     else:
