@@ -26,5 +26,7 @@ urlpatterns = [
         name="prestar_libro_bcompartida"),
 
     # Ajax calls
-    url(r'^marcar_no_disponible/$', views.marcar_no_disponible)
+    url(r'^marcar_no_disponible/$', views.marcar_no_disponible),
+    url(r'^marcar_disponible/$', views.marcar_disponible),
+    url(r'^marcar_devuelto/$', views.marcar_devuelto)
 ]

@@ -18,18 +18,19 @@
 	<div class = "panel panel-primary">
 		<div class = "panel-body">
 			<p>{{l.libro.titulo}}</p>
-			<button class = "btn btn-warning marcar_disponible" data-id="{{l.id}}"> Marcar como Disponible </button>
+			<button class = "btn btn-success marcar_disponible" data-id="{{l.id}}"> Marcar como Disponible </button>
 		</div>
 	</div>
 	{% endfor %}
 
 	<hr>
-	
+
 	<h2> Libros prestados </h2>
 	{% for l in libros_prestados %}
 	<div class = "panel panel-primary">
 		<div class = "panel-body">
-			<p>{{l.libro.titulo}}</p>			
+			<p>{{l.libro.titulo}}</p>
+			<button class = "btn btn-success marcar_devuelto" data-id="{{l.id}}">Marcar como Devuelto</button>
 		</div>
 	</div>
 	{% endfor %}
@@ -37,8 +38,7 @@
 
 <script>
 	$(document).ready(function(){
-		$(".marcar_no_disponible").on("click", function(){
-			console.log($(this).data("id"));
+		$(".marcar_no_disponible").on("click", function(){			
 			var libro_disp_id = $(this).data("id");
 			$.ajax({
 				method: "POST",
@@ -46,8 +46,23 @@
 				data: {'id_libro_disp': libro_disp_id, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
 			});
 		});
-	})
+		$(".marcar_disponible").on("click", function(){
+			var id_libro = $(this).data("id");
+			$.ajax({
+				method: "POST",
+				url: "/libros/marcar_disponible/",
+				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+			});
+		});
+		$(".marcar_devuelto").on("click", function(){
+			var id_libro = $(this).data("id");
+			$.ajax({
+				method: "POST",
+				url: "/libros/marcar_devuelto/",
+				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+			});
+		});
+	});
 </script>
 
 {% endblock content %}
-

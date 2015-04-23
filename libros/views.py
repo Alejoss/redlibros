@@ -75,7 +75,7 @@ def mi_biblioteca(request):
     perfil_usuario = obtener_perfil(request.user)
     libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True)
     libros_no_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=False, prestado=False)
-    libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario)
+    libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario, devuelto=False)
 
     context = {
         'libros_disponibles': libros_disponibles,
@@ -359,6 +359,7 @@ def prestar_libro_bcompartida(request, id_libro_compartido):
     return render(request, template, context)
 
 
+@login_required
 def marcar_no_disponible(request):
     
     if request.is_ajax():
@@ -380,9 +381,53 @@ def marcar_no_disponible(request):
     else:
         return HttpResponse("No es ajax")
 
-"""
+
+@login_required
 def marcar_disponible(request):
 
     if request.is_ajax():
+        id_libro = request.POST.get('id_libro', '')
+        tipo = request.POST.get('tipo', '')
 
-"""
+        if not id_libro or not tipo:
+            return HttpResponse(status=400)  # Bad Request
+
+        if tipo == "perfil":
+            libro_no_disponible = get_object_or_404(LibrosDisponibles, id=id_libro)
+            libro_no_disponible.disponible = True
+            libro_no_disponible.save()
+
+        elif tipo == "biblioteca":
+            pass
+
+        return HttpResponse("libro marcado como disponible", status=200)
+    else:
+        return HttpResponse("No es ajax")
+
+
+@login_required
+def marcar_devuelto(request):
+
+    if request.is_ajax():
+        id_libro_prestado = request.POST.get('id_libro', '')
+        tipo = request.POST.get('tipo', '')
+
+        if not id_libro_prestado or not tipo:
+            return HttpResponse(status=400)  # Bad Request
+
+        if tipo == "perfil":
+            libro_prestado = get_object_or_404(LibrosPrestados, id=id_libro_prestado)
+            libro_prestado.devuelto = True
+            libro_prestado.save()
+
+            libro_no_disponible = LibrosDisponibles.objects.filter(libro=libro_prestado.libro, perfil=libro_prestado.perfil_dueno).first()
+            libro_no_disponible.disponible = True
+            libro_no_disponible.prestado = False
+            libro_no_disponible.save()
+
+        elif tipo == "biblioteca":
+            pass
+
+        return HttpResponse("libro marcado como devuelto", status=200)
+    else:
+        return HttpResponse("No es ajax")
