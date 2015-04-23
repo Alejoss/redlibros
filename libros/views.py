@@ -74,11 +74,13 @@ def mi_biblioteca(request):
     template = "libros/mi_biblioteca.html"
     perfil_usuario = obtener_perfil(request.user)
     libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True)
+    libros_no_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=False, prestado=False)
     libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario)
 
     context = {
         'libros_disponibles': libros_disponibles,
-        'libros_prestados': libros_prestados
+        'libros_prestados': libros_prestados,
+        'libros_no_disponibles': libros_no_disponibles
     }
 
     return render(request, template, context)
@@ -91,8 +93,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad):
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
     libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True)
-    bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)
-    print bibliotecas_compartidas
+    bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)    
 
     context = {
         'ciudad': ciudad,
@@ -316,7 +317,7 @@ def editar_libros_bcompartida(request, slug_biblioteca_compartida):
     libros_prestados = LibrosPrestadosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida)
 
     context = {'biblioteca_compartida': biblioteca_compartida, 'libros_prestados': libros_prestados, 'libros_disponibles': libros_disponibles, 
-                'libros_no_disponibles': libros_no_disponibles}
+            'libros_no_disponibles': libros_no_disponibles}
 
     return render(request, template, context)
 
@@ -356,3 +357,32 @@ def prestar_libro_bcompartida(request, id_libro_compartido):
     context = {'form': form, 'libro_compartido': libro_disponible_obj}
 
     return render(request, template, context)
+
+
+def marcar_no_disponible(request):
+    
+    if request.is_ajax():
+        id_libro_disponible = request.POST.get('id_libro_disp', '')
+        tipo = request.POST.get('tipo', '')
+
+        if not id_libro_disponible or not tipo:
+            return HttpResponse(status=400)  # Bad Request
+
+        if tipo == "perfil":
+            libro_disponible = get_object_or_404(LibrosDisponibles, id=id_libro_disponible)
+            libro_disponible.disponible = False
+            libro_disponible.save()
+
+        elif tipo == "biblioteca":
+            pass
+
+        return HttpResponse("libro marcado como no disponible", status=200)
+    else:
+        return HttpResponse("No es ajax")
+
+"""
+def marcar_disponible(request):
+
+    if request.is_ajax():
+
+"""

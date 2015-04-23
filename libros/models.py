@@ -37,6 +37,7 @@ class LibrosDisponibles(models.Model):
 	libro = models.ForeignKey(Libro)
 	perfil = models.ForeignKey(Perfil)
 	disponible = models.BooleanField(default=True)
+	prestad = models.BooleanField(default=True)
 	ciudad = models.ForeignKey(City)
 
 	def __unicode__(self):

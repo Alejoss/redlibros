@@ -8,11 +8,23 @@
 	<div class = "panel panel-primary">
 		<div class = "panel-body">
 			<p>{{l.libro.titulo}}</p>
-			<button class = "btn btn-warning"> Marcar como no disponible </button>
+			<button class = "btn btn-warning marcar_no_disponible" data-id="{{l.id}}"> Marcar como no disponible </button>
 		</div>
 	</div>
 	{% endfor %}
 
+	<h3> No Disponibles </h3>
+	{% for l in libros_no_disponibles %}
+	<div class = "panel panel-primary">
+		<div class = "panel-body">
+			<p>{{l.libro.titulo}}</p>
+			<button class = "btn btn-warning marcar_disponible" data-id="{{l.id}}"> Marcar como Disponible </button>
+		</div>
+	</div>
+	{% endfor %}
+
+	<hr>
+	
 	<h2> Libros prestados </h2>
 	{% for l in libros_prestados %}
 	<div class = "panel panel-primary">
@@ -23,4 +35,19 @@
 	{% endfor %}
 </div>
 
+<script>
+	$(document).ready(function(){
+		$(".marcar_no_disponible").on("click", function(){
+			console.log($(this).data("id"));
+			var libro_disp_id = $(this).data("id");
+			$.ajax({
+				method: "POST",
+				url: "/libros/marcar_no_disponible/",
+				data: {'id_libro_disp': libro_disp_id, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+			});
+		});
+	})
+</script>
+
 {% endblock content %}
+
