@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from forms import formRegistro, formEditarPerfil
-from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida
-from redlibros.utils import obtener_perfil
+from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida, LibrosDisponibles
+from perfiles.models import Perfil
+from redlibros.utils import obtener_perfil, obtener_historial_libros
 
 
 def registro(request):
@@ -32,42 +33,61 @@ def registro(request):
 def perfil_propio(request):
 	template = "perfiles/perfil_propio.html"
 	perfil_usuario = obtener_perfil(request.user)
-	tiene_requests_pendientes = False
-	tiene_libros_prestados = False
-	tiene_libros_pedidos = False
+	libros_perfil = {
+		'tiene_requests_pendientes': False,
+		'tiene_libros_prestados': False,
+		'tiene_libros_pedidos': False
+		}
+
 	libros_requests = []
 	libros_prestados = []
 	libros_prestados_bcompartida = []
 	libros_pedidos = []
 
-	if LibrosRequest.objects.filter(perfil_envio=perfil_usuario).exists():
-		tiene_libros_pedidos = True
+	if LibrosRequest.objects.filter(perfil_envio=perfil_usuario, aceptado=False, eliminado=False).exists():
+		libros_perfil['tiene_libros_pedidos'] = True
 		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario)
 
-	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario).exists():
-		tiene_requests_pendientes = True
+	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False).exists():
+		libros_perfil['tiene_requests_pendientes'] = True
 		libros_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario)
 
-	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario).exists():
-		tiene_libros_prestados = True
-		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario)
+	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario, fecha_devolucion=None).exists():
+		libros_perfil['tiene_libros_prestados'] = True
+		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario, fecha_devolucion=None)
 
-	if LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario).exists():
-		tiene_libros_prestados = True
-		libros_prestados_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario)
+	if LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario, fecha_devolucion=None).exists():
+		libros_perfil['tiene_libros_prestados'] = True		
+		libros_prestados_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario, fecha_devolucion=None)
 
-	context = {'tiene_requests_pendientes': tiene_requests_pendientes, 'libros_requests': libros_requests,
-	           'tiene_libros_prestados': tiene_libros_prestados, 'libros_prestados': libros_prestados, 
-	           'tiene_libros_pedidos': tiene_libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida}
+	context = {'libros_perfil': libros_perfil, 'libros_requests': libros_requests, 'libros_prestados': libros_prestados,
+	            'libros_pedidos': libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida}
 	
 	return render(request, template, context)
 
 
-def perfil_usuario(request):
-	template = "perfiles/perfil.html"
-	datos_perfil = ""
+def perfil_usuario(request, username):
+	template = "perfiles/perfil_usuario.html"
+	libros_perfil = {'tiene_libros_prestados': False, 'tiene_libros_disponibles': False}
+	perfil = Perfil.objects.get(usuario__username=username)
+	historial_libros = obtener_historial_libros(perfil)
+	libros_prestados = libros_prestados_bcompartida = libros_disponibles = []
 
-	context = {'datos_perfil': datos_perfil}
+	if LibrosPrestados.objects.filter(perfil_receptor=perfil, fecha_devolucion=None).exists():
+		libros_perfil['tiene_libros_prestados'] = True
+		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil, fecha_devolucion=None)
+
+	if LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil, fecha_devolucion=None).exists():
+		libros_perfil['tiene_libros_prestados'] = True
+		libros_prestados_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil, fecha_devolucion=None)
+
+	if LibrosDisponibles.objects.filter(perfil=perfil, disponible=True, prestado=False).exists():
+		libros_perfil['tiene_libros_disponibles'] = True
+		libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil, disponible=True, prestado=False)
+
+	context = {'libros_prestados': libros_prestados, 'libros_prestados_bcompartida': libros_prestados_bcompartida, 'libros_disponibles': libros_disponibles,
+	           'historial_libros': historial_libros, 'libros_perfil': libros_perfil}
+
 	return render(request, template, context)
 
 

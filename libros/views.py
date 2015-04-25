@@ -73,9 +73,9 @@ def mi_biblioteca(request):
     """
     template = "libros/mi_biblioteca.html"
     perfil_usuario = obtener_perfil(request.user)
-    libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True)
+    libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True, prestado=False)
     libros_no_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=False, prestado=False)
-    libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario, devuelto=False)
+    libros_prestados = LibrosPrestados.objects.filter(perfil_dueno=perfil_usuario, fecha_devolucion=None)
 
     context = {
         'libros_disponibles': libros_disponibles,
@@ -92,7 +92,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad):
     """
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
-    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True)
+    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
     bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)    
 
     context = {
@@ -169,7 +169,7 @@ def libro_request(request, libro_request_id):
     """
     template = "libros/libro_request.html"
 
-    libro_request = LibrosRequest.objects.get(id=libro_request_id)
+    libro_request = get_object_or_404(LibrosRequest, id=libro_request_id)
 
     if request.method == "POST":        
         decision = request.POST.get("prestar", "")
@@ -177,20 +177,16 @@ def libro_request(request, libro_request_id):
             libro_request.aceptado = True
             libro_request.save()
 
+            fecha_prestamo = datetime.today()
             libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio,
-                                     perfil_dueno=libro_request.perfil_recepcion)
+                                     perfil_dueno=libro_request.perfil_recepcion, fecha_prestamo=fecha_prestamo)
             libro_prestado.save()
 
-            libros_disponibles = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion)
+            libro_disponible_obj = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion).first()
+            libro_disponible_obj.disponible = False
+            libro_disponible_obj.prestado = True
 
-            counter = 0
-            for libro in libros_disponibles:
-                if counter != 0:
-                    break
-                else:
-                    libro.disponible = False
-                    libro.save()
-                    counter += 1
+            libro_disponible_obj.save()
 
             return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
 
@@ -312,9 +308,9 @@ def editar_libros_bcompartida(request, slug_biblioteca_compartida):
     template = "libros/editar_libros_bcompartida.html"
     
     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug_biblioteca_compartida)
-    libros_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=True)
-    libros_no_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=False)
-    libros_prestados = LibrosPrestadosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida)
+    libros_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=True, prestado=False)
+    libros_no_disponibles = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=False, prestado=False)
+    libros_prestados = LibrosPrestadosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, fecha_devolucion=None)
 
     context = {'biblioteca_compartida': biblioteca_compartida, 'libros_prestados': libros_prestados, 'libros_disponibles': libros_disponibles, 
             'libros_no_disponibles': libros_no_disponibles}
@@ -377,6 +373,7 @@ def marcar_no_disponible(request):
         elif tipo == "biblioteca":
             libro_disponible_obj = get_object_or_404(LibrosBibliotecaCompartida, id=id_libro_disponible)
             libro_disponible_obj.disponible = False
+            libro_disponible_obj.save()
 
         return HttpResponse("libro marcado como no disponible", status=200)
     else:
@@ -387,6 +384,8 @@ def marcar_no_disponible(request):
 def marcar_disponible(request):
 
     if request.is_ajax():
+        print "request ajax a marcar_disponible"
+
         id_libro = request.POST.get('id_libro', '')
         tipo = request.POST.get('tipo', '')
 
@@ -398,12 +397,15 @@ def marcar_disponible(request):
             libro_no_disponible.disponible = True
             libro_no_disponible.save()
 
+            return HttpResponse("libo marcado como disponible", status=200)
+
         elif tipo == "biblioteca":
+            print "marcar_disponible id_libro, tipo: %s, %s" % (id_libro, tipo)
             libro_bcompartida_obj = get_object_or_404(LibrosBibliotecaCompartida, id=id_libro)
             libro_bcompartida_obj.disponible = True
-            libro_bcompartida_obj.save
+            libro_bcompartida_obj.save()
 
-        return HttpResponse("libro marcado como disponible", status=200)
+            return HttpResponse("libro marcado como disponible", status=200)
     else:
         return HttpResponse("No es ajax")
 
@@ -414,6 +416,7 @@ def marcar_devuelto(request):
     if request.is_ajax():
         id_libro_prestado = request.POST.get('id_libro', '')
         tipo = request.POST.get('tipo', '')
+        fecha_devolucion = datetime.today()
 
         if not id_libro_prestado or not tipo:
             return HttpResponse(status=400)  # Bad Request
@@ -421,6 +424,7 @@ def marcar_devuelto(request):
         if tipo == "perfil":
             libro_prestado = get_object_or_404(LibrosPrestados, id=id_libro_prestado)
             libro_prestado.devuelto = True
+            libro_prestado.fecha_devolucion = fecha_devolucion
             libro_prestado.save()
 
             libro_no_disponible = LibrosDisponibles.objects.filter(libro=libro_prestado.libro, perfil=libro_prestado.perfil_dueno).first()
@@ -428,9 +432,15 @@ def marcar_devuelto(request):
             libro_no_disponible.prestado = False
             libro_no_disponible.save()
 
-        elif tipo == "biblioteca":
+        elif tipo == "biblioteca":            
             libro_prestado = get_object_or_404(LibrosPrestadosBibliotecaCompartida, id=id_libro_prestado)
-            
+            libro_prestado.fecha_devolucion = fecha_devolucion
+            libro_prestado.save()
+
+            libro_no_disponible = LibrosBibliotecaCompartida.objects.filter(libro=libro_prestado.libro, biblioteca_compartida=libro_prestado.biblioteca_compartida).first()
+            libro_no_disponible.disponible = True
+            libro_no_disponible.prestado = False
+            libro_no_disponible.save()
 
         return HttpResponse("libro marcado como devuelto", status=200)
     else:

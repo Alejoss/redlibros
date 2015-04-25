@@ -27,7 +27,7 @@
 		Email : {{perfil_usuario.usuario.email}} </br>
 		<br>		
 	</p>
-	<form class="form-horizontal" action="{% url 'libros:mensaje_request' libro_request.id %}" method="post">
+	<form class="form-horizontal" action="{% url 'libros:libro_request' libro_request.id %}" method="post">
 			{% csrf_token %}
 			<div class="control-group">			  
 			  <div class="controls">

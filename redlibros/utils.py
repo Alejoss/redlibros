@@ -2,6 +2,7 @@
 import datetime
 
 from perfiles.models import Perfil
+from libros.models import LibrosPrestados, LibrosPrestadosBibliotecaCompartida
 
 
 def obtener_perfil(usuario):
@@ -23,5 +24,14 @@ def definir_fecha_devolucion(fecha_prestamo, tiempo_prestamo):
 	else:
 		pass
 
-	print fecha_devolucion
 	return fecha_devolucion
+
+
+def obtener_historial_libros(perfil):
+
+	libros_recibidos_usuario = LibrosPrestados.objects.filter(perfil_receptor=perfil)
+	libros_recibidos_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil)
+	libros_prestados_por_usuario = LibrosPrestados.objects.filter(perfil_dueno=perfil)
+
+	return {'libros_recibidos_usuario': libros_recibidos_usuario, 'libros_recibidos_bcompartida': libros_recibidos_bcompartida, 
+	'libros_prestados_por_usuario': libros_prestados_por_usuario}

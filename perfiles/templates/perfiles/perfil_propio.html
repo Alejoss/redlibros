@@ -3,12 +3,12 @@
 {% block content %}
 <div class = "col-md-8">
 
-	{% if tiene_libros_prestados %}
-		<h3> Tienes requests pendientes </h3>
+	{% if libros_perfil.tiene_libros_pedidos %}
+		<h3> Tienes libros pedidos </h3>
 		{% for r in libros_pedidos %}
 		<div class = "panel panel-primary">
 			<div class = "panel-body">
-				<p> {{r.libro.titulo}} | {{r.fecha_request}}</p>				
+				<p> {{r.libro.titulo}} pedido el {{r.fecha_request}} a {{r.perfil_recepcion.usuario.username}} </p>				
 				{% if r.eliminado %}
 					<p>{{r.libro.perfil_recepcion.usuario}} no puede prestart este libro por ahora. <br>
 						Este mensaje se borrará en una semana. Puedes pedirle el libro de nuevo si deseas.
@@ -19,7 +19,7 @@
 		{% endfor %}
 	{% endif %}
 
-	{% if tiene_libros_prestados %}
+	{% if libros_perfil.tiene_libros_prestados %}
 		<h3> Tienes libros prestados </h3>
 		{% for l in libros_prestados %}
 		<div class = "panel panel-primary">
@@ -38,7 +38,7 @@
 		{% endfor %}	
 	{% endif %}
 
-	{% if tiene_requests_pendientes %}
+	{% if libros_perfil.tiene_requests_pendientes %}
 		<h3> Tienes requests pendientes </h3>
 		{% for r in libros_requests %}
 		<div class = "panel panel-primary">
@@ -55,8 +55,9 @@
 		<p> Recibió Tal Libro de Tal Usuario </p>
 		<p> Tomó Tal Libro de Tal Sitio </p>
 		<p> Añadió Tal Libro a su Biblioteca Compartida </p>
-	</div>
-	<div class = "col-md-4">
+</div>
+	
+<div class = "col-md-4">
 
 	<h4> {{perfil_usuario.ciudad.name}} / {{perfil_usuario.descripcion}} </h4>
 
