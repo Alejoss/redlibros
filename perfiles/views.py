@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
@@ -69,6 +70,12 @@ def perfil_propio(request):
 def perfil_usuario(request, username):
 	template = "perfiles/perfil_usuario.html"
 	libros_perfil = {'tiene_libros_prestados': False, 'tiene_libros_disponibles': False}
+
+	# redirigir a la pagina perfil_propio si es el caso
+	user_obj = User.objects.get(username=username)
+	if user_obj == request.user:
+		return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
+
 	perfil = Perfil.objects.get(usuario__username=username)
 	historial_libros = obtener_historial_libros(perfil)
 	libros_prestados = libros_prestados_bcompartida = libros_disponibles = []
