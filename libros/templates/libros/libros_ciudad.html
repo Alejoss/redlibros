@@ -4,12 +4,14 @@
 <div class = "col-md-8">
 	<h2> Libros Disponibles en {{ciudad.name}} </h2>
 	{% for l in libros_disponibles %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p> {{l.libro.titulo}} | <a href="{% url 'perfiles:perfil_usuario' l.perfil.usuario.username %}">{{l.perfil.usuario.username}}</a></p>
-			<a href="{% url 'libros:pedir_libro' l.id %}">Pedir Libro</a>
+		{% if l.perfil != perfil_usuario %}
+		<div class = "panel panel-primary">
+			<div class = "panel-body">
+				<p> {{l.libro.titulo}} | <a href="{% url 'perfiles:perfil_usuario' l.perfil.usuario.username %}">{{l.perfil.usuario.username}}</a></p>
+				<a href="{% url 'libros:pedir_libro' l.id %}">Pedir Libro</a>
+			</div>
 		</div>
-	</div>
+		{% endif %}
 	{% endfor %}
 </div>
 
