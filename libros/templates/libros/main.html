@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
+<!-- WELCOME -->
+<section>
+	<div class="container">
+	
+		<div class="row">
+			<div class="col-md-6">				
+				<p class="lead">Deja que ese libro al fondo de tu escritorio sea leído una vez más, 
+				<em class="styleColor">y ten acceso a los libros de otros miembros de nuestro club.</em></p>
 
-<div class ="col-md-8">
-	<h4>Últimas acciones en la página web</h4>
-	<hr>	
-</div>
+				<a href="#" class="btn btn-facebook btn-lg btn-block"><i class="fa fa-facebook"></i> Regístrate con Facebook</a>				
+				<a href="#" class="btn btn-google-plus btn-lg btn-block"><i class="fa fa-google-plus"></i> Regístrate con Google</a>
+				<br>
+				<p> ¿Ya tienes una cuenta? <a href=""> <i class="fa fa-facebook"></i> Entra con Facebook </a>  | <a href=""> <i class="fa fa-google"></i> Entra con Google </a>
 
-<div class = "col-md-4">
-	<h3> Libros disponibles en Quito </h3>
-	<a href="#" class="btn btn-primary">Académicos</a>
-	<a href="#" class="btn btn-success">Literarios</a>
-	<hr>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h3 class="panel-title">
-				Rayuela - Julio Cortázar
-			</h3>
+			</div>
+			
+			<div class="col-md-6 text-center">
+				<img class="img-responsive animate_fade_in" src="https://lesptitsmobiles.files.wordpress.com/2012/04/oldbooks.jpg" alt=""/>
+			</div>
 		</div>
-		<div class="panel-body">
-			Panel content
-		</div>
+
 	</div>
-</div>
+</section>
+<!-- /WELCOME -->
 {% endblock content %}

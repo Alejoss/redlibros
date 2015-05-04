@@ -1,53 +1,85 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
 <head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"> <!--bootstrap cambiado por bootstrap themes - Readable -->
+	<meta charset="utf-8" />
+	<title>Letras.Club</title>
+	<meta name="keywords" content="HTML5,CSS3,Template" />
+	<meta name="description" content="" />
+	<meta name="Author" content="Dorin Grigoras [www.stepofweb.com]" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	<!-- mobile settings -->
+	<meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1, user-scalable=0" />
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="{% static 'assets/images/demo/favicon.ico' %}" />
+
+	<!-- WEB FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800&amp;subset=latin,latin-ext,cyrillic,cyrillic-ext" rel="stylesheet" type="text/css" />
+
+	<!-- CORE CSS -->
+	<link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/font-awesome.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/sky-forms.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/weather-icons.min.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/line-icons.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/plugins/owl-carousel/owl.pack.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/plugins/magnific-popup/magnific-popup.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/animate.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/flexslider.css' %}" rel="stylesheet" type="text/css" />
+
+	<!-- REVOLUTION SLIDER -->
+	<link href="{% static 'assets/css/revolution-slider.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/layerslider.css' %}" rel="stylesheet" type="text/css" />
+
+	<!-- THEME CSS -->
+	<link href="{% static 'assets/css/essentials.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/layout.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/header-2.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/footer-default.css' %}" rel="stylesheet" type="text/css" />
+	<link href="{% static 'assets/css/color_scheme/brown.css' %}" rel="stylesheet" type="text/css" id="color_scheme" />
+
+	<!-- Morenizr -->
+	<script type="text/javascript" src="{% static 'assets/plugins/modernizr.min.js' %}"></script>
+
+	<!-- Jquery -->		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
 </head>
-<body>
-	<nav class="navbar navbar-inverse">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <a class="navbar-brand" href="{% url 'libros:main' %} ">Red de Libros</a>
-	    </div>
 
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-	      <ul class="nav navbar-nav">
-	      	{% if user.is_authenticated %}
-	      		{% if tiene_ciudad %}
-		        <li><a href="{% url 'libros:libros_ciudad' perfil_ciudad.slug perfil_ciudad.id %}">Libros disponibles en {{perfil_ciudad.name}}</a></li>
-		        {% else %}
-		        <li><a href="">Busca un libro disponible en tu ciudad</a></li>
-		        {% endif %}		        
-		        <li><a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}">Compartir un Libro</a></li>
-	        {% endif %}
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	      	{% if user.is_authenticated %}
-	      	<li><a href="{% url 'perfiles:perfil_propio' %}">{{user.username}}</a></li>
-	      	<li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
-	      	<li><a href="{% url 'perfiles:logout' %}">Logout</a></li>
-	      	<li><a href="{% url 'perfiles:editar_perfil' %}">Editar Perfil</a></li>
-	      	{% else %}
-	        <li><a href="{% url 'perfiles:login' %}">Login</a></li>
-	        <li><a href="{% url 'perfiles:registro' %}">Registro</a></li>
-	        {% endif %}
-	      </ul>
-	    </div>
-	  </div>
-	</nav>
+<body class = "boxed pattern1">
+
+	<div id="wrapper">
+	
+	{% include 'menu.html' %}
 
 	{% block content %}
 
 	{% endblock content %}
+
+	</div>
+
+	<!-- JAVASCRIPT FILES -->
+	<script type="text/javascript" src="{% static 'assets/plugins/jquery-2.1.1.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/jquery.isotope.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/masonry.js' %}"></script>
+
+	<script type="text/javascript" src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/owl-carousel/owl.carousel.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/knob/js/jquery.knob.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/flexslider/jquery.flexslider-min.js' %}"></script>
+
+	<!-- REVOLUTION SLIDER -->
+	<script type="text/javascript" src="{% static 'assets/plugins/revolution-slider/js/jquery.themepunch.tools.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/plugins/revolution-slider/js/jquery.themepunch.revolution.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/js/revolution_slider.js' %}"></script>
+	
+
+	<script type="text/javascript" src="{% static 'assets/js/scripts.js' %}"></script>
+
 </body>
 </html>

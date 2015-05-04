@@ -1,0 +1,54 @@
+{% load staticfiles %}
+
+<div id="header"> <!-- class="sticky" for sticky menu -->
+	<!-- Top Nav -->
+	<header id="topNav">
+		<div class="container">
+
+			<!-- Logo -->
+			<a class="logo" href="{% url 'libros:main' %}">
+				<img src="{% static 'assets/images/logo.png' %}" height="50" alt="" />
+			</a>
+
+			<!-- Mobile Menu Button -->
+			<button class="btn btn-mobile" data-toggle="collapse" data-target=".nav-main-collapse">
+				<i class="fa fa-bars"></i>
+			</button>
+
+			<!-- Top Nav -->
+			<div class="navbar-collapse nav-main-collapse collapse pull-right">
+				<nav class="nav-main">
+					<ul id="topMain" class="nav nav-pills nav-main">						
+
+						{% if user.is_authenticated %}
+				      		{% if tiene_ciudad %}
+					        <li><a href="{% url 'libros:libros_ciudad' perfil_ciudad.slug perfil_ciudad.id %}">Libros disponibles en {{perfil_ciudad.name}}</a></li>
+					        {% else %}
+					        <li><a href="">Busca un libro disponible en tu ciudad</a></li>
+					        {% endif %}		        
+					    {% else %}
+					    	<li><a href="">Busca un libro disponible en tu ciudad</a></li>
+					    {% endif %}
+
+						{% if user.is_authenticated %}
+						<li class="dropdown">
+							<a class="dropdown-toggle pull-right" href="">{{user.username}}</a>
+							<ul class="dropdown-menu">
+								<li><a href="{% url 'perfiles:perfil_propio' %}">Perfil</a></li>
+								<li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
+								<li class="divider"></li>
+								<li><a href="{% url 'perfiles:editar_perfil' %}">Editar Perfil</a></li>
+								<li><a href="{% url 'perfiles:logout' %}">Logout</a></li>
+							</ul>
+						</li>
+					    <li><a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}"><i class="fa fa-book"></i> Compartir un Libro</a></li>
+						{% endif %}
+					</ul>
+				</nav>
+			</div>
+			<!-- /Top Nav -->
+
+		</div><!-- /.container -->
+	</header>
+	<!-- /Top Nav -->
+</div>
