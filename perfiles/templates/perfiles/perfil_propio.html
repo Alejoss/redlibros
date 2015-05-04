@@ -1,72 +1,140 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 <div class = "col-md-8">
-
 	{% if libros_perfil.tiene_libros_pedidos %}
-		<h3> Tienes libros pedidos </h3>
+		<hr class="half-margins" /><!-- divider 30px -->	
+		<h4> Has pedido prestado estos libros </h4>
+
 		{% for r in libros_pedidos %}
-		<div class = "panel panel-primary">
-			<div class = "panel-body">
-				<p> {{r.libro.titulo}} pedido el {{r.fecha_request}} a {{r.perfil_recepcion.usuario.username}} </p>				
-				{% if r.eliminado %}
-					<p>{{r.libro.perfil_recepcion.usuario}} no puede prestart este libro por ahora. <br>
-						Este mensaje se borrará en una semana. Puedes pedirle el libro de nuevo si deseas.
+		<!-- CALLOUT -->
+		<div class="alert callout alert-default fade in">
+			<div class="row">
+				<div class="col-md-9 col-sm-9"><!-- left text -->
+					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-				{% endif %}
+						Jul-5-2015 | pediste este libro a <a href="">{{r.perfil_recepcion.usuario.username}}</a>.
+					</p>
+					{% if r.eliminado %}
+					<p>
+						{{r.libro.perfil_recepcion.usuario}} no puede prestarte este libro por ahora. <br>
+						Este mensaje se borrará en una semana.
+					</p>
+					{% endif %}
+				</div><!-- /left text -->
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+					<a href="" rel="nofollow" target="_blank" class="btn btn-danger btn-lg">Cancelar</a>
+				</div><!-- /right btn -->
 			</div>
 		</div>
+		<!-- /CALLOUT -->
 		{% endfor %}
+	
 	{% endif %}
 
 	{% if libros_perfil.tiene_libros_prestados %}
-		<h3> Tienes libros prestados </h3>
+		<hr class="half-margins" /><!-- divider 30px -->	
+		<h4> Tienes libros prestados </h4>
+
 		{% for l in libros_prestados %}
-		<div class = "panel panel-primary">
-			<div class = "panel-body">
-				<p> {{l.libro.titulo}} | {{l.perfil_dueno.usuario}} | {{l.fecha_limite}} </p>
+		<!-- CALLOUT -->
+		<div class="alert callout alert-default fade in">
+			<div class="row">
+				<div class="col-md-9 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+					<p>
+						Tienes este libro de <a href="">{{l.perfil_dueno.usuario.username}} </a> desde el {{l.fecha_limite}}.
+					</p>
+				</div><!-- /left text -->
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Marcar Devuelto</a>
+				</div><!-- /right btn -->
 			</div>
 		</div>
+		<!-- /CALLOUT -->
 		{% endfor %}
 
 		{% for l in libros_prestados_bcompartida %}
-		<div class = "panel panel-primary">
-			<div class = "panel-body">
-				<p> {{l.libro.titulo}} | {{l.biblioteca_compartida.nombre}} | {{l.fecha_max_devolucion}}</p>
-			</div>	
+		<!-- CALLOUT -->
+		<div class="alert callout alert-default fade in">
+			<div class="row">
+				<div class="col-md-9 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+					<p>
+						Tomaste este libro de <a href="">{{l.biblioteca_compartida.nombre}}</a> <br>
+						<small>fecha límite de devolución {{l.fecha_limite}}</small>
+					</p>
+				</div><!-- /left text -->
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Marcar Devuelto</a>
+				</div><!-- /right btn -->
+			</div>
 		</div>
-		{% endfor %}	
+		<!-- /CALLOUT -->
+		{% endfor %}
+
 	{% endif %}
 
 	{% if libros_perfil.tiene_requests_pendientes %}
-		<h3> Tienes requests pendientes </h3>
+		<hr class="half-margins" /><!-- divider 30px -->
+		<h4> Tienes pedidos pendientes</h4>
+		<!-- CALLOUT -->
 		{% for r in libros_requests %}
-		<div class = "panel panel-primary">
-			<div class = "panel-body">
-				<p> {{r.perfil_envio.usuario}} | {{r.libro.titulo}} | {{r.fecha_request}} </p>
-				<a href="{% url 'libros:libro_request' r.id %}">Ver Mensaje</a>
+		<div class="alert callout alert-default fade in">
+			<div class="row">
+				<div class="col-md-9 col-sm-9"><!-- left text -->
+					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
+					<p>
+						{{r.fecha_request}} | <a href="">{{r.perfil_envio.usuario}} </a> desea leer este libro.
+					</p>
+				</div><!-- /left text -->				
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+					<a href="{% url 'libros:libro_request' r.id %}" rel="nofollow" target="_blank" class="btn btn-warning btn-lg">Ver mensaje</a>
+				</div><!-- /right btn -->
 			</div>
 		</div>
 		{% endfor %}
+		<!-- /CALLOUT -->
 	{% endif %}
-
-	<h1> Actividad Reciente </h1>
-		<p> Dejó un Libro en Tal Sitio </p>
-		<p> Recibió Tal Libro de Tal Usuario </p>
-		<p> Tomó Tal Libro de Tal Sitio </p>
-		<p> Añadió Tal Libro a su Biblioteca Compartida </p>
 </div>
 	
 <div class = "col-md-4">
+	<br>
+	<!-- IMAGE -->
+	<figure class="default-gradient bg-silver text-center margin-bottom8">
+		<!-- 230 x 340 px -->
+		<img class="img-responsive" src="{% static 'assets/images/demo/people/9_thumb.jpg' %}" alt="" />
+	</figure>
+	<!-- /IMAGE -->
 
-	<h4> {{perfil_usuario.ciudad.name}} / {{perfil_usuario.descripcion}} </h4>
+	<h3 class="nomargin">{{perfil_usuario.usuario.username}}</h3>
+	<span class="margin-bottom20 margin-top6 block gray fsize12">{{perfil_usuario.ciudad.name}}</span>
+	<p>{{perfil_usuario.descripcion}}</p>
 
-	<h2> Actualmente Leyendo </h2>
-	<p> Ultimos Libros leídos </p>
+	<div class="divider"><!-- divider -->
+		<i class="fa fa-book"></i>
+	</div>
 
-	<h2> Biblioteca Compartida </h2>
-	<p> lista de libros prestables o prestados </p>
-	<a href=""> Editar Biblioteca</a>
+	<div class="row profile-activity hidden-xs">
+		<!-- activity item -->
+		<div class="col-xs-10 col-sm-11">
+			<h3><a href="#">Biblioteca</a></h3>
 
+			<div class="alert alert-default">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->						
+						<p>
+							Los Miserables <br> <small> Víctor Hugo </small>
+						</p>
+					</div><!-- /left text -->
+				</div>
+			</div>
+
+		<div class="col-sm-12">
+			<hr class="half-margins" />
+		</div><!-- /activity separator -->
+	</div>
+	<!-- /activity list -->
 </div>
 {% endblock content %}
