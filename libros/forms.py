@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
-from django.forms import TextInput, URLInput, Textarea, CheckboxInput, HiddenInput, NumberInput, Select
+from django.forms import TextInput, URLInput, Textarea, CheckboxInput, HiddenInput, Select
 
 from models import BibliotecaCompartida
 
@@ -27,13 +27,11 @@ class NuevaBibliotecaCompartida(forms.ModelForm):
 	
 	class Meta:
 		model = BibliotecaCompartida
-		fields = ('nombre', 'direccion', 'hora_apertura', 'hora_cierre', 'imagen')
+		fields = ('nombre', 'direccion', 'imagen')
 
 		widgets = {
 					'nombre': TextInput(attrs={'class': 'form-control'}),
 					'direccion': Textarea(attrs={'class': 'form-control'}),
-					'hora_apertura': NumberInput(attrs={'class': 'form-control', 'max': '24'}),
-					'hora_cierre': NumberInput(attrs={'class': 'form-control', 'max': '24'}),
 					'imagen': URLInput(attrs={'class': 'form-control'})
 				}
 

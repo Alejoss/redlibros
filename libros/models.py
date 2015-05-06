@@ -79,8 +79,6 @@ class BibliotecaCompartida(models.Model):
 	punto_google_maps = models.CharField(max_length=500, blank=True)
 	direccion = models.CharField(max_length=500, blank=True)
 	imagen = models.URLField(blank=True)
-	hora_apertura = models.PositiveSmallIntegerField(null=True)
-	hora_cierre = models.PositiveSmallIntegerField(null=True)
 	eliminada = models.BooleanField(default=False)
 	
 	def save(self, *args, **kwargs):
