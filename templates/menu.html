@@ -24,10 +24,10 @@
 				      		{% if tiene_ciudad %}
 					        <li><a href="{% url 'libros:libros_ciudad' perfil_ciudad.slug perfil_ciudad.id %}">Libros disponibles en {{perfil_ciudad.name}}</a></li>
 					        {% else %}
-					        <li><a href="">Busca un libro disponible en tu ciudad</a></li>
+					        <li><a href="{% url 'libros:buscar_ciudad' %}">Busca un libro disponible en tu ciudad</a></li>
 					        {% endif %}		        
 					    {% else %}
-					    	<li><a href="">Busca un libro disponible en tu ciudad</a></li>
+					    	<li><a href="{% url 'libros:buscar_ciudad' %}">Busca un libro disponible en tu ciudad</a></li>
 					    {% endif %}
 
 						{% if user.is_authenticated %}

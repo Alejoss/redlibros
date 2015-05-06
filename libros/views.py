@@ -123,6 +123,37 @@ def libros_usuario(request, username):
     return render(request, template, context)
 
 
+def buscar_ciudad(request):
+    template = "libros/buscar_ciudad.html"
+
+    if request.method == "POST":
+        id_ciudad = request.POST.get("ciudades", "")
+        set_city = request.POST.get("set_city", "")
+        print set_city
+        print id_ciudad
+
+        ciudad = City.objects.get(id=id_ciudad)
+
+        if set_city:
+            perfil_usuario = obtener_perfil(request.user)
+            perfil_usuario.ciudad = ciudad
+            perfil_usuario.save()
+
+        return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id}))
+
+    ciudades = City.objects.all()
+    nombres_ciudades_importantes = ["Quito", "Guayaquil", "Cuenca"]
+    ciudades_importantes = []
+
+    for nombre in nombres_ciudades_importantes:
+        ciudad = City.objects.get(name=nombre)
+        ciudades_importantes.append(ciudad)
+
+    context = {'ciudades': ciudades, 'ciudades_importantes': ciudades_importantes}
+
+    return render(request, template, context)
+
+
 @login_required
 def pedir_libro(request, id_libro_disponible):
     template = "libros/pedir_libro.html"
@@ -260,11 +291,10 @@ def biblioteca_compartida(request, slug_biblioteca_compartida):
         usuario_es_administrador = True
 
     libros_bcompartida = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=True, prestado=False)
-
-    print libros_bcompartida
+    num_libros_bcompartida = libros_bcompartida.count()
 
     context = {'biblioteca_compartida': biblioteca_compartida, 'usuario_es_administrador': usuario_es_administrador,
-               'libros_bcompartida': libros_bcompartida}
+               'libros_bcompartida': libros_bcompartida, 'num_libros_bcompartida': num_libros_bcompartida}
 
     return render(request, template, context)
 

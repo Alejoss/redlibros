@@ -30,7 +30,7 @@
 
 {% else %}
 
-<h1> <small> No hay libros disponibles en {{biblioteca_compartida.nombre}} </small> </h1>
+<h1><small> No hay libros disponibles en {{biblioteca_compartida.nombre}} </small></h1>
 
 {% endif %}
 
@@ -65,7 +65,7 @@
 	<div class = "col-md-4">
 		<div class="row text-center countTo">
 			<div class="col-md-5">
-				<strong data-to="35">0</strong>
+				<strong data-to="{{num_libros_bcompartida}}">0</strong>
 				<label>Libros Disponibles</label>
 			</div>
 		</div>

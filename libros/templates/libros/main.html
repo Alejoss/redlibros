@@ -4,8 +4,7 @@
 {% block content %}
 <!-- WELCOME -->
 <section>
-	<div class="container">
-	
+	<div class="container">	
 		<div class="row">
 			<div class="col-md-6">				
 				<p class="lead">Deja que ese libro al fondo de tu escritorio sea leído una vez más, 
@@ -15,6 +14,8 @@
 				<a href="#" class="btn btn-google-plus btn-lg btn-block"><i class="fa fa-google-plus"></i> Regístrate con Google</a>
 				<br>
 				<p> ¿Ya tienes una cuenta? <a href=""> <i class="fa fa-facebook"></i> Entra con Facebook </a>  | <a href=""> <i class="fa fa-google"></i> Entra con Google </a>
+				<p>O <a href="{% url 'perfiles:login' %}">entra</a> con otra cuenta</p>
+
 
 			</div>
 			
@@ -22,7 +23,6 @@
 				<img class="img-responsive animate_fade_in" src="https://lesptitsmobiles.files.wordpress.com/2012/04/oldbooks.jpg" alt=""/>
 			</div>
 		</div>
-
 	</div>
 </section>
 <!-- /WELCOME -->

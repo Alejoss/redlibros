@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<hr class = "invisible">
+
+<div class = "col-md-10 col-md-offset-1">
+	<form class="form-horizontal" method="post" action="{% url 'libros:buscar_ciudad' %}">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Buscar Ciudad</legend>
+
+			<div class = "col-md-8 col-md-offset-2">
+				<div class="control-group">
+				  <label class="control-label" for="ciudades">Seleccionar</label>
+				  <div class="controls">
+				    <select id="ciudades" name="ciudades" class="input-xlarge form-control">
+				      <optgroup>			      
+					      {% for ci in ciudades_importantes %}
+					      	<option value="{{ci.id}}">{{ci.name}}</option>
+					      {% endfor %}
+				      </optgroup>
+
+				      <optgroup label="--------------------------------------">
+					      {% for ciudad in ciudades %}
+						      <option value="{{ciudad.id}}">{{ciudad.name}}</option>
+						  {% endfor %}
+					  </optgroup>
+				    </select>
+				  </div>
+				</div>
+
+				{% if user.is_authenticated %}
+				<div class="control-group">		 			 			   
+				    <input name="set_city" value="1" type="checkbox" class ="">
+				    Marcar esta ciudad como la ciudad donde vivo			    			  
+				</div>
+				{% endif %}
+
+				<input class = "btn btn-success pull-right" type="submit" value="Ir a ciudad">			
+			</div>
+		</fieldset>
+	</form>
+	<hr class = "invisible">
+</div>
+
+
+{% endblock content %}
