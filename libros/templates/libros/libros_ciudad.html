@@ -3,39 +3,33 @@
 
 {% block content %}
 
-			<!-- PAGE TOP -->
-			<!-- parallax -->
-			<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/librosclub/quitoparallax.jpg' %});">
-				<span class="parallax-overlay"></span>
-
-				<div class="container parallax-content">
-
-					<div class="row">
-						<div class="col-md-5 col-sm-5 col-md-offset-1">						
-							<h3> Libros disponibles en <strong>{{ciudad.name}}</strong></h3>
-						</div>
-					</div>
-
-				</div>
-
+<!-- PAGE TOP -->
+<!-- parallax -->
+<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/librosclub/quitoparallax.jpg' %});">
+	<span class="parallax-overlay"></span>
+	<div class="container parallax-content">
+		<div class="row">
+			<div class="col-md-5 col-sm-5 col-md-offset-1">
+				<h3> Libros disponibles en <strong>{{ciudad.name}}</strong></h3>
 			</div>
-			<!-- /parallax -->
-			<!-- /PAGE TOP -->
-
-
+		</div>
+	</div>
+</div>
+<!-- /parallax -->
+<!-- /PAGE TOP -->
 
 
 <div class = "col-md-8">
-	<br>	
+	<br>
 	{% for l in libros_disponibles %}	
 		{% if l.perfil != perfil_usuario %}
 		<div class="alert callout alert-default">
 			<div class="row">
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}} </h4>
-					<p>
-						{{l.perfil.usuario.username}}
-					</p>
+					<a href="{% url 'perfiles:perfil_usuario' l.perfil.usuario.username %}">
+						<i class = "fa fa-user"></i>{{l.perfil.usuario.username}}
+					</a>
 				</div><!-- /left text -->
 				
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->

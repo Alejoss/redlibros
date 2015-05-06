@@ -93,7 +93,7 @@ def perfil_usuario(request, username):
 		libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil, disponible=True, prestado=False)
 
 	context = {'libros_prestados': libros_prestados, 'libros_prestados_bcompartida': libros_prestados_bcompartida, 'libros_disponibles': libros_disponibles,
-	           'historial_libros': historial_libros, 'libros_perfil': libros_perfil}
+	           'historial_libros': historial_libros, 'libros_perfil': libros_perfil, 'perfil': perfil}
 
 	return render(request, template, context)
 

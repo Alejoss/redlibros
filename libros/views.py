@@ -259,7 +259,12 @@ def biblioteca_compartida(request, slug_biblioteca_compartida):
     if biblioteca_compartida.perfil_admin == perfil_usuario:
         usuario_es_administrador = True
 
-    context = {'biblioteca_compartida': biblioteca_compartida, 'usuario_es_administrador': usuario_es_administrador}
+    libros_bcompartida = LibrosBibliotecaCompartida.objects.filter(biblioteca_compartida=biblioteca_compartida, disponible=True, prestado=False)
+
+    print libros_bcompartida
+
+    context = {'biblioteca_compartida': biblioteca_compartida, 'usuario_es_administrador': usuario_es_administrador,
+               'libros_bcompartida': libros_bcompartida}
 
     return render(request, template, context)
 

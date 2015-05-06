@@ -1,55 +1,93 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<br>
 
-<h1>{{biblioteca_compartida.nombre}} <small>administrar libros</small></h1>
+<div class = "col-md-10 col-md-offset-1">
+	<a class = "pull-right" href="{% url 'libros:nuevo_libro' 'biblioteca_compartida' biblioteca_compartida.slug  %}">
+	<i class = "fa fa-plus"></i> Nuevo Libro</a>
+	<h1>{{biblioteca_compartida.nombre}} <small>administrar libros</small></h1>
+	<hr>
+</div>
 
-<h3>Libros de {{biblioteca_compartida.nombre}}</h3>
-
-{% for l in libros_disponibles %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>		
-			<a class = "marcar_no_disponible" href="" data-id="{{l.id}}">Marcar como No Disponible</a>
-			<a href="{% url 'libros:prestar_libro_bcompartida' l.id %}">Prestar Libro</a>	
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<h3>Libros Disponibles</h3>
+		{% for l in libros_disponibles %}
+		<div class="alert callout alert-default">
+			<div class="row">
+				<div class="col-md-7 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+				</div>
+				<div class="col-md-5 col-sm-3 text-right">
+					<a href="{% url 'libros:prestar_libro_bcompartida' l.id %}" rel="nofollow" target="_blank" class="btn btn-success btn-lg" data-id="{{l.id}}">
+					Prestar Libro
+					</a>
+					<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
+					No Disponible
+					</a>
+				</div><!-- /right btn -->
+			</div>
 		</div>
+		{% endfor %}
 	</div>
-{% endfor %}
+</div>
 
-<h3>No Disponibles</h3>
-{% for l in libros_no_disponibles %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>
-			
-			{% if l.prestado %}
-				<p> Este libro fue prestado </p>
-			{% else %}
-				<a class = "marcar_disponible" href="" data-id="{{l.id}}" >Marcar como Disponible</a>
-			{% endif %}
-
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<br>
+		<h3>Libros no Disponibles</h3>
+		{% for l in libros_no_disponibles %}
+		<div class="alert callout alert-default">
+			<div class="row">
+				<div class="col-md-7 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+				</div>
+				<div class="col-md-5 col-sm-3 text-right">
+					{% if l.prestado %}
+						<p> Este libro fue prestado </p>
+					{% else %}						
+						<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-info btn-lg marcar_disponible" data-id="{{l.id}}">
+						Marcar como Disponible
+						</a>
+					{% endif %}
+				</div>
+			</div>
 		</div>
+		{% endfor %}
 	</div>
-{% endfor %}
+</div>
 
-<a href="{% url 'libros:nuevo_libro' 'biblioteca_compartida' biblioteca_compartida.slug  %}">Nuevo Libro</a>
 
 <hr>
 
-<h3>Libros Prestados</h3>
-
-{% for l in libros_prestados%}
-<div class = "panel panel-primary">
-	<div class = "panel-body">
-		<p> {{l.libro.titulo}} | {{l.libro.autor}} </p>
-		<a class ="marcar_devuelto" href="" data-id="{{l.id}}" >Marcar como Devuelto</a>
+<div class = "row">
+	<div class = "col-md-10 col-md-offset-1">
+		<br>
+		<h3>Libros Prestados</h3>
+		{% for l in libros_prestados%}
+		<div class="alert callout alert-default">
+			<div class="row">
+				<div class="col-md-7 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+				</div>
+				<div class="col-md-5 col-sm-3 text-right">
+					{% if l.prestado %}
+						<p> Este libro fue prestado </p>
+					{% else %}						
+						<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
+						Marcar como Devuelto
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		{% endfor %}
 	</div>
 </div>
-{% endfor %}
 
 
 <script>
-
 $(document).ready(function(){
 
 	$(".marcar_no_disponible").on("click", function(e){
@@ -94,8 +132,5 @@ $(document).ready(function(){
 		});
 	});
 });
-
 </script>
-
-
 {% endblock content %}

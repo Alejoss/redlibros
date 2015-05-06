@@ -63,7 +63,7 @@
 					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
 					<p>
 						Tomaste este libro de <a href="">{{l.biblioteca_compartida.nombre}}</a> <br>
-						<small>fecha límite de devolución {{l.fecha_limite}}</small>
+						<small>fecha límite de devolución {{l.fecha_max_devolucion}}</small>
 					</p>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
@@ -188,7 +188,7 @@
 	<div class="row profile-activity hidden-xs">
 		<!-- activity item -->
 		<div class="col-xs-10 col-sm-11">
-			<h3><a href="#">Biblioteca</a></h3>
+			<h3><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></h3>
 
 			<div class="alert alert-default">
 				<div class="row">

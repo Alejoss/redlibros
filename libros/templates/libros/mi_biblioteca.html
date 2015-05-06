@@ -1,36 +1,70 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
-<div class = "col-md-8">
-	<h2> En tu biblioteca </h2>
-	{% for l in libros_disponibles %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p>{{l.libro.titulo}}</p>
-			<button class = "btn btn-warning marcar_no_disponible" data-id="{{l.id}}"> Marcar como no disponible </button>
+<!-- PAGE TOP -->
+<!-- parallax -->
+<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/librosclub/books_biblioteca.jpg' %});">
+	<span class="parallax-overlay"></span>
+	<div class="container parallax-content">
+		<div class="row">
+			<div class="col-md-5 col-sm-5 col-md-offset-1">
+				<a href="{% url 'libros:nuevo_libro' 'perfil' perfil_usuario.usuario.username %}"> Sumar un nuevo libro a tu <strong>biblioteca</strong></a>
+			</div>
 		</div>
 	</div>
-	{% endfor %}
+</div>
+<!-- /parallax -->
+<!-- /PAGE TOP -->
 
-	<h3> No Disponibles </h3>
-	{% for l in libros_no_disponibles %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p>{{l.libro.titulo}}</p>
-			<button class = "btn btn-success marcar_disponible" data-id="{{l.id}}"> Marcar como Disponible </button>
+<div class = "col-md-10 col-md-offset-1">
+	<br>
+	<h2>Disponibles en tu biblioteca </h2>
+	{% for l in libros_disponibles %}
+	<div class="alert callout alert-default">
+		<div class="row">
+			<div class="col-md-9 col-sm-9"><!-- left text -->
+				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+			</div><!-- /left text -->			
+			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+				<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
+				No Disponible</a>
+			</div><!-- /right btn -->
 		</div>
 	</div>
 	{% endfor %}
 
 	<hr>
 
-	<h2> Libros prestados </h2>
+	<h3> No Disponibles </h3>
+	{% for l in libros_no_disponibles %}
+	<div class="alert callout alert-default">
+		<div class="row">
+			<div class="col-md-9 col-sm-9"><!-- left text -->
+				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+			</div><!-- /left text -->			
+			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+				<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-success btn-lg marcar_disponible" data-id="{{l.id}}">
+				Disponible</a>
+			</div><!-- /right btn -->
+		</div>
+	</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3> Libros prestados </h3>
 	{% for l in libros_prestados %}
-	<div class = "panel panel-primary">
-		<div class = "panel-body">
-			<p>{{l.libro.titulo}}</p>
-			<button class = "btn btn-success marcar_devuelto" data-id="{{l.id}}">Marcar como Devuelto</button>
+	<div class="alert callout alert-default">
+		<div class="row">
+			<div class="col-md-9 col-sm-9"><!-- left text -->
+				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+			</div><!-- /left text -->			
+			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+				<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
+				Marcar como Devuelto</a>
+			</div><!-- /right btn -->
 		</div>
 	</div>
 	{% endfor %}

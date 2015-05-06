@@ -1,21 +1,89 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block content %}
+<!-- GOOGLE MAP -->
+<div class = "row">
+	<div class = "col-md-12">
+	<div id="gmap" class="grayscale"><!-- map container --></div>
+	<script type="text/javascript">
+		var	$googlemap_latitude 	= -37.812344,
+			$googlemap_longitude	= 144.968900,
+			$googlemap_zoom			= 13;
+	</script>
+	</div>
+</div>
+<!-- /GOOGLE MAP -->
 
-<h1>{{biblioteca_compartida.nombre}} <small>administrar libros</small></h1>
-<p>
+<div class = "col-md-8">
 
-{{biblioteca_compartida.direccion}}<br>
-{{biblioteca_compartida.hora_apertura}}<br>
-{{biblioteca_compartida.hora_cierre}}<br>
+{% if libros_bcompartida %}
 
-<img src="{{biblioteca_compartida.imagen}}">
-</p>
+<br>
+<h1> Libros: </h1>
 
-{% if usuario_es_administrador %}
-	<a href="{% url 'libros:editar_info_bcompartida' biblioteca_compartida.slug %}">Editar Información</a>
-	<a href="{% url 'libros:editar_libros_bcompartida' biblioteca_compartida.slug  %} ">Administrar Libros</a>
+	{% for l in libros_bcompartida %}		
+		<div class="alert alert-default"><!-- DEFAULT -->
+			<strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}
+		</div>		
+	{% endfor %}
+
+{% else %}
+
+<h1> <small> No hay libros disponibles en {{biblioteca_compartida.nombre}} </small> </h1>
+
 {% endif %}
 
+</div>
+
+<div class = "col-md-4">
+	<br>
+	<div class = "row">
+		<div class = "col-md-11">
+			<div class = "pull-right">
+				<div class="box-content thumbnail text-center">	
+					<img class="img-responsive" src="{% static 'assets/images/librosclub/cafearte.jpg' %}" alt=""/>
+					<h3>
+						<span>{{biblioteca_compartida.nombre}}</span> <br />
+						<small>{{biblioteca_compartida.ciudad.name}}</small>
+					</h3>		
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class = "col-md-8">		
+		<div class="testimonial classic">
+			<p>{{biblioteca_compartida.direccion}}</p>			
+			<p>
+				Apertura: {{biblioteca_compartida.hora_apertura}}<br>
+				Cierre: {{biblioteca_compartida.hora_cierre}}<br>
+			</p>
+		</div>
+	</div>
+
+	<div class = "col-md-4">
+		<div class="row text-center countTo">
+			<div class="col-md-5">
+				<strong data-to="35">0</strong>
+				<label>Libros Disponibles</label>
+			</div>
+		</div>
+	</div>
+		
+	{% if usuario_es_administrador %}	
+	<div class = "col-md-8">
+	<hr>
+		<div class="featured-box noborder"><!-- add .transparent for no background color -->
+			<i class="fa fa-cogs"></i>
+			<div class = "row">
+				<a href="{% url 'libros:editar_libros_bcompartida' biblioteca_compartida.slug  %}"><small>Administrar libros</small></a><br>
+				<a href="{% url 'libros:editar_info_bcompartida' biblioteca_compartida.slug %}"><small>Editar información</small></a>
+			</div>
+		</div>
+	<hr>
+	</div>
+	{% endif %}	
+</div>
 
 {% endblock content %}
