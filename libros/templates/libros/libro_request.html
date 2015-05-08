@@ -2,21 +2,24 @@
 
 {% block content %}
 
-<div class = "col-md-6 col-md-offset-1">
-	<h4>
-		{{libro_request.perfil_envio.usuario}} te ha pedido que le prestes el libro {{libro_request.libro.titulo}}
-	</h4>
+<div class = "col-md-8 col-md-offset-2">
+	<br>
+	<h2>
+		<a href="{% url 'perfiles:perfil_usuario' libro_request.perfil_envio.usuario.username %}">
+		{{libro_request.perfil_envio.usuario}}</a> te ha pedido que le prestes el libro {{libro_request.libro.titulo}}
+	</h2>
+	<hr>
 	
 	<p>
 		{{libro_request.perfil_envio.usuario}} - Datos de contacto:
 	</p>
 		
 	<p>
-		Mensaje : {{libro_request.mensaje}} <br>
+		Mensaje : <br> {{libro_request.mensaje}} <br><br>
 		Teléfono : {{libro_request.telefono}} <br>
 		Email : {{libro_request.email}} </br>
 		<br>
-		<small>fecha: {{libro_request.fecha_request}}</small>
+		<p>Fecha: {{libro_request.fecha_request}}</p>
 	</p>
 	<hr>
 	<p>
@@ -25,7 +28,6 @@
 	<p>
 		Teléfono : {{perfil_usuario.numero_telefono_contacto}} <br>
 		Email : {{perfil_usuario.usuario.email}} </br>
-		<br>		
 	</p>
 	<form class="form-horizontal" action="{% url 'libros:libro_request' libro_request.id %}" method="post">
 			{% csrf_token %}
@@ -42,7 +44,8 @@
 			  </div>
 			</div>
 			<input class = "btn btn-success pull-right" type="submit" value="Enviar">
-	</form>	
+	</form>
+	<hr class = "invisible">
 </div>
 
 {% endblock content %}

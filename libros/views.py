@@ -35,12 +35,11 @@ def nuevo_libro(request, tipo_dueno, slug):
         
         if form.is_valid():            
             titulo = form.cleaned_data.get("titulo", "")
-            autor = form.cleaned_data.get("autor", "")
-            imagen = form.cleaned_data.get("imagen", "")
+            autor = form.cleaned_data.get("autor", "")            
             descripcion = form.cleaned_data.get("descripcion", "")
             disponible = form.cleaned_data.get("disponible", "")
 
-            nuevo_libro = Libro(titulo=titulo, autor=autor, imagen=imagen, descripcion=descripcion)
+            nuevo_libro = Libro(titulo=titulo, autor=autor, descripcion=descripcion)
             nuevo_libro.save()
 
             if disponible:
@@ -162,6 +161,7 @@ def pedir_libro(request, id_libro_disponible):
     al dueño del libro
     !!! id_libro es un bug pues puede que un libro este disponible en la biblioteca de 2 personas diferentes
     """
+    perfil_usuario = obtener_perfil(request.user)
 
     if request.method == "POST":
 
@@ -186,7 +186,11 @@ def pedir_libro(request, id_libro_disponible):
 
         libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
     
-    form_pedir_libro = FormPedirLibro(initial={'libro_id': libro_disponible_obj.libro.id})
+    form_pedir_libro = FormPedirLibro(initial={
+        'libro_id': libro_disponible_obj.libro.id,
+        'telefono': str(perfil_usuario.numero_telefono_contacto),
+        'email': request.user.email
+        })
 
     context = {'libro_disponible': libro_disponible_obj, 'form_pedir_libro': form_pedir_libro}
 

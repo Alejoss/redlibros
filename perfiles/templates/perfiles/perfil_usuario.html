@@ -20,6 +20,14 @@
 			</div>
 		</div>
 		{% endfor %}
+	{% else %}
+		<hr class="invisible"/><!-- divider 30px -->
+		<div class = "col-md-10 col-md-offset-1">
+			<h4> No tiene libros disponibles por ahora.</h4>
+			<a class="thumbnail lightbox" href="assets/images/demo/shop/slider_2/4.jpg" data-plugin-options='{"type":"image"}'>
+				<img class="img-responsive" src="http://www.troop701.com/images/bookshelf.png" alt="" />
+			</a>
+		</div>
 	{% endif %}
 	
 	{% if libros_perfil.tiene_libros_prestados %}
@@ -77,7 +85,7 @@
 			<h4>Libros recibidos: </h4>
 
 			{% for libro_recibido in historial_libros.libros_recibidos_usuario %}
-			<div class="alert alert-info">
+			<div class="alert alert-default">
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->												
 						<p>{{libro_recibido.libro.titulo}} <small> {{libro_recibido.libro.autor}} </small> <br>
@@ -90,7 +98,7 @@
 			{% endfor %}
 
 			{% for libro_recibido in historial_libros.libros_recibidos_bcompartida %}
-			<div class="alert alert-info">
+			<div class="alert alert-default">
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->
 						<p>{{libro_recibido.libro.titulo}} <small> {{libro_recibido.libro.autor}} </small> <br>

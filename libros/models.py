@@ -10,7 +10,6 @@ class Libro(models.Model):
 	titulo = models.CharField(max_length=255, blank=True)
 	slug = models.SlugField(null=True, blank=True)
 	autor = models.CharField(max_length=255, blank=True)
-	imagen = models.CharField(max_length=255, blank=True)
 	descripcion = models.TextField(null=True, blank=True, max_length=2500)
 
 	def save(self, *args, **kwargs):

@@ -14,7 +14,7 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-						Jul-5-2015 | pediste este libro a <a href="">{{r.perfil_recepcion.usuario.username}}</a>.
+						Jul-5-2015 | pediste este libro a <a href="{% url 'perfiles:perfil_usuario' r.perfil_recepcion.usuario.username %}">{{r.perfil_recepcion.usuario.username}}</a>.
 					</p>
 					{% if r.eliminado %}
 					<p>
@@ -44,11 +44,11 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
 					<p>
-						Tienes este libro de <a href="">{{l.perfil_dueno.usuario.username}} </a> desde el {{l.fecha_limite}}.
+						Tienes este libro de <a href="{% url 'perfiles:perfil_usuario' l.perfil_dueno.usuario.username %} ">{{l.perfil_dueno.usuario.username}} </a> prestado hasta el {{l.libro.fecha_max_devolucion}}.
 					</p>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Marcar Devuelto</a>
+					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Ya lo devolví</a>
 				</div><!-- /right btn -->
 			</div>
 		</div>
@@ -67,7 +67,7 @@
 					</p>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Marcar Devuelto</a>
+					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Ya lo devolví</a>
 				</div><!-- /right btn -->
 			</div>
 		</div>
@@ -86,7 +86,7 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-						{{r.fecha_request}} | <a href="">{{r.perfil_envio.usuario}} </a> desea leer este libro.
+						{{r.fecha_request}} | <a href="{% url 'perfiles:perfil_usuario' r.perfil_envio.usuario.username %} ">{{r.perfil_envio.usuario.username}} </a> desea leer este libro.
 					</p>
 				</div><!-- /left text -->				
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
@@ -97,9 +97,7 @@
 		{% endfor %}
 		<!-- /CALLOUT -->
 	{% endif %}
-
 	<hr class="half-margins" /><!-- divider 30px -->
-
 </div>
 	
 <div class = "col-md-4">
@@ -124,15 +122,20 @@
 		<div class="col-xs-10 col-sm-11">
 			<h3><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></h3>
 
+			{% for l in libros_disponibles %}
 			<div class="alert alert-default">
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->						
 						<p>
-							Los Miserables <br> <small> Víctor Hugo </small>
+							{{l.libro.titulo}} <br> <small> {{l.libro.autor}} </small>
 						</p>
 					</div><!-- /left text -->
 				</div>
 			</div>
+			{% empty %}
+			<p> No tienes libres disponibles por ahora </p>
+
+			{% endfor %}
 
 		<div class="col-sm-12">
 			<hr class="half-margins" />

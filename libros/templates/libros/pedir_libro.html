@@ -3,16 +3,18 @@
 {% block content %}
 
 <div class = "col-md-8">
+	<br>
 	<h2> Pedir prestado {{libro_disponible.libro.titulo}} de {{libro_disponible.libro.autor}} a {{libro_disponible.perfil.usuario}}</h2>
 
 	<div class = "col-md-6 col-md-offset-1">
 		<form class="form-horizontal" action="{% url 'libros:pedir_libro' libro_disponible.id %}" method="post">
 			{% csrf_token %}		
-				<fieldset>					
+				<fieldset>
 					{{form_pedir_libro}}
 				</fieldset>
 				<br>
-				<input class = "btn btn-success pull-right" type="submit" value="Submit">
+				<h6><small> Es importante enviar tus datos de contacto</small></h6>
+				<input class = "btn btn-success pull-right" type="submit" value="Enviar">
 		</form>
 	</div>	
 </div>

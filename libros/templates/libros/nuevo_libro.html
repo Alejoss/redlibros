@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class = "col-md-6 col-md-offset-1">
+	<br>
 	<form class="form-horizontal" action="{% url 'libros:nuevo_libro' tipo_dueno slug %}" method="post">
 		{% csrf_token %}		
 			<fieldset>

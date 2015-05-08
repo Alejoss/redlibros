@@ -9,9 +9,9 @@ from models import BibliotecaCompartida
 class FormNuevoLibro(forms.Form):
 
 	titulo = forms.CharField(max_length=255, required=True, widget=TextInput(attrs={'class': 'form-control'}))
-	autor = forms.CharField(max_length=255, required=True, widget=TextInput(attrs={'class': 'form-control'}))
-	imagen = forms.URLField(max_length=255, required=False, widget=URLInput(attrs={'class': 'form-control'}))
-	descripcion = forms.CharField(max_length=2500, required=False, widget=Textarea(attrs={'class': 'form-control'}))
+	autor = forms.CharField(max_length=255, required=True, widget=TextInput(attrs={'class': 'form-control'}))	
+	descripcion = forms.CharField(max_length=2500, required=False, widget=Textarea(attrs={'class': 'form-control', 
+	'placeholder': 'Edición, traductor, un link a Amazon que muestre la versión del libro que tienes, el estado del libro o cualquier información extra que desees compartir.'}))
 	disponible = forms.BooleanField(initial=True, help_text="Este libro estará listo para ser prestado", widget=CheckboxInput())
 
 
@@ -19,7 +19,7 @@ class FormPedirLibro(forms.Form):
 
 	libro_id = forms.IntegerField(required=False, widget=HiddenInput())
 	mensaje = forms.CharField(max_length=500, required=False, widget=Textarea(attrs={'class': 'form-control'}))
-	telefono = forms.IntegerField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
+	telefono = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
 	email = forms.CharField(max_length=500, required=False, widget=TextInput(attrs={'class': 'form-control'}))
 
 

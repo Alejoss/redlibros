@@ -47,7 +47,7 @@ def perfil_propio(request):
 
 	if LibrosRequest.objects.filter(perfil_envio=perfil_usuario, aceptado=False, eliminado=False).exists():
 		libros_perfil['tiene_libros_pedidos'] = True
-		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario)
+		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario, aceptado=False, eliminado=False)
 
 	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False).exists():
 		libros_perfil['tiene_requests_pendientes'] = True
@@ -58,11 +58,14 @@ def perfil_propio(request):
 		libros_prestados = LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario, fecha_devolucion=None)
 
 	if LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario, fecha_devolucion=None).exists():
-		libros_perfil['tiene_libros_prestados'] = True		
+		libros_perfil['tiene_libros_prestados'] = True
 		libros_prestados_bcompartida = LibrosPrestadosBibliotecaCompartida.objects.filter(perfil_prestamo=perfil_usuario, fecha_devolucion=None)
 
+	libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True, prestado=False)
+
 	context = {'libros_perfil': libros_perfil, 'libros_requests': libros_requests, 'libros_prestados': libros_prestados,
-	            'libros_pedidos': libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida}
+	           'libros_pedidos': libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida, 
+	           'libros_disponibles': libros_disponibles}
 	
 	return render(request, template, context)
 
