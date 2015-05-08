@@ -50,6 +50,8 @@ class LibrosPrestados(models.Model):
 	fecha_max_devolucion = models.DateTimeField(null=True)
 	fecha_prestamo = models.DateTimeField(null=True)
 	fecha_devolucion = models.DateTimeField(null=True)
+	mensaje_aceptacion = models.CharField(blank=True, max_length=500)
+	receptor_anuncio_devolucion = models.BooleanField(default=False)
 
 	def __unicode__(self):
 		return "Libro Prestado object: %s - %s - %s" % (self.libro, self.perfil_dueno.usuario, self.perfil_receptor.usuario)

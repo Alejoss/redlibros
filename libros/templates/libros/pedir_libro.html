@@ -4,7 +4,8 @@
 
 <div class = "col-md-8">
 	<br>
-	<h2> Pedir prestado {{libro_disponible.libro.titulo}} de {{libro_disponible.libro.autor}} a {{libro_disponible.perfil.usuario}}</h2>
+	<h2> Pedir prestado '{{libro_disponible.libro.titulo}}'' de {{libro_disponible.libro.autor}} al usuario 
+	<a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_disponible.perfil.usuario.username %}">{{libro_disponible.perfil.usuario.username}}</a></h2>
 
 	<div class = "col-md-6 col-md-offset-1">
 		<form class="form-horizontal" action="{% url 'libros:pedir_libro' libro_disponible.id %}" method="post">

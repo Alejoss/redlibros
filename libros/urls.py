@@ -27,6 +27,9 @@ urlpatterns = [
     url(r'^prestar_libro_biblioteca_compartida/(?P<id_libro_compartido>\d+)/$', views.prestar_libro_bcompartida, 
         name="prestar_libro_bcompartida"),
 
+    url(r'^anunciar_devolucion/(?P<id_libro_prestado>\d+)/$', views.anunciar_devolucion, 
+        name="anunciar_devolucion"),
+
     # Ajax calls
     url(r'^marcar_no_disponible/$', views.marcar_no_disponible),
     url(r'^marcar_disponible/$', views.marcar_disponible),

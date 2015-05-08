@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.utils.html import strip_tags
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
@@ -211,10 +212,11 @@ def libro_request(request, libro_request_id):
         if decision == "prestado":
             libro_request.aceptado = True
             libro_request.save()
+            mensaje = strip_tags(request.POST.get("mensaje_aceptacion", ""))
 
             fecha_prestamo = datetime.today()
             libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio,
-                                     perfil_dueno=libro_request.perfil_recepcion, fecha_prestamo=fecha_prestamo)
+                                     perfil_dueno=libro_request.perfil_recepcion, fecha_prestamo=fecha_prestamo, mensaje_aceptacion=mensaje)
             libro_prestado.save()
 
             libro_disponible_obj = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion).first()
@@ -482,3 +484,18 @@ def marcar_devuelto(request):
         return HttpResponse("libro marcado como devuelto", status=200)
     else:
         return HttpResponse("No es ajax")
+
+
+@login_required
+def anunciar_devolucion(request, id_libro_prestado):
+
+    perfil_usuario = obtener_perfil(request.user)
+    libro_prestado = LibrosPrestados.objects.get(id=id_libro_prestado)
+
+    if libro_prestado.perfil_recepcion != perfil_usuario:
+        raise PermissionDenied
+    else:
+        libro_prestado.receptor_anuncio_devolucion = True
+        libro_prestado.save()
+
+        return HttpResponseRedirect(reverse('perfiles:perfil_propio', kwargs={'username': perfil_usuario.username}))

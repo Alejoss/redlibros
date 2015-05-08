@@ -39,13 +39,28 @@
 
 		{% for l in libros_prestados %}
 		<!-- CALLOUT -->
-		<div class="alert callout alert-default fade in">
+		<div class="alert callout alert-default">
 			<div class="row">
 				<div class="col-md-9 col-sm-9"><!-- left text -->
-					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-					<p>
-						Tienes este libro de <a href="{% url 'perfiles:perfil_usuario' l.perfil_dueno.usuario.username %} ">{{l.perfil_dueno.usuario.username}} </a> prestado hasta el {{l.libro.fecha_max_devolucion}}.
-					</p>
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>					
+					<div class="toggle transparent">
+						<div class="toggle">
+							<label><h6>
+							Tienes este libro de <a target="_blank" href="{% url 'perfiles:perfil_usuario' l.perfil_dueno.usuario.username %}">
+							{{l.perfil_dueno.usuario.username}}</a>
+							</h6></label>
+							<div class="toggle-content">
+								<p> 
+									<small>
+									Fecha máxima de devolución: {{l.fecha_max_devolucion}}. <br>
+									Mensaje: '{{l.mensaje_aceptacion}}' <br>
+									Teléfono de contacto: {{l.perfil_dueno.numero_telefono_contacto}}. <br>
+									Email: {{l.perfil_dueno.usuario.email}}.
+									</small>
+								</p>
+							</div>
+						</div>
+					</div>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
 					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Ya lo devolví</a>
@@ -61,18 +76,54 @@
 			<div class="row">
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-					<p>
-						Tomaste este libro de <a href="{% url 'libros:biblioteca_compartida' l.biblioteca_compartida.slug %}">{{l.biblioteca_compartida.nombre}}</a> <br>
-						<small>fecha límite de devolución {{l.fecha_max_devolucion}}</small>
-					</p>
+					<div class="toggle transparent">
+						<div class="toggle">
+							<label><h6>
+							Tienes este libro de <a target="_blank" href="{% url 'libros:biblioteca_compartida' l.biblioteca_compartida.slug %}">
+							{{l.biblioteca_compartida.nombre}}</a>
+							</h6></label>
+							<div class="toggle-content">
+								<p>
+									<small>
+									Fecha máxima de devolución: {{l.fecha_max_devolucion}}. <br>
+									Dirección: {{l.biblioteca_compartida.direccion}}
+									</small>
+								</p>
+							</div>
+						</div>
+					</div>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Ya lo devolví</a>
+					<a href="" rel="nofollow" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Ya lo devolví</a>
 				</div><!-- /right btn -->
 			</div>
 		</div>
 		<!-- /CALLOUT -->
 		{% endfor %}
+
+		<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+
+					<div class="modal-header"><!-- modal header -->
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">Small Modal</h4>
+					</div><!-- /modal header -->
+
+					<!-- modal body -->
+					<div class="modal-body">
+						Modal Body
+					</div>
+					<!-- /modal body -->
+
+					<div class="modal-footer"><!-- modal footer -->
+						<button class="btn btn-default" data-dismiss="modal">Close</button> <button class="btn btn-primary">Save changes</button>
+					</div><!-- /modal footer -->
+
+				</div>
+			</div>
+		</div>
+
 
 	{% endif %}
 

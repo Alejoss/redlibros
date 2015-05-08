@@ -5,8 +5,8 @@
 <div class = "col-md-8 col-md-offset-2">
 	<br>
 	<h2>
-		<a href="{% url 'perfiles:perfil_usuario' libro_request.perfil_envio.usuario.username %}">
-		{{libro_request.perfil_envio.usuario}}</a> te ha pedido que le prestes el libro {{libro_request.libro.titulo}}
+		<a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_request.perfil_envio.usuario.username %}">
+		{{libro_request.perfil_envio.usuario}}</a> te ha pedido que le prestes el libro '{{libro_request.libro.titulo}}'.
 	</h2>
 	<hr>
 	
@@ -31,7 +31,13 @@
 	</p>
 	<form class="form-horizontal" action="{% url 'libros:libro_request' libro_request.id %}" method="post">
 			{% csrf_token %}
-			<div class="control-group">			  
+			<div class="control-group">
+			  <label class="control-label" for="mensaje_aceptacion">Mensaje</label>
+			  <div class="controls">
+			    <textarea class = "form-control" id="mensaje_aceptacion" name="mensaje_aceptacion" placeholder="Puedes escribir un mensaje de aceptación con información extra sobre cómo puede contactarte."></textarea>
+			  </div>
+			</div>
+			<div class="control-group">
 			  <div class="controls">
 			    <label class="radio" for="radios-0">
 			      <input name="prestar" id="" value="prestado" checked="checked" type="radio">

@@ -54,13 +54,33 @@
 
 	<hr>
 
-	<h3> Libros prestados </h3>
+	<h3>Tus libros prestados a otros usuarios</h3>
 	{% for l in libros_prestados %}
 	<div class="alert callout alert-default">
 		<div class="row">
-			<div class="col-md-9 col-sm-9"><!-- left text -->
+			<div class="col-md-8 col-sm-8"><!-- left text -->
 				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-			</div><!-- /left text -->			
+				<div class="toggle transparent">
+					<div class="toggle">
+						<label><h6>
+						Prestaste este libro a <a target="_blank" href="{% url 'perfiles:perfil_usuario' l.perfil_receptor.usuario.username %}">
+						{{l.perfil_receptor.usuario.username}}</a>
+						</h6></label>
+						<div class="toggle-content">
+							<p> 
+								<small>
+								Fecha máxima de devolución: {{l.fecha_max_devolucion}}. <br>
+								Mensaje: '{{l.mensaje_aceptacion}}' <br>
+								Teléfono de contacto: {{l.perfil_receptor.numero_telefono_contacto}}. <br>
+								Email: {{l.perfil_receptor.usuario.email}}.
+								</small>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div><!-- /left text -->
+			<div class = "col-md-1">
+			</div>
 			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
 				<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
 				Marcar como Devuelto</a>
