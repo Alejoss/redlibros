@@ -90,7 +90,7 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (BASE_DIR + "/templates/",)
 
-LOCAL_STATICFILES = True
+LOCAL_STATICFILES = False
 
 if not LOCAL_STATICFILES:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
