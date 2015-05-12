@@ -35,7 +35,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'cities_light',
     'libros',   
-    'perfiles'
+    'perfiles',
+    'storages'
 )
 
 MIDDLEWARE_CLASSES = (
