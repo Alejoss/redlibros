@@ -487,15 +487,38 @@ def marcar_devuelto(request):
 
 
 @login_required
-def anunciar_devolucion(request, id_libro_prestado):
+def anunciar_devolucion(request):
 
-    perfil_usuario = obtener_perfil(request.user)
-    libro_prestado = LibrosPrestados.objects.get(id=id_libro_prestado)
+    if request.method == "POST":
+        id_libro_prestado = request.POST.get("id_libro_prestado")
+        perfil_usuario = obtener_perfil(request.user)
+        libro_prestado = LibrosPrestados.objects.get(id=id_libro_prestado)
 
-    if libro_prestado.perfil_recepcion != perfil_usuario:
-        raise PermissionDenied
+        if libro_prestado.perfil_receptor != perfil_usuario:
+            raise PermissionDenied
+        else:
+            libro_prestado.receptor_anuncio_devolucion = True
+            libro_prestado.save()
+
+        return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
     else:
-        libro_prestado.receptor_anuncio_devolucion = True
-        libro_prestado.save()
+        raise PermissionDenied 
 
-        return HttpResponseRedirect(reverse('perfiles:perfil_propio', kwargs={'username': perfil_usuario.username}))
+
+@login_required
+def cancelar_pedido(request):
+
+    if request.method == "POST":
+        request_id = request.POST.get("request_id", "")
+        perfil_usuario = obtener_perfil(request.user)
+        libro_request = LibrosRequest.objects.get(id=request_id)
+
+        if libro_request.perfil_envio != perfil_usuario:
+            raise PermissionDenied
+        else:
+            libro_request.eliminado = False
+            libro_request.save()
+
+            return HttpResponse("request de libro cancelado", status=200)
+    else:
+        raise PermissionDenied

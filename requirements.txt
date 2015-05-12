@@ -1,7 +1,11 @@
+dj-database-url==0.3.0
+dj-static==0.0.6
 Django==1.8
-Unidecode==0.04.17
-argparse==1.2.1
 django-autoslug==1.7.2
 django-cities-light==3.1.0
+django-toolbelt==0.0.1
+gunicorn==19.3.0
+psycopg2==2.6
 six==1.9.0
-wsgiref==0.1.2
+static3==0.6.0
+Unidecode==0.4.17

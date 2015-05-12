@@ -14,7 +14,8 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-						Jul-5-2015 | pediste este libro a <a href="{% url 'perfiles:perfil_usuario' r.perfil_recepcion.usuario.username %}">{{r.perfil_recepcion.usuario.username}}</a>.
+						Jul-5-2015 | pediste este libro a <a href="{% url 'perfiles:perfil_usuario' r.perfil_recepcion.usuario.username %}">{{r.perfil_recepcion.usuario.username}}
+						</a>. {{r.eliminado}}
 					</p>
 					{% if r.eliminado %}
 					<p>
@@ -24,7 +25,7 @@
 					{% endif %}
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" target="_blank" class="btn btn-danger btn-lg">Cancelar</a>
+					<a class="cancelar_pedido" data-id="{{r.id}}" href="" rel="nofollow">Cancelar</a>
 				</div><!-- /right btn -->
 			</div>
 		</div>
@@ -63,7 +64,11 @@
 					</div>
 				</div><!-- /left text -->
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg">Ya lo devolví</a>
+					{% if l.receptor_anuncio_devolucion %}
+						<p> <small> marcaste este libro como devuelto </small></p>
+					{% else %}
+						<button class="btn btn-info anunciar_devuelto" data-toggle="modal" data-target=".bs-example-modal-sm" data-id="{{l.id}}" >Ya lo devolví</button>
+					{% endif %}
 				</div><!-- /right btn -->
 			</div>
 		</div>
@@ -93,31 +98,32 @@
 						</div>
 					</div>
 				</div><!-- /left text -->
-				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="" rel="nofollow" class="btn btn-info btn-lg" data-toggle="modal" data-target=".bs-example-modal-sm">Ya lo devolví</a>
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->					
+					<button class="btn btn-info" data-toggle="modal" data-target=".bs-example-modal-sm">Ya lo devolví</button>
 				</div><!-- /right btn -->
 			</div>
 		</div>
 		<!-- /CALLOUT -->
 		{% endfor %}
 
+		<!--Modal Anunciar Devolucion -->
 		<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-sm">
 				<div class="modal-content">
 
 					<div class="modal-header"><!-- modal header -->
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">Small Modal</h4>
+						<h4 class="modal-title" id="myModalLabel">Anunciar devolución</h4>
 					</div><!-- /modal header -->
 
 					<!-- modal body -->
 					<div class="modal-body">
-						Modal Body
+						Se enviará un mensaje al dueño recordándole que marque el libro como devuelto.
 					</div>
 					<!-- /modal body -->
 
 					<div class="modal-footer"><!-- modal footer -->
-						<button class="btn btn-default" data-dismiss="modal">Close</button> <button class="btn btn-primary">Save changes</button>
+						<button class="btn btn-default" data-dismiss="modal">Cancelar</button> <button id="modal_devolucion" class="btn btn-primary" data-id="">Ya lo devolví</button>
 					</div><!-- /modal footer -->
 
 				</div>
@@ -195,3 +201,45 @@
 	<!-- /activity list -->
 </div>
 {% endblock content %}
+
+
+{% block extra_javascript %}
+<script>
+	$(document).ready(function(){
+
+		$(".cancelar_pedido").on("click", function(e){
+			e.preventDefault();
+			var request_id = $(this).data("id");
+			$.ajax({
+				method: "POST",
+				url: "/libros/cancelar_pedido/",
+				data: {'request_id': request_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				success: function(){
+					location.reload();
+				}
+			});
+		});
+
+		$(".anunciar_devuelto").on("click", function(e){
+			e.preventDefault();
+			var lprestado_id = $(this).data("id");
+			console.log(lprestado_id);
+			$("#modal_devolucion").data("id", lprestado_id);			
+		});
+
+		$("#modal_devolucion").on("click", function(e){
+			e.preventDefault();
+			var libro_id = $(this).data("id");
+			$.ajax({
+				method: "POST",
+				url: "/libros/anunciar_devolucion/",
+				data: {'id_libro_prestado': libro_id, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+				success: function(){
+					location.reload();
+				}
+			});
+		});
+	});
+
+</script>
+{% endblock extra_javascript %}

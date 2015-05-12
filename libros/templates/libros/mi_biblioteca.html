@@ -28,7 +28,7 @@
 				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
 			</div><!-- /left text -->			
 			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-				<a href="" rel="nofollow" target="_blank" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
+				<a href="" rel="nofollow" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
 				No Disponible</a>
 			</div><!-- /right btn -->
 		</div>
@@ -45,7 +45,7 @@
 				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
 			</div><!-- /left text -->			
 			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-				<a href="" rel="nofollow" target="_blank" class="btn btn-success btn-lg marcar_disponible" data-id="{{l.id}}">
+				<a href="" rel="nofollow" class="btn btn-success btn-lg marcar_disponible" data-id="{{l.id}}">
 				Disponible</a>
 			</div><!-- /right btn -->
 		</div>
@@ -63,7 +63,7 @@
 				<div class="toggle transparent">
 					<div class="toggle">
 						<label><h6>
-						Prestaste este libro a <a target="_blank" href="{% url 'perfiles:perfil_usuario' l.perfil_receptor.usuario.username %}">
+						Prestaste este libro a <a href="{% url 'perfiles:perfil_usuario' l.perfil_receptor.usuario.username %}">
 						{{l.perfil_receptor.usuario.username}}</a>
 						</h6></label>
 						<div class="toggle-content">
@@ -82,8 +82,14 @@
 			<div class = "col-md-1">
 			</div>
 			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-				<a href="" rel="nofollow" target="_blank" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
-				Marcar como Devuelto</a>
+				{% if l.receptor_anuncio_devolucion %}
+					<p style="{color: red !important}">* {{l.perfil_receptor.usuario.username}} marcó este libro como devuelto</p>
+					<a href="" rel="nofollow" class="btn btn-danger btn-lg marcar_devuelto" data-id="{{l.id}}">
+					Marcar como Devuelto</a>
+				{% else %}
+					<a href="" rel="nofollow" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
+					Marcar como Devuelto</a>
+				{% endif %}
 			</div><!-- /right btn -->
 		</div>
 	</div>
@@ -92,28 +98,40 @@
 
 <script>
 	$(document).ready(function(){
-		$(".marcar_no_disponible").on("click", function(){			
+		$(".marcar_no_disponible").on("click", function(e){
+			e.preventDefault();
 			var libro_disp_id = $(this).data("id");
 			$.ajax({
 				method: "POST",
 				url: "/libros/marcar_no_disponible/",
-				data: {'id_libro_disp': libro_disp_id, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+				data: {'id_libro_disp': libro_disp_id, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'},
+				success: function(){
+					location.reload();
+				}
 			});
 		});
-		$(".marcar_disponible").on("click", function(){
+		$(".marcar_disponible").on("click", function(e){
+			e.preventDefault();
 			var id_libro = $(this).data("id");
 			$.ajax({
 				method: "POST",
 				url: "/libros/marcar_disponible/",
-				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'},
+				success: function(){
+					location.reload();
+				}
 			});
 		});
-		$(".marcar_devuelto").on("click", function(){
+		$(".marcar_devuelto").on("click", function(e){
+			e.preventDefault();
 			var id_libro = $(this).data("id");
 			$.ajax({
 				method: "POST",
 				url: "/libros/marcar_devuelto/",
-				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'}
+				data: {'id_libro': id_libro, 'csrfmiddlewaretoken': '{{ csrf_token }}', 'tipo': 'perfil'},
+				success: function(){
+					location.reload();
+				}
 			});
 		});
 	});

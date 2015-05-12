@@ -1,8 +1,9 @@
-    
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -10,14 +11,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w6_vq)3g-5^k6s@&8mpxuc59#c+7j51ey0z!+2^$foaq-0n(78'
+SECRET_KEY = os.environ['LIBROS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Context Processors
@@ -54,13 +55,19 @@ WSGI_APPLICATION = 'redlibros.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+LOCAL_DB = True
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+if LOCAL_DB:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+
+else:    
+    DATABASES['default'] = dj_database_url.config()
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -82,11 +89,24 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (BASE_DIR + "/templates/",)
-STATICFILES_DIRS = (BASE_DIR + "/static/",)
+
+LOCAL_STATICFILES = True
+
+if not LOCAL_STATICFILES:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+    AWS_ACCESS_KEY_ID = os.environ['AWSAccessKeyId']
+    AWS_SECRET_ACCESS_KEY = os.environ['AWSSecretKey']
+    AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
+    S3_URL = 'http://%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = S3_URL
+    STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+if LOCAL_STATICFILES:
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+    STATIC_URL = '/static/'
+    STATIC_ROOT = '/'
 
 
-# Extra Settings
-LOGIN_REDIRECT_URL = "perfiles:perfil_propio"
-LOGIN_URL = "libros:main"
-CITIES_LIGHT_INCLUDE_COUNTRIES = ['EC']
-CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es', 'abbr']
+# Heroku
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
