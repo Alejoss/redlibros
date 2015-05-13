@@ -7,16 +7,16 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('libros', '0003_auto_20150423_2044'),
+        ('perfiles', '0001_initial'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='bibliotecacompartida',
-            name='hora_apertura',
+            model_name='perfil',
+            name='actualmente_leyendo',
         ),
         migrations.RemoveField(
-            model_name='bibliotecacompartida',
-            name='hora_cierre',
+            model_name='perfil',
+            name='libros_leidos',
         ),
     ]

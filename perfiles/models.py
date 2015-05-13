@@ -13,8 +13,6 @@ class Perfil(models.Model):
 	ciudad = models.ForeignKey(City, null=True, blank=True)
 	numero_telefono_contacto = models.IntegerField(null=True, blank=True)
 
-	actualmente_leyendo = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="actualmente_leyendo")
-	libros_leidos = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="libros_leidos")
 	libros_propios = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="libros_propios")
 	libros_recibidos = models.ForeignKey('libros.Libro', null=True, blank=True, related_name="libros_recibidos")
 
