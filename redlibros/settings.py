@@ -20,6 +20,8 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+CITIES_LIGHT_TRANSLATION_LANGUAGES = ['es']
+CITIES_LIGHT_INCLUDE_COUNTRIES = ['EC']
 
 # Context Processors
 TEMPLATE_CONTEXT_PROCESSORS += ('perfiles.context_processors.procesar_perfil', 'perfiles.context_processors.procesar_ciudad')
@@ -33,10 +35,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cities_light',
-    'libros',   
+    'libros',
     'perfiles',
-    'storages'
+    'storages',
+    'cities_light'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,7 +58,7 @@ WSGI_APPLICATION = 'redlibros.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-LOCAL_DB = True
+LOCAL_DB = False
 
 if LOCAL_DB:
     DATABASES = {
