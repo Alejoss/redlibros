@@ -14,9 +14,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = os.environ['LIBROS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-TEMPLATE_DEBUG = True
+DEBUG = TEMPLATE_DEBUG = True
+HEROKU = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -58,17 +57,15 @@ WSGI_APPLICATION = 'redlibros.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-LOCAL_DB = False
 
-if LOCAL_DB:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
 
-else:    
+if HEROKU:  
     DATABASES['default'] = dj_database_url.config()
 
 
@@ -93,9 +90,7 @@ STATIC_URL = '/static/'
 
 TEMPLATE_DIRS = (BASE_DIR + "/templates/",)
 
-LOCAL_STATICFILES = False
-
-if not LOCAL_STATICFILES:
+if HEROKU:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
     AWS_ACCESS_KEY_ID = os.environ['AWSAccessKeyId']
     AWS_SECRET_ACCESS_KEY = os.environ['AWSSecretKey']
@@ -104,7 +99,7 @@ if not LOCAL_STATICFILES:
     STATIC_URL = S3_URL
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-if LOCAL_STATICFILES:
+else:
     STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
     STATIC_URL = '/static/'
     STATIC_ROOT = '/'
