@@ -35,3 +35,14 @@ def obtener_historial_libros(perfil):
 
 	return {'libros_recibidos_usuario': libros_recibidos_usuario, 'libros_recibidos_bcompartida': libros_recibidos_bcompartida, 
 	'libros_prestados_por_usuario': libros_prestados_por_usuario}
+
+
+def crear_perfil(backend, user, response, *args, **kwargs):
+
+	perfil, creado = Perfil.objects.get_or_create(usuario=user)
+	
+	if backend.name == "facebook":
+		imagen_url_backend = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+		perfil.imagen_perfil = imagen_url_backend
+		perfil.save()
+	return None
