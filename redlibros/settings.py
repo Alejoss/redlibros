@@ -128,7 +128,7 @@ else:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Login settings
-LOGIN_REDIRECT_URL = '/perfiles/mi_perfil/'
+LOGIN_REDIRECT_URL = '/perfil/mi_perfil/'
 
 if HEROKU:
     SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
