@@ -159,17 +159,22 @@
 	
 <div class = "col-md-4">
 	<br>
-	<!-- IMAGE -->
-	<figure class="default-gradient bg-silver text-center margin-bottom8">		
-		<img class="img-responsive" src="{{avatar}}" alt="" />
+	
+	<figure class="text-center margin-bottom8">		
+		<img class="img-responsive img-circle" src="http://graph.facebook.com/10153192768876480/picture?type=large" width="260" height="260" alt="">
 	</figure>
-	<!-- /IMAGE -->
-
+	
 	<h3 class="nomargin">{{perfil_usuario.usuario.username}}</h3>
-	<span class="margin-bottom20 margin-top6 block gray fsize12">{{perfil_usuario.ciudad.name}}</span>
-	<p>{{perfil_usuario.descripcion}}</p>
 
-	<div class="divider"><!-- divider -->
+	{% if not perfil_usuario.ciudad %}
+		<a href="{% url 'perfiles:editar_perfil' %}" class="margin-bottom20 margin-top6 block gray fsize12">Importante: Define tu Ciudad</a>
+	{% else %}
+		<span class="margin-bottom20 margin-top6 block gray fsize12">{{perfil_usuario.ciudad.name}}</span>
+	{% endif %}	
+	
+	<p>{{perfil_usuario.descripcion}}</p>	
+
+	<div class="divider">
 		<i class="fa fa-book"></i>
 	</div>
 

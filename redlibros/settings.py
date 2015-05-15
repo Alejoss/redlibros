@@ -60,6 +60,7 @@ WSGI_APPLICATION = 'redlibros.wsgi.application'
 # python social auth
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
+    'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend'
 )
 
