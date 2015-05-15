@@ -59,6 +59,7 @@ def obtener_historial_libros(perfil):
 def crear_perfil(backend, user, response, *args, **kwargs):
 
 	perfil, creado = Perfil.objects.get_or_create(usuario=user)
+	print backend.name
 	
 	if backend.name == "facebook":
 		print "facebook"
