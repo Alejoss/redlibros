@@ -5,6 +5,25 @@ from perfiles.models import Perfil
 from libros.models import LibrosPrestados, LibrosPrestadosBibliotecaCompartida
 
 
+# Perfil y Editar Perfil
+def obtener_avatar_large(perfil):
+    # Obtiene un perfil y devuelve la imagen de perfil grande.
+    avatar_large = None
+    if perfil.imagen_perfil is not None:
+        if "facebook" in perfil.imagen_perfil:
+            avatar_large = "%s?type=large" % (perfil.imagen_perfil)        
+        elif "google" in perfil.imagen_perfil:
+            avatar_large = (perfil.imagen_perfil).replace("sz=50", "sz=400")
+        elif "puzzle" in perfil.imagen_perfil:
+            avatar_large = "https://s3-us-west-1.amazonaws.com/orillalibertaria/logo_ol_puzzle_small.png"
+        else:
+            avatar_large = perfil.imagen_perfil
+    else:
+        avatar_large = "https://s3-us-west-1.amazonaws.com/orillalibertaria/tema_default.jpg"
+
+    return avatar_large
+
+
 def obtener_perfil(usuario):
 	perfil, created = Perfil.objects.get_or_create(usuario=usuario)
 

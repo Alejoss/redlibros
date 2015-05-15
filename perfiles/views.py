@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 from forms import formRegistro, formEditarPerfil
 from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida, LibrosDisponibles
 from perfiles.models import Perfil
-from redlibros.utils import obtener_perfil, obtener_historial_libros
+from redlibros.utils import obtener_perfil, obtener_historial_libros, obtener_avatar_large
 
 
 def registro(request):
@@ -63,9 +63,11 @@ def perfil_propio(request):
 
 	libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil_usuario, disponible=True, prestado=False)
 
+	avatar = obtener_avatar_large(perfil_usuario)
+
 	context = {'libros_perfil': libros_perfil, 'libros_requests': libros_requests, 'libros_prestados': libros_prestados,
 	           'libros_pedidos': libros_pedidos, 'libros_prestados_bcompartida': libros_prestados_bcompartida, 
-	           'libros_disponibles': libros_disponibles}
+	           'libros_disponibles': libros_disponibles, 'avatar': avatar}
 	
 	return render(request, template, context)
 
