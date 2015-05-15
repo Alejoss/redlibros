@@ -14,12 +14,10 @@ def obtener_avatar_large(perfil):
             avatar_large = "%s?type=large" % (perfil.imagen_perfil)        
         elif "google" in perfil.imagen_perfil:
             avatar_large = (perfil.imagen_perfil).replace("sz=50", "sz=400")
-        elif "puzzle" in perfil.imagen_perfil:
-            avatar_large = "https://s3-us-west-1.amazonaws.com/orillalibertaria/logo_ol_puzzle_small.png"
         else:
             avatar_large = perfil.imagen_perfil
     else:
-        avatar_large = "https://s3-us-west-1.amazonaws.com/orillalibertaria/tema_default.jpg"
+        avatar_large = "https://s3.amazonaws.com/epona/assets/images/letrasclub/books_biblioteca.jpg"
 
     return avatar_large
 
@@ -59,19 +57,13 @@ def obtener_historial_libros(perfil):
 def crear_perfil(backend, user, response, *args, **kwargs):
 
 	perfil, creado = Perfil.objects.get_or_create(usuario=user)
-	print backend.name
 	
 	if backend.name == "facebook":
-		print "facebook"
 		imagen_url_backend = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
-		print imagen_url_backend
-		print "response:"
-		print response
 		perfil.imagen_perfil = imagen_url_backend
 		perfil.save()
 
-	elif backend.name == "google":
-		print "google"
+	elif backend.name == "google-oauth2":
 		if response['image'].get('url') is not None:
 			imagen_url_backend = response['image'].get('url')
 			perfil.imagen_perfil = imagen_url_backend
