@@ -44,6 +44,9 @@ def crear_perfil(backend, user, response, *args, **kwargs):
 	if backend.name == "facebook":
 		print "facebook"
 		imagen_url_backend = 'http://graph.facebook.com/{0}/picture'.format(response['id'])
+		print imagen_url_backend
+		print "response:"
+		print response
 		perfil.imagen_perfil = imagen_url_backend
 		perfil.save()
 
@@ -51,5 +54,7 @@ def crear_perfil(backend, user, response, *args, **kwargs):
 		print "google"
 		if response['image'].get('url') is not None:
 			imagen_url_backend = response['image'].get('url')
+			perfil.imagen_perfil = imagen_url_backend
+			perfil.save()
 
 	return None
