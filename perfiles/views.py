@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 
 from forms import formRegistro, formEditarPerfil
+from cities_light.models import City
 from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida, LibrosDisponibles
 from perfiles.models import Perfil
 from redlibros.utils import obtener_perfil, obtener_historial_libros, obtener_avatar_large
@@ -122,11 +123,15 @@ def editar_perfil(request):
 			form.save()
 			return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
 
-	else:		
+	else:
+		if perfil_usuario.ciudad:
+			ciudad_default = perfil_usuario.ciudad
+		else:
+			ciudad_default = City.objects.get(name="Quito")
 		form = formEditarPerfil(
 			initial={
 				'descripcion': perfil_usuario.descripcion,
-				'ciudad': perfil_usuario.ciudad,
+				'ciudad': ciudad_default,
 				'numero_telefono_contacto': perfil_usuario.numero_telefono_contacto
 			})
 
