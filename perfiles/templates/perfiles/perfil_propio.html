@@ -14,8 +14,8 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-						Jul-5-2015 | pediste este libro a <a href="{% url 'perfiles:perfil_usuario' r.perfil_recepcion.usuario.username %}">{{r.perfil_recepcion.usuario.username}}
-						</a>. {{r.eliminado}}
+						Jul-5-2015 | pediste este libro a <a href="{% url 'perfiles:perfil_usuario' r.perfil_recepcion.usuario.username %}">{{r.perfil_recepcion.usuario.username}}.
+						</a>
 					</p>
 					{% if r.eliminado %}
 					<p>
