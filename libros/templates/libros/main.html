@@ -6,18 +6,18 @@
 <section>
 	<div class="container">	
 		<div class="row">
-			<div class="col-md-6">				
+			<div class="col-md-6">
+				<h1> Club de Libros Compartidos en Quito </h1>
 				<p class="lead">Deja que ese libro al fondo de tu escritorio sea leído una vez más, 
-				<em class="styleColor">y ten acceso a los libros de otros miembros de nuestro club.</em></p>
+				<em class="styleColor">y ten acceso a los libros de otros miembros del club.</em></p>
 
 				<a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook btn-lg btn-block"><i class="fa fa-facebook"></i> Entra con Facebook</a>
 				<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google-plus btn-lg btn-block"><i class="fa fa-google-plus"></i> Regístrate con Google</a>
-				<br>
-				<p> ¿Ya tienes una cuenta? <a href=""> <i class="fa fa-facebook"></i> Entra con Facebook </a>  | <a href=""> <i class="fa fa-google"></i> Entra con Google </a>
+				<br>				
 				<p>O <a href="{% url 'perfiles:login' %}">entra</a> con otra cuenta</p>
 			</div>			
 			<div class="col-md-6 text-center">
-				<img class="img-responsive animate_fade_in" src="https://lesptitsmobiles.files.wordpress.com/2012/04/oldbooks.jpg" alt=""/>
+				<img class="img-responsive animate_fade_in" src="{% static 'assets/images/letrasclub/booksmain.jpg' %}" alt=""/>
 			</div>
 		</div>
 	</div>

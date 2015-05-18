@@ -3,6 +3,12 @@ import datetime
 
 from perfiles.models import Perfil
 from libros.models import LibrosPrestados, LibrosPrestadosBibliotecaCompartida
+from cities_light.models import City
+
+
+# Devuelve el modelo de Quito
+def obtenerquito():
+	return City.objects.get(id=18)
 
 
 # Perfil y Editar Perfil
@@ -57,6 +63,8 @@ def obtener_historial_libros(perfil):
 def crear_perfil(backend, user, response, *args, **kwargs):
 
 	perfil, creado = Perfil.objects.get_or_create(usuario=user)
+
+	perfil.ciudad = obtenerquito()
 	
 	if backend.name == "facebook":
 		imagen_url_backend = 'http://graph.facebook.com/{0}/picture'.format(response['id'])

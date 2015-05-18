@@ -166,14 +166,16 @@
 	
 	<h3 class="nomargin">{{perfil_usuario.usuario.username}}</h3>
 
+	<!--
 	{% if not perfil_usuario.ciudad %}
 		<a href="{% url 'perfiles:editar_perfil' %}" class="margin-bottom20 margin-top6 block gray fsize12">Importante: Define tu Ciudad</a>
 	{% else %}
 		<span class="margin-bottom20 margin-top6 block gray fsize12">{{perfil_usuario.ciudad.name}}</span>
-	{% endif %}	
+	{% endif %}
+	-->
 
 	{% if perfil_usuario.descripcion %}	
-		<p>{{perfil_usuario.descripcion}}</p>
+		<p class ="gray">{{perfil_usuario.descripcion}}</p>
 	{% else %}
 		<a href="{% url 'perfiles:editar_perfil' %}" class="margin-bottom20 margin-top6 block gray fsize12">Describe tu perfil</a>
 	{% endif %}

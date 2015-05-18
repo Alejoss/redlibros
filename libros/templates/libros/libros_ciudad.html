@@ -5,7 +5,7 @@
 
 <!-- PAGE TOP -->
 <!-- parallax -->
-<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/letrasclub/quitoparallax.jpg' %});">
+<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/letrasclub/quito2.jpg' %});">
 	<span class="parallax-overlay"></span>
 	<div class="container parallax-content">
 		<div class="row">
@@ -20,7 +20,9 @@
 
 
 <div class = "col-md-8">
+	<!--
 	<a href="{% url 'libros:buscar_ciudad' %}" class="pull-right">Buscar libros en otra ciudad <i class="fa fa-external-link-square"></i></a>
+	-->
 	<br>
 	{% for l in libros_disponibles %}	
 		{% if l.perfil != perfil_usuario %}
@@ -44,7 +46,7 @@
 
 <div class = "col-md-4">
 	<br>
-	<h4> Bibliotecas Compartidas en <strong>{{ciudad.name}}</strong></h4>
+	<h4> Bibliotecas Compartidas</h4>
 	<div class="toggle transparent">
 		<div class="toggle">
 			<label><small>¿Qué es una Biblioteca Compartida?</small></label>

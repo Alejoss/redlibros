@@ -21,6 +21,7 @@
 				<nav class="nav-main">
 					<ul id="topMain" class="nav nav-pills nav-main">						
 
+					<!--
 						{% if user.is_authenticated %}
 				      		{% if tiene_ciudad %}
 					        <li><a href="{% url 'libros:libros_ciudad' perfil_ciudad.slug perfil_ciudad.id %}">Libros disponibles en {{perfil_ciudad.name}}</a></li>
@@ -30,6 +31,8 @@
 					    {% else %}
 					    	<li><a href="{% url 'libros:buscar_ciudad' %}">Busca un libro disponible en tu ciudad</a></li>
 					    {% endif %}
+					-->
+					<li><a href="{% url 'libros:libros_ciudad' 'quito' '18' %}">Libros disponibles en Quito</a></li>
 
 						{% if user.is_authenticated %}
 						<li class="dropdown">
