@@ -18,8 +18,8 @@ class FormNuevoLibro(forms.Form):
 class FormPedirLibro(forms.Form):
 
 	libro_id = forms.IntegerField(required=False, widget=HiddenInput())
-	mensaje = forms.CharField(max_length=500, required=False, widget=Textarea(attrs={'class': 'form-control'}))
-	telefono = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control'}))
+	mensaje = forms.CharField(max_length=500, required=False, widget=Textarea(attrs={'class': 'form-control', 'placeholder': 'Hola ...'}))
+	telefono = forms.CharField(required=False, widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'Importante. Para que pueda contactarte.'}))
 	email = forms.CharField(max_length=500, required=False, widget=TextInput(attrs={'class': 'form-control'}))
 
 

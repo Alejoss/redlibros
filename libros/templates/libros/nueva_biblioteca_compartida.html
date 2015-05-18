@@ -6,10 +6,19 @@
 	<form class="form-horizontal" action="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
+			<br>
 				{{form}}
 			<br>
 			<input class = "btn btn-success pull-right" type="submit" value="Submit">
+			<hr class = "invisible">
 	</form>
+</div>
+<div class = "col-md-4">
+	<hr class = "invisible">
+	<p class = "gray">
+		Si vas a abrir una nueva Biblioteca Compartida, por favor contáctanos: <br> 
+		<i class = "fa fa-facebook"></i> Facbook Group 
+	</p>
 </div>
 <script type="text/javascript">	
 </script>

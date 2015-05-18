@@ -187,7 +187,7 @@ def pedir_libro(request, id_libro_disponible):
     
     form_pedir_libro = FormPedirLibro(initial={
         'libro_id': libro_disponible_obj.libro.id,
-        'telefono': str(perfil_usuario.numero_telefono_contacto),
+        'telefono': perfil_usuario.numero_telefono_contacto,
         'email': request.user.email
         })
 

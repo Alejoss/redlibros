@@ -98,8 +98,10 @@ def perfil_usuario(request, username):
 		libros_perfil['tiene_libros_disponibles'] = True
 		libros_disponibles = LibrosDisponibles.objects.filter(perfil=perfil, disponible=True, prestado=False)
 
+	avatar = obtener_avatar_large(perfil)
+
 	context = {'libros_prestados': libros_prestados, 'libros_prestados_bcompartida': libros_prestados_bcompartida, 'libros_disponibles': libros_disponibles,
-	           'historial_libros': historial_libros, 'libros_perfil': libros_perfil, 'perfil': perfil}
+	           'historial_libros': historial_libros, 'libros_perfil': libros_perfil, 'perfil': perfil, 'avatar': avatar}
 
 	return render(request, template, context)
 

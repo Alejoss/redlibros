@@ -47,14 +47,6 @@
 <div class = "col-md-4">
 	<br>
 	<h4> Bibliotecas Compartidas</h4>
-	<div class="toggle transparent">
-		<div class="toggle">
-			<label><small>¿Qué es una Biblioteca Compartida?</small></label>
-			<div style="display: none;" class="toggle-content">
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas metus nulla, commodo a sodales sed, dignissim pretium nunc. Nam et lacus neque. Ut enim massa, sodales tempor convallis et, iaculis ac massa.</p>
-			</div>
-		</div>
-	</div>
 
 <!-- JUSTIFIED TAB -->
 	<div class="tabs nomargin">
@@ -69,7 +61,7 @@
 				<div class="row tab-post"><!-- post -->
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<a href="{% url 'libros:biblioteca_compartida' biblioteca.slug %}">
-							<img src="{% static 'assets/images/librosclub/cafearte.jpg' %}" width="50" alt="" />
+							<img src="{{biblioteca.imagen}}" width="50" alt="" />
 						</a>
 					</div>
 					<div class="col-md-9 col-sm-9 col-xs-9">

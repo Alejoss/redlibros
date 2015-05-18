@@ -24,9 +24,6 @@
 		<hr class="invisible"/><!-- divider 30px -->
 		<div class = "col-md-10 col-md-offset-1">
 			<h4> No tiene libros disponibles por ahora.</h4>
-			<a class="thumbnail lightbox" href="assets/images/demo/shop/slider_2/4.jpg" data-plugin-options='{"type":"image"}'>
-				<img class="img-responsive" src="http://www.troop701.com/images/bookshelf.png" alt="" />
-			</a>
 		</div>
 	{% endif %}
 	
@@ -64,13 +61,10 @@
 <div class = "col-md-4">
 
 	<br>
-	<!-- IMAGE -->
-	<figure class="default-gradient bg-silver text-center margin-bottom8">
-		<!-- 230 x 340 px -->
-		<img class="img-responsive" src="{% static 'assets/images/demo/people/9_thumb.jpg' %}" alt="" />
+	<figure class="text-center margin-bottom8">		
+		<img class="img-responsive img-circle" src="{{avatar}}" width="260" height="260" alt="">
 	</figure>
-	<!-- /IMAGE -->
-
+	
 	<h3 class="nomargin">{{perfil.usuario.username}}</h3>
 	<span class="margin-bottom20 margin-top6 block gray fsize12">{{perfil.ciudad.name}}</span>
 	<p>{{perfil.descripcion}}</p>
