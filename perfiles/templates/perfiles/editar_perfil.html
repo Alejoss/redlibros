@@ -2,13 +2,40 @@
 
 {% block content %}
 <div class = "col-md-8">
+	<br>
 	<form class="form-horizontal" action="{% url 'perfiles:editar_perfil' %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
-				{{form}}
+				{{form.non_field_errors}}				
+				<!-- Textarea -->
+				<div class="control-group">
+				  <label class="control-label" for="descripcion">Descripción:</label>
+					  <div class = "controls">
+					  	{{form.descripcion}}
+					  </div>
+				</div>
+
+				<!-- Text input-->
+				<div class="control-group">
+				  <label class="control-label" for="telefono">Teléfono:</label>
+				  <div class="controls">
+				    	{{form.numero_telefono_contacto}}
+				    <p class="help-block">Se mostrará tu número de contacto solamente cuando prestes o te presten un libro.</p>
+				  </div>
+				</div>
+
+				<!-- Select Basic -->
+				<div class="control-group">
+				  <label class="control-label" for="ciudad">Ciudad</label>
+				  <div class="controls">
+				    {{form.ciudad}}	
+				  </div>
+				</div>
+
 			</fieldset>
 			<br>
 			<input class = "btn btn-success pull-right" type="submit" value="Submit">
+			<hr class = "invisible">
 	</form>
 </div>
 {% endblock content %}

@@ -38,7 +38,7 @@ class formEditarPerfil(forms.ModelForm):
 		model = Perfil
 		fields = ("descripcion", "ciudad", "numero_telefono_contacto")
 		widgets = {
-				'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+				'descripcion': forms.Textarea(attrs={'class': 'form-control'}),
 				'ciudad': forms.Select(attrs={'class': 'form-control'}),
-				'numero_telefono_contacto': forms.TextInput(attrs={'class': 'form-control'}),				
+				'numero_telefono_contacto': forms.TextInput(attrs={'class': 'form-control'})
 		}

@@ -129,8 +129,6 @@ def buscar_ciudad(request):
     if request.method == "POST":
         id_ciudad = request.POST.get("ciudades", "")
         set_city = request.POST.get("set_city", "")
-        print set_city
-        print id_ciudad
 
         ciudad = City.objects.get(id=id_ciudad)
 
