@@ -50,9 +50,9 @@ def perfil_propio(request):
 		libros_perfil['tiene_libros_pedidos'] = True
 		libros_pedidos = LibrosRequest.objects.filter(perfil_envio=perfil_usuario, aceptado=False, eliminado=False)
 
-	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False).exists():
+	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False).exists():
 		libros_perfil['tiene_requests_pendientes'] = True
-		libros_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario)
+		libros_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False)
 
 	if LibrosPrestados.objects.filter(perfil_receptor=perfil_usuario, fecha_devolucion=None).exists():
 		libros_perfil['tiene_libros_prestados'] = True

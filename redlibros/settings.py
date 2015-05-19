@@ -15,7 +15,7 @@ SECRET_KEY = os.environ['LIBROS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
-HEROKU = True
+HEROKU = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -24,6 +24,7 @@ CITIES_LIGHT_INCLUDE_COUNTRIES = ['EC']
 
 # Context Processors
 TEMPLATE_CONTEXT_PROCESSORS += ('perfiles.context_processors.procesar_perfil', 'perfiles.context_processors.procesar_ciudad',
+                                'perfiles.context_processors.notificaciones_requests',
                                 'social.apps.django_app.context_processors.backends', 
                                 'social.apps.django_app.context_processors.login_redirect')
 

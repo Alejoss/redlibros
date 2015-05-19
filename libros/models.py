@@ -69,7 +69,7 @@ class LibrosRequest(models.Model):
 	eliminado = models.BooleanField(default=False)
 
 	def __unicode__(self):
-		return "Libro Request object: %s - %s - %s" % (self.libro.titulo, self.perfil_envio.usuario, self.perfil_recepcion.titulo)
+		return "Libro Request object: %s - %s - %s" % (self.libro.titulo, self.perfil_envio.usuario, self.perfil_recepcion.usuario)
 
 
 class BibliotecaCompartida(models.Model):

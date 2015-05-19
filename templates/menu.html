@@ -36,7 +36,11 @@
 
 						{% if user.is_authenticated %}
 						<li class="dropdown">
-							<a class="dropdown-toggle pull-right" href="">{{user.username}}</a>
+							<a class="dropdown-toggle pull-right" href="">
+							{% if num_requests %}
+							<span class="badge">{{num_requests}}</span>
+							{% endif %}
+							{{user.username}}</a>
 							<ul class="dropdown-menu">
 								<li><a href="{% url 'perfiles:perfil_propio' %}">Perfil</a></li>
 								<li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
