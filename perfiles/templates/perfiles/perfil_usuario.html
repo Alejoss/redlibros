@@ -4,58 +4,63 @@
 {% block content %}
 <div class = "col-md-8">
 
-	{% if libros_perfil.tiene_libros_disponibles %}
-		<hr class="half-margins" /><!-- divider 30px -->	
-		<h4> Libros disponibles </h4>
+	<div class ="row">
+		<div class = "col-md-offset-1">
+		{% if libros_perfil.tiene_libros_disponibles %}
+			<hr class="half-margins" /><!-- divider 30px -->	
+			<h4> Libros disponibles </h4>
 
-		{% for l in libros_disponibles %}
-		<div class="alert callout alert-default fade in">
-			<div class="row">
-				<div class="col-md-9 col-sm-9"><!-- left text -->
-					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-				</div><!-- /left text -->
-				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-					<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-warning btn-lg">Pedir Libro</a>
-				</div><!-- /right btn -->
+			{% for l in libros_disponibles %}
+			<div class="alert callout alert-default fade in">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->
+						<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+					</div><!-- /left text -->
+					<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+						<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-warning btn-lg">Pedir Libro</a>
+					</div><!-- /right btn -->
+				</div>
 			</div>
-		</div>
-		{% endfor %}
-	{% else %}
-		<hr class="invisible"/><!-- divider 30px -->
-		<div class = "col-md-10 col-md-offset-1">
+			{% endfor %}
+		{% else %}
+			<hr class="invisible"/><!-- divider 30px -->		
 			<h4> No tiene libros disponibles por ahora.</h4>
+		{% endif %}
 		</div>
-	{% endif %}
+	</div>
 	
-	{% if libros_perfil.tiene_libros_prestados %}
-		<hr class="half-margins" /><!-- divider 30px -->	
-		<h4>Tiene libros prestados: </h4>
-		
-		{% for l in libros_prestados %}
-		<div class="alert callout alert-default fade in">
-			<div class="row">
-				<div class="col-md-9 col-sm-9"><!-- left text -->
-					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-					<p>Libro de <a href="{% url 'perfiles:perfil_usuario' l.perfil_dueno.usuario.username %}">l.perfil_dueno.usuario.username</a>,
-					prestado hasta el {{l.fecha_limite}}</p>
-				</div><!-- /left text -->
+	<div class ="row">
+		<div class = "col-md-offset-1">
+		{% if libros_perfil.tiene_libros_prestados %}
+			<hr class="half-margins" /><!-- divider 30px -->	
+			<h4>Tiene libros prestados: </h4>
+			
+			{% for l in libros_prestados %}
+			<div class="alert callout alert-default fade in">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->
+						<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+						<p>Libro de <a href="{% url 'perfiles:perfil_usuario' l.perfil_dueno.usuario.username %}">{{l.perfil_dueno.usuario.username}}</a>
+						{% if l.fecha_max_devolucion %}, prestado hasta: {{l.fecha_max_devolucion|date}} {% endif %}</p>
+					</div><!-- /left text -->
+				</div>
 			</div>
-		</div>
-		{% endfor %}
+			{% endfor %}
 
-		{% for l in libros_prestados_bcompartida %}
-		<div class="alert callout alert-default fade in">
-			<div class="row">
-				<div class="col-md-9 col-sm-9"><!-- left text -->
-					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-					<p>Libro de <a href="{% url 'libros:biblioteca_compartida' l.biblioteca_compartida.slug %}">{{l.biblioteca_compartida.nombre}}</a>, 
-					prestado hasta el {{l.fecha_max_devolucion}} </p>
-				</div><!-- /left text -->
+			{% for l in libros_prestados_bcompartida %}
+			<div class="alert callout alert-default fade in">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->
+						<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+						<p>Libro de <a href="{% url 'libros:biblioteca_compartida' l.biblioteca_compartida.slug %}">{{l.biblioteca_compartida.nombre}}</a>
+						{% if l.fecha_max_devolucion %} , prestado hasta: {{l.fecha_max_devolucion|date}} {% endif %}</p>
+					</div><!-- /left text -->
+				</div>
 			</div>
+			{% endfor %}
+		{% endif %}
 		</div>
-		{% endfor %}
-	{% endif %}
-
+	</div>
 </div>
 
 <div class = "col-md-4">
@@ -82,8 +87,8 @@
 			<div class="alert alert-default">
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->												
-						<p>{{libro_recibido.libro.titulo}} <small> {{libro_recibido.libro.autor}} </small> <br>
-							El {{libro_recibido.fecha_prestamo}} de <a href="{% url 'perfiles:perfil_usuario' libro_recibido.perfil_dueno.usuario.username %}">
+						<p>{{libro_recibido.libro.titulo}} <br> <small> {{libro_recibido.libro.autor}} </small> <br>
+							{{libro_recibido.fecha_prestamo|date}} de <a href="{% url 'perfiles:perfil_usuario' libro_recibido.perfil_dueno.usuario.username %}">
 							{{libro_recibido.perfil_dueno.usuario.username}}</a> 
 						</p>
 					</div>
@@ -96,7 +101,7 @@
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->
 						<p>{{libro_recibido.libro.titulo}} <small> {{libro_recibido.libro.autor}} </small> <br>
-							El {{libro_recibido.fecha_prestamo}} de <a href="{% url 'libros:biblioteca_compartida' libro_recibido.biblioteca_compartida.slug %}">
+							{{libro_recibido.fecha_prestamo|date}} de <a href="{% url 'libros:biblioteca_compartida' libro_recibido.biblioteca_compartida.slug %}">
 							{{libro_recibido.biblioteca_compartida.nombre}}</a>
 						</p>
 					</div><!-- /left text -->
@@ -107,11 +112,11 @@
 			<h4>Libros prestados: </h4>
 
 			{% for libro_prestado in historial_libros.libros_prestados_por_usuario %}
-					<div class="alert alert-success">
+					<div class="alert alert-default">
 						<div class="row">
 							<div class="col-md-9 col-sm-9"><!-- left text -->
-								<p>{{libro_prestado.libro.titulo}} <small> {{libro_prestado.libro.autor}} </small> <br>
-									El {{libro_prestado.fecha_prestamo}} a <a href="{% url 'perfiles:perfil_usuario' libro_prestado.perfil_receptor.usuario.username %}">
+								<p>{{libro_prestado.libro.titulo}} <br> <small> {{libro_prestado.libro.autor}} </small> <br>
+									{{libro_prestado.fecha_prestamo|date}} a <a href="{% url 'perfiles:perfil_usuario' libro_prestado.perfil_receptor.usuario.username %}">
 									{{libro_prestado.perfil_receptor.usuario.username}}</a>
 								</p>
 							</div><!-- /left text -->
@@ -121,6 +126,6 @@
 		</div>
 	</div>
 	<!-- /activity list -->
-
+	<hr class = "invisible">
 </div>
 {% endblock content %}

@@ -15,7 +15,7 @@ SECRET_KEY = os.environ['LIBROS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
-HEROKU = False
+HEROKU = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -91,7 +91,7 @@ if HEROKU:
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 

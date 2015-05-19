@@ -37,13 +37,13 @@ def obtener_perfil(usuario):
 def definir_fecha_devolucion(fecha_prestamo, tiempo_prestamo):
 	fecha_devolucion = None
 	if tiempo_prestamo == "2_semanas":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=2)
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=3)
 	elif tiempo_prestamo == "1_mes":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=4)
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)
 	elif tiempo_prestamo == "2_meses":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=4)		
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)		
 	elif tiempo_prestamo == "3_meses":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=4)
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)
 	else:
 		pass
 

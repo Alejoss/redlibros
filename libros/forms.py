@@ -43,7 +43,7 @@ class EditarBibliotecaCompartida(NuevaBibliotecaCompartida):
 
 class FormPrestarLibroBCompartida(forms.Form):
 
-	_choices = [("2_semanas", "2 Semanas"), ('1_mes', '1 Mes'), ('2_meses', '2 Meses'), ('3_meses', '3 Meses'), ('indefinido', 'Sin Fecha Máxima')]
+	_choices = [("2_semanas", "2 Semanas"), ('1_mes', '1 Mes'), ('2_meses', '2 Meses'), ('3_meses', '3 Meses'), ('indefinido', 'Sin fecha máxima')]
 
 	usuario = forms.CharField(max_length=255, required=True)
-	tiempo_entrega = forms.ChoiceField(choices=_choices, required=False, initial=_choices[2][0] , widget=Select())
+	tiempo_entrega = forms.ChoiceField(choices=_choices, required=False, initial=_choices[2][0], widget=Select())

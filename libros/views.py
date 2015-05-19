@@ -12,7 +12,7 @@ from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
 from perfiles.models import Perfil
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida, FormPrestarLibroBCompartida
-from redlibros.utils import obtener_perfil, definir_fecha_devolucion
+from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito
 
 
 def main(request):
@@ -47,7 +47,8 @@ def nuevo_libro(request, tipo_dueno, slug):
                 if tipo_dueno == "perfil":
                     # !!! Falta opcionalidad para cambiar ciudad
                     perfil_usuario = obtener_perfil(request.user)
-                    libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=perfil_usuario.ciudad)
+                    # !!! Todos los libros son marcados disponibles en Quito !!!                                        
+                    libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=obtenerquito())
                     libro_disponible_obj.save()
                     
                     return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
@@ -202,8 +203,10 @@ def libro_request(request, libro_request_id):
     view en la que el usuario acepta o niega el pedido de préstamo de libro
     """
     template = "libros/libro_request.html"
-
     libro_request = get_object_or_404(LibrosRequest, id=libro_request_id)
+
+    if request.user != libro_request.perfil_recepcion.usuario:
+        raise PermissionDenied
 
     if request.method == "POST":        
         decision = request.POST.get("prestar", "")
@@ -211,10 +214,14 @@ def libro_request(request, libro_request_id):
             libro_request.aceptado = True
             libro_request.save()
             mensaje = strip_tags(request.POST.get("mensaje_aceptacion", ""))
+            tiempo_prestamo = request.POST.get("tiempo_max_devolucion", "")
+            print tiempo_prestamo
+            fecha_max_devolucion = definir_fecha_devolucion(datetime.today(), tiempo_prestamo)
 
             fecha_prestamo = datetime.today()
             libro_prestado = LibrosPrestados(libro=libro_request.libro, perfil_receptor=libro_request.perfil_envio,
-                                     perfil_dueno=libro_request.perfil_recepcion, fecha_prestamo=fecha_prestamo, mensaje_aceptacion=mensaje)
+                                     perfil_dueno=libro_request.perfil_recepcion, fecha_prestamo=fecha_prestamo, mensaje_aceptacion=mensaje,
+                                     fecha_max_devolucion=fecha_max_devolucion)
             libro_prestado.save()
 
             libro_disponible_obj = LibrosDisponibles.objects.filter(libro=libro_request.libro, perfil=libro_request.perfil_recepcion).first()

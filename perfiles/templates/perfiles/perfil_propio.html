@@ -53,7 +53,9 @@
 							<div class="toggle-content">
 								<p> 
 									<small>
-									Fecha máxima de devolución: {{l.fecha_max_devolucion}}. <br>
+									{% if l.fecha_max_devolucion %}
+										Fecha máxima de devolución: {{l.fecha_max_devolucion|date}}. <br>
+									{% endif %}
 									Mensaje: '{{l.mensaje_aceptacion}}' <br>
 									Teléfono de contacto: {{l.perfil_dueno.numero_telefono_contacto}}. <br>
 									Email: {{l.perfil_dueno.usuario.email}}.
@@ -90,7 +92,7 @@
 							<div class="toggle-content">
 								<p>
 									<small>
-									Fecha máxima de devolución: {{l.fecha_max_devolucion}}. <br>
+									Fecha máxima de devolución: {{l.fecha_max_devolucion|date}}. <br>
 									Dirección: {{l.biblioteca_compartida.direccion}}
 									</small>
 								</p>
@@ -143,7 +145,7 @@
 				<div class="col-md-9 col-sm-9"><!-- left text -->
 					<h4><strong>{{r.libro.titulo}}</strong> {{r.libro.autor}}</h4>
 					<p>
-						{{r.fecha_request}} | <a href="{% url 'perfiles:perfil_usuario' r.perfil_envio.usuario.username %} ">{{r.perfil_envio.usuario.username}} </a> desea leer este libro.
+						{{r.fecha_request|date}} | <a href="{% url 'perfiles:perfil_usuario' r.perfil_envio.usuario.username %} ">{{r.perfil_envio.usuario.username}} </a> desea leer este libro.
 					</p>
 				</div><!-- /left text -->				
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
@@ -194,7 +196,7 @@
 				<div class="row">
 					<div class="col-md-9 col-sm-9"><!-- left text -->						
 						<p>
-							{{l.libro.titulo}} <br> <small> {{l.libro.autor}} </small>
+							<strong>{{l.libro.titulo}}</strong> <br> <small> {{l.libro.autor}} </small>
 						</p>
 					</div><!-- /left text -->
 				</div>

@@ -4,6 +4,7 @@
 
 <div class = "col-md-8 col-md-offset-2">
 	<br>
+	<br>
 	<h2>
 		<a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_request.perfil_envio.usuario.username %}">
 		{{libro_request.perfil_envio.usuario}}</a> te ha pedido que le prestes el libro '{{libro_request.libro.titulo}}'.
@@ -32,26 +33,74 @@
 	<form class="form-horizontal" action="{% url 'libros:libro_request' libro_request.id %}" method="post">
 			{% csrf_token %}
 			<div class="control-group">
-			  <label class="control-label" for="mensaje_aceptacion">Mensaje</label>
 			  <div class="controls">
-			    <textarea class = "form-control" id="mensaje_aceptacion" name="mensaje_aceptacion" placeholder="Puedes escribir un mensaje de aceptación con información extra sobre cómo puede contactarte."></textarea>
-			  </div>
-			</div>
-			<div class="control-group">
-			  <div class="controls">
-			    <label class="radio" for="radios-0">
-			      <input name="prestar" id="" value="prestado" checked="checked" type="radio">
+			    <label class="radio" for="aceptar">
+			      <input name="prestar" id="aceptar" value="prestado" checked="checked" type="radio">
 			      Aceptar - Prestar Libro. Se enviaran tus datos de contacto
 			    </label>
 			    <label class="radio" for="radios-1">
-			      <input name="prestar" id="" value="no_prestado" type="radio">
+			      <input name="prestar" id="no_prestar" value="no_prestado" type="radio">
 			      No puedo prestarlo en este momento.
 			    </label>
 			  </div>
 			</div>
-			<input class = "btn btn-success pull-right" type="submit" value="Enviar">
+			<div class="control-group" id = "div_mensaje">
+				<hr>
+						
+				<label class="control-label" for="tiempo_max_devolucion"><strong>Tiempo de Préstamo:</strong></label>
+				<div class="controls">
+					<label class="radio" for="2_semanas">
+						<input name="tiempo_max_devolucion" id="2_semanas" value="2_semanas" type="radio">
+						2 Semanas
+					</label>
+					<label class="radio" for="1_mes">
+						<input name="tiempo_max_devolucion" id="1_mes" value="1_mes" checked="checked" type="radio">
+						Un Mes
+					</label>
+					<label class="radio" for="2_meses">
+						<input name="tiempo_max_devolucion" id="2_meses" value="2_meses" type="radio">
+						Dos Meses
+					</label>
+					<label class="radio" for="3_meses">
+						<input name="tiempo_max_devolucion" id="3_meses" value="3_meses" type="radio">
+						Tres Meses
+					</label>
+					<label class="radio" for="indefinido">
+						<input name="tiempo_max_devolucion" id="indefinido" value="indefinido" type="radio">
+						No importa
+					</label>
+					<br>
+					<p class = "help-text"> *Más una semana en la que {{libro_request.perfil_envio.usuario}} tiene tiempo para contactarte.
+				</div>
+				<br>
+			  <label class="control-label" for="mensaje_aceptacion"><strong>Mensaje</strong></label>
+			  
+			  <div class="controls">
+			    <textarea class = "form-control" id="mensaje_aceptacion" name="mensaje_aceptacion" placeholder="Puedes escribir un mensaje de aceptación con información extra sobre cómo puede contactarte."></textarea>
+			  </div>
+
+			</div>
+		<input class = "btn btn-success pull-right" type="submit" value="Enviar">
 	</form>
 	<hr class = "invisible">
 </div>
 
 {% endblock content %}
+
+{% block extra_javascript %}
+<script>
+
+$(document).ready(function(){
+	$("#no_prestar").change(function(){
+		console.log("no prestar!");
+		$("#div_mensaje").addClass("hidden");
+	});
+
+	$("#aceptar").change(function(){
+		console.log("prestar!");
+		$("#div_mensaje").removeClass("hidden");
+	});
+});
+
+</script>
+{% endblock extra_javascript %}
