@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+
 from perfiles.models import Perfil
 from libros.models import LibrosPrestados, LibrosPrestadosBibliotecaCompartida
 from cities_light.models import City
@@ -76,5 +79,24 @@ def crear_perfil(backend, user, response, *args, **kwargs):
 			imagen_url_backend = response['image'].get('url')
 			perfil.imagen_perfil = imagen_url_backend
 			perfil.save()
+
+	return None
+
+
+def mail_pedir_libro(request_libro, mensaje):
+
+	titulo = "%s te ha pedido un libro" % (request_libro.perfil_envio.usuario.username)
+	mensaje = "%s te ha pedido que le prestes el libro %s, por favor visita tu perfil en Letras.Club" % (request_libro.perfil_recepcion.usuario.username, request_libro.libro.titulo)
+
+	send_mail(
+			subject=titulo,
+			message=mensaje,
+			email="letras.club@no-reply",
+			recipient_list=[request_libro.perfil_recepcion.usuario.email],
+			fail_silently=True,
+			html_message=render_to_string("mail/pedir_libro.html", 
+				{'nombre_usuario_receptor': request_libro.perfil_recepcion.usuario.username, 'nombre_usuario_envio': request_libro.perfil_envio.usuario.username,
+				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor})
+		)
 
 	return None

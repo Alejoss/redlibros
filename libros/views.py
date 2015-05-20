@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -180,7 +181,10 @@ def pedir_libro(request, id_libro_disponible):
             request_libro = LibrosRequest(libro=libro_request, perfil_envio=perfil_envio, perfil_recepcion=perfil_recepcion, 
                                           mensaje=mensaje, telefono=telefono, email=email)
             request_libro.save()
-            
+
+            if perfil_recepcion.usuario.email:
+                email_pedido_libro(request_libro, mensaje)
+
             return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
     else:
 
@@ -214,8 +218,7 @@ def libro_request(request, libro_request_id):
             libro_request.aceptado = True
             libro_request.save()
             mensaje = strip_tags(request.POST.get("mensaje_aceptacion", ""))
-            tiempo_prestamo = request.POST.get("tiempo_max_devolucion", "")
-            print tiempo_prestamo
+            tiempo_prestamo = request.POST.get("tiempo_max_devolucion", "")       
             fecha_max_devolucion = definir_fecha_devolucion(datetime.today(), tiempo_prestamo)
 
             fecha_prestamo = datetime.today()
@@ -521,7 +524,7 @@ def cancelar_pedido(request):
         if libro_request.perfil_envio != perfil_usuario:
             raise PermissionDenied
         else:
-            libro_request.eliminado = False
+            libro_request.eliminado = True
             libro_request.save()
 
             return HttpResponse("request de libro cancelado", status=200)
