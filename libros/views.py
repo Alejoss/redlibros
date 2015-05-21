@@ -48,9 +48,12 @@ def nuevo_libro(request, tipo_dueno, slug):
                 if tipo_dueno == "perfil":
                     # !!! Falta opcionalidad para cambiar ciudad
                     perfil_usuario = obtener_perfil(request.user)
-                    # !!! Todos los libros son marcados disponibles en Quito !!!                                        
-                    libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=obtenerquito())
+                    # !!! Todos los libros son marcados disponibles en Quito !!!
+                    quito = obtenerquito()
+                    print quito
+                    libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=quito)
                     libro_disponible_obj.save()
+                    print libro_disponible_obj.ciudad
                     
                     return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
                 
@@ -94,6 +97,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad):
     """
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
+
     libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
     bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)    
 

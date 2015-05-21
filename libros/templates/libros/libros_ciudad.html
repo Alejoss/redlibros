@@ -25,7 +25,6 @@
 	-->
 	<br>
 	{% for l in libros_disponibles %}	
-		{% if l.perfil != perfil_usuario %}
 		<div class="alert callout alert-default">
 			<div class="row">
 				<div class="col-md-9 col-sm-9"><!-- left text -->
@@ -35,12 +34,13 @@
 					</a>
 				</div><!-- /left text -->
 				
+				{% if l.perfil != perfil_usuario %}
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
 					<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-default btn-lg">Pedir Libro</a>
 				</div><!-- /right btn -->
+				{% endif %}
 			</div>
 		</div>
-		{% endif %}
 	{% endfor %}
 </div>
 
