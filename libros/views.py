@@ -513,7 +513,8 @@ def anunciar_devolucion(request):
             libro_prestado.receptor_anuncio_devolucion = True
             libro_prestado.save()
 
-            if libro_prestado.perfil.usuario.mail:
+            if libro_prestado.perfil.usuario.email:
+                print "enviar mail devolucion"
                 mail_anunciar_devolucion(libro_prestado)
 
         return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
