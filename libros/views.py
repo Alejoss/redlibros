@@ -168,12 +168,10 @@ def pedir_libro(request, id_libro_disponible):
     perfil_usuario = obtener_perfil(request.user)
 
     if request.method == "POST":
-        print "REQUEST POST PEDIR LIBRO"
 
         form = FormPedirLibro(request.POST)
 
         if form.is_valid():
-            print "PRINT FORM IS VALID"
 
             mensaje = form.cleaned_data.get("mensaje", "")
             telefono = form.cleaned_data.get("telefono", "")
@@ -188,9 +186,7 @@ def pedir_libro(request, id_libro_disponible):
                                           mensaje=mensaje, telefono=telefono, email=email)
             request_libro.save()
 
-            print perfil_recepcion.usuario.email
-            if perfil_recepcion.usuario.email:
-                print "1 mandar mail"
+            if perfil_recepcion.usuario.email:    
                 mail_pedir_libro(request_libro, mensaje)
 
             return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
