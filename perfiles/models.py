@@ -5,8 +5,7 @@ from cities_light.models import City
 
 
 class Perfil(models.Model):
-	usuario = models.OneToOneField(User, null=True)
-	nickname = models.CharField(max_length=75, unique=True, blank=True)
+	usuario = models.OneToOneField(User, null=True)	
 	imagen_perfil = models.CharField(max_length=255, blank=True)
 	descripcion = models.CharField(max_length=250, blank=True)
 
