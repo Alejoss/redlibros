@@ -95,7 +95,7 @@ def mail_pedir_libro(request_libro, mensaje):
 	send_mail(
 			subject=titulo,
 			message=mensaje_texto,
-			from_email="letras.club@no-reply",
+			from_email="letras.club@no-reply.com",
 			recipient_list=[request_libro.perfil_recepcion.usuario.email],
 			fail_silently=True,
 			html_message=html_message
@@ -112,3 +112,14 @@ def mail_anunciar_devolucion(libro_prestado):
 	html_message = render_to_string("anunciar_devolucion_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_dueno.usuario.username,
 		'usuario_devolucion_libro': libro_prestado.perfil_receptor.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
 		'autor_libro': libro_prestado.libro.titulo})
+
+	send_mail(
+			subject=titulo,
+			message=mensaje_texto,
+			from_email="letras.club@no-reply.com",
+			recipient_list=[libro_prestado.perfil_dueno.usuario.username],
+			fail_silently=True,
+			html_message=html_message
+		)
+
+	return None
