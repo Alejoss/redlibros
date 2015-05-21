@@ -87,6 +87,13 @@ def mail_pedir_libro(request_libro, mensaje):
 
 	titulo = "%s te ha pedido un libro" % (request_libro.perfil_envio.usuario.username)
 	mensaje = "%s te ha pedido que le prestes el libro %s, por favor visita tu perfil en Letras.Club" % (request_libro.perfil_recepcion.usuario.username, request_libro.libro.titulo)
+	html_message = render_to_string("mail/pedirl_libro.html", {'nombre_usuario_receptor': request_libro.perfil_recepcion.usuario.username, 'nombre_usuario_envio': request_libro.perfil_envio.usuario.username,
+				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor})
+
+	print request_libro.perfil_recepcion.usuario.email
+	print titulo
+	print mensaje
+	print html_message
 
 	send_mail(
 			subject=titulo,
@@ -94,9 +101,7 @@ def mail_pedir_libro(request_libro, mensaje):
 			email="letras.club@no-reply",
 			recipient_list=[request_libro.perfil_recepcion.usuario.email],
 			fail_silently=True,
-			html_message=render_to_string("mail/pedir_libro.html", 
-				{'nombre_usuario_receptor': request_libro.perfil_recepcion.usuario.username, 'nombre_usuario_envio': request_libro.perfil_envio.usuario.username,
-				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor})
+			html_message=html_message
 		)
 
 	return None

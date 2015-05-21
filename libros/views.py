@@ -186,6 +186,7 @@ def pedir_libro(request, id_libro_disponible):
             request_libro.save()
 
             if perfil_recepcion.usuario.email:
+                print "1 mandar mail"
                 mail_pedir_libro(request_libro, mensaje)
 
             return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
