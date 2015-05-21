@@ -168,10 +168,13 @@ def pedir_libro(request, id_libro_disponible):
     perfil_usuario = obtener_perfil(request.user)
 
     if request.method == "POST":
+        print "REQUEST POST PEDIR LIBRO"
 
         form = FormPedirLibro(request.POST)
 
         if form.is_valid():
+            print "PRINT FORM IS VALID"
+
             mensaje = form.cleaned_data.get("mensaje", "")
             telefono = form.cleaned_data.get("telefono", "")
             email = form.cleaned_data.get("email", "")
