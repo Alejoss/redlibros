@@ -191,8 +191,9 @@ def pedir_libro(request, id_libro_disponible):
                 mail_pedir_libro(request_libro, mensaje)
 
             return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
+        else:
+            print "form not valid!"
     else:
-
         libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
     
     form_pedir_libro = FormPedirLibro(initial={

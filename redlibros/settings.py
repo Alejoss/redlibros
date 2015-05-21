@@ -15,7 +15,7 @@ SECRET_KEY = os.environ['LIBROS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
-HEROKU = True
+HEROKU = False
 
 ALLOWED_HOSTS = ["*"]
 
