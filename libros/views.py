@@ -185,6 +185,7 @@ def pedir_libro(request, id_libro_disponible):
                                           mensaje=mensaje, telefono=telefono, email=email)
             request_libro.save()
 
+            print perfil_recepcion.usuario.email
             if perfil_recepcion.usuario.email:
                 print "1 mandar mail"
                 mail_pedir_libro(request_libro, mensaje)
