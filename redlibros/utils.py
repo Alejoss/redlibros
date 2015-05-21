@@ -102,3 +102,13 @@ def mail_pedir_libro(request_libro, mensaje):
 		)
 
 	return None
+
+
+def mail_anunciar_devolucion(libro_prestado):
+
+	titulo = "%s ha marcado un libro tuyo como devuelto"
+	mensaje_texto = "%s ha marcado tu libro %s como devuelto, si ya lo tienes, por favor visita tu perfil en Letras.Club\
+	 y márcalo como devuelto también" % (libro_prestado.perfil_receptor.usuario.username, libro_prestado.libro.titulo)
+	html_message = render_to_string("anunciar_devolucion_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_dueno.usuario.username,
+		'usuario_devolucion_libro': libro_prestado.perfil_receptor.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
+		'autor_libro': libro_prestado.libro.titulo})
