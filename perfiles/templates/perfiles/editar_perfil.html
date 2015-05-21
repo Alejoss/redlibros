@@ -3,6 +3,7 @@
 {% block content %}
 <div class = "col-md-8">
 	<br>
+	<p>{{perfil_usuario.usuario.username}} - {{perfil_usuario.usuario.email}}</p>
 	<form class="form-horizontal" action="{% url 'perfiles:editar_perfil' %}" method="post">
 		{% csrf_token %}		
 			<fieldset>

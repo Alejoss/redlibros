@@ -9,7 +9,7 @@ from forms import formRegistro, formEditarPerfil
 from cities_light.models import City
 from libros.models import LibrosRequest, LibrosPrestados, LibrosPrestadosBibliotecaCompartida, LibrosDisponibles
 from perfiles.models import Perfil
-from redlibros.utils import obtener_perfil, obtener_historial_libros, obtener_avatar_large
+from redlibros.utils import obtener_perfil, obtener_historial_libros, obtener_avatar_large, obtenerquito
 
 
 def registro(request):
@@ -129,7 +129,7 @@ def editar_perfil(request):
 		if perfil_usuario.ciudad:
 			ciudad_default = perfil_usuario.ciudad
 		else:
-			ciudad_default = City.objects.get(name="Quito")
+			ciudad_default = obtenerquito()
 		form = formEditarPerfil(
 			initial={
 				'descripcion': perfil_usuario.descripcion,
