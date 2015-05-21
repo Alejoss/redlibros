@@ -29,8 +29,9 @@ def procesar_ciudad(request):
 
 def notificaciones_requests(request):
 	num_requests = None
-	perfil_usuario = Perfil.objects.get(usuario=request.user)
-	if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False).exists():		
-		num_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False).count()
+	if request.user.is_authenticated():
+		perfil_usuario = Perfil.objects.get(usuario=request.user)
+		if LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False).exists():		
+			num_requests = LibrosRequest.objects.filter(perfil_recepcion=perfil_usuario, aceptado=False, eliminado=False).count()
 	
 	return {'num_requests': num_requests}
