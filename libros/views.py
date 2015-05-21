@@ -3,7 +3,6 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -13,7 +12,7 @@ from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
 from perfiles.models import Perfil
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida, FormPrestarLibroBCompartida
-from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito
+from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito, email_pedido_libro
 
 
 def main(request):
