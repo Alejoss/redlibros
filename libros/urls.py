@@ -2,6 +2,7 @@ from django.conf.urls import url
 import views
 
 urlpatterns = [
+    url(r'^render_to_string_problem/$', views.render_to_string_problem, name="render_to_string_problem"),
     url(r'^main/$', views.main, name="main"),
     url(r'^nuevo_libro/(?P<tipo_dueno>\w+)/(?P<slug>\w+)/$', views.nuevo_libro, name="nuevo_libro"),
     url(r'^mi_biblioteca/$', views.mi_biblioteca, name="mi_biblioteca"),

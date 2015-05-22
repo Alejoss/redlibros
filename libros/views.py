@@ -7,6 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
+from django.template.loader import render_to_string
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
@@ -545,3 +546,10 @@ def cancelar_pedido(request):
             return HttpResponse("request de libro cancelado", status=200)
     else:
         raise PermissionDenied
+
+
+def render_to_string_problem(request):
+
+    print render_to_string("aceptar_prestamo_mail.html")
+
+    return HttpResponse("test test debug test")
