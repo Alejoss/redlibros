@@ -117,7 +117,7 @@ def mail_anunciar_devolucion(libro_prestado):
 			subject=titulo,
 			message=mensaje_texto,
 			from_email="letras.club@no-reply.com",
-			recipient_list=[libro_prestado.perfil_dueno.usuario.username],
+			recipient_list=[libro_prestado.perfil_dueno.usuario.email],
 			fail_silently=True,
 			html_message=html_message
 		)
