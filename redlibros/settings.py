@@ -59,6 +59,8 @@ WSGI_APPLICATION = 'redlibros.wsgi.application'
 
 
 # python social auth
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.google.GoogleOAuth2',
