@@ -88,7 +88,7 @@ def mail_pedir_libro(request_libro, mensaje):
 	titulo = "%s te ha pedido un libro" % (request_libro.perfil_envio.usuario.username)
 	mensaje_texto = ("%s te ha pedido que le prestes el libro %s, por favor visita tu perfil en Letras.Club" 
 		% (request_libro.perfil_recepcion.usuario.username, request_libro.libro.titulo))
-	html_message = render_to_string("pedir_libro_mail.html", {'nombre_usuario_receptor': request_libro.perfil_recepcion.usuario.username, 
+	html_message = render_to_string("pedir_libro_mail.html", {'usuario_receptor_mail': request_libro.perfil_recepcion.usuario.username, 
 				'nombre_usuario_envio': request_libro.perfil_envio.usuario.username, 'mensaje': mensaje,
 				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor})
 
@@ -106,11 +106,11 @@ def mail_pedir_libro(request_libro, mensaje):
 
 def mail_anunciar_devolucion(libro_prestado):
 
-	titulo = "%s ha marcado un libro tuyo como devuelto"
+	titulo = "%s ha marcado un libro tuyo como devuelto" % (libro_prestado.perfil_receptor.usuario.username)
 	mensaje_texto = ("%s ha marcado tu libro %s como devuelto, si ya lo tienes,\
 	 por favor visita tu biblioteca en Letras.Club") % (libro_prestado.perfil_receptor.usuario.username, libro_prestado.libro.titulo)
-	html_message = render_to_string("anunciar_devolucion_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_dueno.usuario.username,
-		'usuario_devolucion_libro': libro_prestado.perfil_receptor.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
+	html_message = render_to_string("anunciar_devolucion_mail.html", {'usuario_receptor_mail': libro_prestado.perfil_dueno.usuario.username,
+		'usuario_devolucion': libro_prestado.perfil_receptor.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
 		'autor_libro': libro_prestado.libro.titulo})
 
 	send_mail(
@@ -129,7 +129,7 @@ def mail_aceptar_prestamo(libro_prestado):
 
 	titulo = "%s ha aceptado prestarte el libro %s" % (libro_prestado.perfil_dueno.usuario.username, libro_prestado.libro.titulo)
 	mensaje_texto = "%s ha aceptado prestarte el libro %s de %s, por favor visita tu perfil en Letras.Club"
-	html_message = render_to_string("aceptar_prestamo_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_receptor.usuario.username,
+	html_message = render_to_string("aceptar_prestamo_mail.html", {'usuario_receptor_mail': libro_prestado.perfil_receptor.usuario.username,
 		'usuario_dueno_libro': libro_prestado.perfil_dueno.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
 		'autor_libro': libro_prestado.libro.autor, 'mensaje': libro_prestado.mensaje_aceptacion})
 
