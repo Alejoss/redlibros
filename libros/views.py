@@ -12,7 +12,7 @@ from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
 from perfiles.models import Perfil
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida, FormPrestarLibroBCompartida
-from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito, mail_pedir_libro, mail_anunciar_devolucion
+from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito, mail_pedir_libro, mail_anunciar_devolucion, mail_aceptar_presamo
 
 
 def main(request):
@@ -237,6 +237,10 @@ def libro_request(request, libro_request_id):
             libro_disponible_obj.prestado = True
 
             libro_disponible_obj.save()
+
+            if libro_prestado.perfil_receptor.usuario.email:
+                print "enviar mail aceptar prestamo"
+                mail_aceptar_presamo(libro_prestado)
 
             return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
 
