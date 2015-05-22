@@ -11,13 +11,26 @@
 				<p class="lead">Deja que ese libro al fondo de tu escritorio sea leído una vez más, 
 				<em class="styleColor">y ten acceso a los libros de otros miembros del club.</em></p>
 
-				<a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook btn-lg btn-block"><i class="fa fa-facebook"></i> Entra con Facebook</a>
-				<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google-plus btn-lg btn-block"><i class="fa fa-google-plus"></i> Regístrate con Google</a>
-				<br>				
-				<p>O <a href="{% url 'perfiles:login' %}">entra</a> con otra cuenta</p>
+				{% if user.is_authenticated %}
+					<div class="divider"><!-- divider -->
+						<i class="fa fa-user"></i>
+					</div>
+					<p> 
+					Estás autenticado como <strong>{{perfil_usuario.usuario.username}}</strong>, continúa a tu <a href="{% url 'perfiles:perfil_propio' %}">perfil</a><br>
+					o has <a href="{% url 'perfiles:logout' %}">logout</a> si deseas entrar con otra cuenta.
+					</p>
+
+				{% else %}
+					<a href="{% url 'social:begin' 'facebook' %}" class="btn btn-facebook btn-lg btn-block"><i class="fa fa-facebook"></i> Entra con Facebook</a>
+					<a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-google-plus btn-lg btn-block"><i class="fa fa-google-plus"></i> Entra con Google</a>
+				{% endif %}				
+				<br>
 			</div>			
 			<div class="col-md-6 text-center">
 				<img class="img-responsive animate_fade_in" src="{% static 'assets/images/letrasclub/booksmain.jpg' %}" alt=""/>
+
+				<!-- facebook fan page -->
+				<div class="fb-page" data-href="https://www.facebook.com/letras.club" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/facebook"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div></div>
 			</div>
 		</div>
 	</div>
