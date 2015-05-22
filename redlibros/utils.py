@@ -129,7 +129,7 @@ def mail_aceptar_prestamo(libro_prestado):
 
 	titulo = "%s ha aceptado prestarte el libro %s" % (libro_prestado.perfil_dueno.usuario.username, libro_prestado.libro.titulo)
 	mensaje_texto = "%s ha aceptado prestarte el libro %s de %s, por favor visita tu perfil en Letras.Club"
-	html_message = render_to_string("aceptar_prestamo_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_recepcion.usuario.username,
+	html_message = render_to_string("aceptar_prestamo_mail.html", {'nombre_usuario_receptor': libro_prestado.perfil_receptor.usuario.username,
 		'usuario_dueno_libro': libro_prestado.perfil_dueno.usuario.username, 'titulo_libro': libro_prestado.libro.titulo, 
 		'autor_libro': libro_prestado.libro.autor, 'mensaje': libro_prestado.mensaje_aceptacion})
 
