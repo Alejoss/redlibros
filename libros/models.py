@@ -42,6 +42,9 @@ class LibrosDisponibles(models.Model):
 	def __unicode__(self):
 		return "Libro Disponible object: %s - %s" % (self.libro.titulo, self.perfil.usuario)
 
+	class Meta:
+		ordering = ["libro__titulo"]
+
 
 class LibrosPrestados(models.Model):
 	libro = models.ForeignKey(Libro)
