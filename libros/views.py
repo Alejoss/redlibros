@@ -29,7 +29,7 @@ def main(request):
 
 
 @login_required
-def nuevo_libro(request, tipo_dueno, slug):
+def nuevo_libro(request, tipo_dueno, username):
     template = "libros/nuevo_libro.html"
 
     if request.method == "POST":
@@ -50,14 +50,13 @@ def nuevo_libro(request, tipo_dueno, slug):
                     perfil_usuario = obtener_perfil(request.user)
                     # !!! Todos los libros son marcados disponibles en Quito !!!
                     quito = obtenerquito()
-                    print quito
                     libro_disponible_obj = LibrosDisponibles(libro=nuevo_libro, perfil=perfil_usuario, ciudad=quito)
                     libro_disponible_obj.save()
-                    print libro_disponible_obj.ciudad
                     
                     return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
                 
                 elif tipo_dueno == "biblioteca_compartida":
+                    slug = username  # fea manera de tomar el argumento y usarlo para biblioteca_compartida
                     biblioteca_compartida = BibliotecaCompartida.objects.get(slug=slug)
                     libro_disponible_obj = LibrosBibliotecaCompartida(biblioteca_compartida=biblioteca_compartida, libro=nuevo_libro)
                     libro_disponible_obj.save()
@@ -67,7 +66,7 @@ def nuevo_libro(request, tipo_dueno, slug):
     else:
         form = FormNuevoLibro()
 
-    context = {'form': form, 'tipo_dueno': tipo_dueno, 'slug': slug}
+    context = {'form': form, 'tipo_dueno': tipo_dueno, 'username': username}
     return render(request, template, context)
 
 
