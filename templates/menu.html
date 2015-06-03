@@ -31,25 +31,34 @@
 					    	<li><a href="{% url 'libros:buscar_ciudad' %}">Busca un libro disponible en tu ciudad</a></li>
 					    {% endif %}
 					-->
-					<li><a href="{% url 'libros:libros_ciudad' 'quito' '18' %}">Libros disponibles en Quito</a></li>
 
 						{% if user.is_authenticated %}
-						<li class="dropdown">
-							<a class="dropdown-toggle pull-right" href="">
+						<li class="dropdown hidden-sm hidden-xs">
+							<a class="dropdown-toggle hidden-sm hidden-xs" href="">
 							{% if num_requests %}
 							<span class="badge">{{num_requests}}</span>
 							{% endif %}
-							{{user.username}}</a>
+							{{user.username}}
+							</a>
 							<ul class="dropdown-menu">
-								<li><a href="{% url 'perfiles:perfil_propio' %}">Perfil</a></li>
-								<li><a href="{% url 'libros:mi_biblioteca' %}">Biblioteca</a></li>
+								<li><a href="{% url 'perfiles:perfil_propio' %}"><i class = "fa fa-user"></i> Perfil</a></li>
+								<li><a href="{% url 'libros:mi_biblioteca' %}"><i class="fa fa-th"></i> Biblioteca</a></li>
 								<li class="divider"></li>
-								<li><a href="{% url 'perfiles:editar_perfil' %}">Editar Perfil</a></li>
-								<li><a href="{% url 'perfiles:logout' %}">Logout</a></li>
+								<li><a href="{% url 'perfiles:editar_perfil' %}"><i class="fa fa-edit"></i> Editar Perfil</a></li>
+								<li><a href="{% url 'perfiles:logout' %}"><i class="fa fa-power-off"></i> Logout</a></li>
 							</ul>
 						</li>
-					    <li><a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}"><i class="fa fa-book"></i> Compartir un Libro</a></li>
+					    <li class=""><a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}"><i class="fa fa-book"></i> Compartir un Libro</a>
+					    </li>
+					    <li class="hidden-md hidden-lg"><a href="{% url 'perfiles:perfil_propio' %}"><i class = "fa fa-user"></i> Perfil</a></li>
+						<li class="hidden-md hidden-lg"><a href="{% url 'libros:mi_biblioteca' %}"><i class="fa fa-th"></i> Biblioteca</a></li>
+						<li class="divider hidden-md hidden-lg">
+						<li class="hidden-md hidden-lg"><a href="{% url 'perfiles:editar_perfil' %}"><i class="fa fa-edit"></i> Editar Perfil</a></li>
+						<li class="hidden-md hidden-lg"><a href="{% url 'perfiles:logout' %}"><i class="fa fa-power-off"></i> Logout</a></li>
+
 						{% endif %}
+					
+						<li><a href="{% url 'libros:libros_ciudad' 'quito' '18' %}"><i class="fa fa-map-marker"></i> Libros disponibles en Quito</a></li>
 					</ul>
 				</nav>
 			</div>
