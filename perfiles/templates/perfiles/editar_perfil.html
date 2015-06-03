@@ -2,8 +2,11 @@
 
 {% block content %}
 <div class = "col-md-8">
-	<br>
-	<p>{{perfil_usuario.usuario.username}} - {{perfil_usuario.usuario.email}}</p>
+	<hr class ="invisible half-margins">
+
+	<div class="col-md-offset-1">
+		<h3> {{perfil_usuario.usuario.username}} - <small> {{perfil_usuario.usuario.email}} </small></h3>
+	</div>
 	<form class="form-horizontal" action="{% url 'perfiles:editar_perfil' %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
