@@ -129,6 +129,14 @@
 
 	{% endif %}
 
+		{% if not libros_perfil.tiene_libros_pedidos and not libros_perfil.tiene_libros_prestados %}
+
+			<hr class="invisible">
+			<h5> <i class="fa fa-info-circle"></i> No has pedido ningún libro ni tienes un libro prestado. <br>
+			Busca un <a href="{% url 'libros:libros_ciudad' 'quito' '18' %}">libro disponible</a> en Quito </h5>
+
+		{% endif %}
+
 	{% if libros_perfil.tiene_requests_pendientes %}
 		<hr class="half-margins" /><!-- divider 30px -->
 		<h4> Tienes pedidos pendientes</h4>
