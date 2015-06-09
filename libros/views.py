@@ -90,17 +90,24 @@ def mi_biblioteca(request):
     return render(request, template, context)
 
 
-def libros_ciudad(request, slug_ciudad, id_ciudad):
+def libros_ciudad(request, slug_ciudad, id_ciudad, filtro):
     """
-    Recibe como parametro una ciudad y un pais
+    Recibe como parametro una ciudad, un id de la ciudad y un filtro. 
+    renderea un html con los libros ordenados por el filtro
     """
+
     template = "libros/libros_ciudad.html"
     ciudad = City.objects.get(pk=id_ciudad)
 
-    libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
-    bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)    
+    if filtro == "autor":
+        libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False).order_by("libro__autor")
+    else:
+        libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
+
+    bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)
 
     context = {
+        'filtro': filtro,
         'ciudad': ciudad,
         'libros_disponibles': libros_disponibles,
         'bibliotecas_compartidas': bibliotecas_compartidas
@@ -142,7 +149,7 @@ def buscar_ciudad(request):
             perfil_usuario.ciudad = ciudad
             perfil_usuario.save()
 
-        return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id}))
+        return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id, 'filtro': 'titulo'}))
 
     ciudades = City.objects.all()
     nombres_ciudades_importantes = ["Quito", "Guayaquil", "Cuenca"]
@@ -292,7 +299,7 @@ def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
             biblioteca_compartida.ciudad = ciudad
             biblioteca_compartida.save()
 
-            return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id}))
+            return HttpResponseRedirect(reverse('libros:libros_ciudad', kwargs={'slug_ciudad': ciudad.slug, 'id_ciudad': ciudad.id, 'filtro': 'titulo'}))
 
     else:
         form = NuevaBibliotecaCompartida()
