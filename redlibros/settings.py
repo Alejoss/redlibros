@@ -80,16 +80,21 @@ SOCIAL_AUTH_PIPELINE = (
     'redlibros.utils.crear_perfil'
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
+DATABASES = {}
 
 if HEROKU:  
     DATABASES['default'] = dj_database_url.config()
 
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'letrasclublocal',
+            'USER': 'alejandro',
+            'PASSWORD': os.environ["POSTGRE_PSWD"]
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
