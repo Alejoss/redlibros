@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<!-- PAGE TOP -->
+<!-- parallax -->
+<div class="parallax parallax-1" style="background-image:url({% static 'assets/images/letrasclub/quito2.jpg' %});">
+	<span class="parallax-overlay"></span>
+	<div class="container parallax-content">
+		<div class="row">
+			<div class="col-md-5 col-sm-5 col-md-offset-1">
+				<h3> Libros disponibles en <strong>{{ciudad}}</strong></h3>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /parallax -->
+<!-- /PAGE TOP -->
+
+<div class ="col-md-8">
+	<br>
+	{% for l in libros_disponibles %}	
+		<div class="alert callout alert-default">
+			<div class="row">
+				<div class="col-md-9 col-sm-9"><!-- left text -->
+					<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}} </h4>
+					<a href="{% url 'perfiles:perfil_usuario' l.perfil.usuario.username %}">
+						<i class = "fa fa-user"></i>{{l.perfil.usuario.username}}
+					</a>
+				</div><!-- /left text -->
+				
+				{% if l.perfil != perfil_usuario %}
+				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+					<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-default btn-lg">Pedir Libro</a>
+				</div><!-- /right btn -->
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+</div>
+
+
+<div class ="col-md-4">
+	<br>
+	<div class="btn-toolbar pull-right" role="toolbar">
+		<div class="btn-group btn-group">
+
+			<button id="elegir_autor" type="button" class="btn btn-default active">Autor</button>
+			<button id="elegir_titulo" type="button" class="btn btn-default">Título</button>
+
+		</div>
+	</div>
+
+	<form id="form_buscar_autor" method="get" action="{% url 'libros:buscar' 'quito' 'autor' %} " class="input-group">
+		{% if filtro == "autor" %}
+		<input type="text" class="form-control" name="q" placeholder="Buscar otro autor" />
+		{% else %}
+		<input type="text" class="form-control" name="q" placeholder="Buscar por autor" />
+		{% endif %}
+		<span class="input-group-btn">
+			<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+		</span>
+	</form>
+
+	<!-- buscar por titulo- invisible -->
+	<form id="form_buscar_titulo" method="get" action="{% url 'libros:buscar' 'quito' 'titulo' %} " class="input-group hidden">
+		{% if filtro == "titulo" %}
+		<input type="text" class="form-control" name="q" placeholder="Buscar otro título" />
+		{% else %}
+		<input type="text" class="form-control" name="q" placeholder="Buscar por título" />
+		{% endif %}
+		<span class="input-group-btn">
+			<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+		</span>
+	</form>
+
+	<hr class ="invisible">
+</div>
+
+<script>
+$(document).ready(function(){
+
+	$("#elegir_autor").on("click", function(e){
+		e.preventDefault();
+		$("#elegir_titulo").removeClass("active");
+		$("#form_buscar_titulo").addClass("hidden");
+		$("#form_buscar_autor").removeClass("hidden");
+	});
+
+	$("#elegir_titulo").on("click", function(e){
+		e.preventDefault();
+		$("#elegir_autor").removeClass("active")
+		$("#form_buscar_autor").addClass("hidden");
+		$("#form_buscar_titulo").removeClass("hidden");
+	});
+})
+
+</script>
+
+{% endblock content %}

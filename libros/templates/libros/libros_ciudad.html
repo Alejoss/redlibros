@@ -30,10 +30,10 @@
 	{% if filtro == "autor" %}
 	
 	<div class="widget">
-		<form id="newsletterSubscribe" method="post" action="php/newsletter.php" class="input-group">
-			<input type="text" class="form-control" name="s" value="" placeholder="Buscar Autor" />
+		<form method="get" action="{% url 'libros:buscar' 'quito' 'autor' %} " class="input-group">
+			<input type="text" class="form-control" name="q" placeholder="Buscar Autor" />
 			<span class="input-group-btn">
-				<button class="btn btn-primary"><i class="fa fa-search"></i></button>
+				<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
 			</span>
 		</form>
 	</div>
@@ -48,10 +48,10 @@
 	{% else %}
 	
 	<div class="widget">
-		<form id="newsletterSubscribe" method="post" action="php/newsletter.php" class="input-group">
-			<input type="text" class="form-control" name="s" value="" placeholder="Buscar Título" />
+		<form method="get" action="{% url 'libros:buscar' 'quito' 'titulo' %}" class="input-group">
+			<input type="text" class="form-control" name="q" placeholder="Buscar Título" />
 			<span class="input-group-btn">
-				<button class="btn btn-primary"><i class="fa fa-search"></i></button>
+				<button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
 			</span>
 		</form>
 	</div>
@@ -97,19 +97,20 @@
 	
 	<hr class="half-margins invisible" /><!-- divider 30px -->
 
+	{% comment 'bibliotecas compartidas' %} 
 	<h4> Bibliotecas Compartidas</h4>
 
-<!-- JUSTIFIED TAB -->
+
 	<div class="tabs nomargin">
 
-		<!-- tabs content -->
+	
 		<div class="tab-content">
 
-			<!-- POPULAR -->
+	
 			<div id="tab_1" class="tab-pane active">
 
 				{% for biblioteca in bibliotecas_compartidas %}
-				<div class="row tab-post"><!-- post -->
+				<div class="row tab-post">
 					<div class="col-md-3 col-sm-3 col-xs-3">
 						<a href="{% url 'libros:biblioteca_compartida' biblioteca.slug %}">
 							<img src="{{biblioteca.imagen}}" width="50" alt="" />
@@ -119,13 +120,15 @@
 						<a href="{% url 'libros:biblioteca_compartida' biblioteca.slug %}" class="tab-post-link">{{biblioteca.nombre}}</a>
 						<small>{{biblioteca.direccion}}</small>
 					</div>
-				</div><!-- /post -->
+				</div>
 				{% endfor %}
 			</div>
-			<!-- /POPULAR -->
+	
 		</div>
 	</div>
-	<!-- JUSTIFIED TAB -->
+	
 	<a href="{% url 'libros:nueva_biblioteca_compartida' ciudad.slug ciudad.id %}" class="pull-right"> <small>Registrar una Biblioteca Compartida en {{ciudad.name}}</small></a>
+	{% endcomment %}
+
 </div>
 {% endblock content %}

@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
+import re
+from django.db.models import Q
+
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
-from django.template.loader import render_to_string
 
 from cities_light.models import City
 from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
@@ -554,8 +556,63 @@ def cancelar_pedido(request):
         raise PermissionDenied
 
 
-def render_to_string_problem(request):
+# Para el search de temas
+def normalize_query(query_string,
+                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
+                    normspace=re.compile(r'\s{2,}').sub):
+    ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
+        and grouping quoted words together.
+        Example:
 
-    print render_to_string("aceptar_prestamo_mail.html")
+        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
+        ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
 
-    return HttpResponse("test test debug test")
+    '''
+    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
+
+
+# Para el search de temas
+def get_query(query_string, search_fields):
+    ''' Returns a query, that is a combination of Q objects. That combination
+        aims to search keywords within a model by testing the given search fields.
+
+    '''
+    query = None  # Query to search for every search term
+    terms = normalize_query(query_string)
+    for term in terms:
+        or_query = None  # Query to search for a given term in each field
+        for field_name in search_fields:
+            q = Q(**{"%s__icontains" % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query & or_query
+    return query
+
+
+def buscar(request, slug_ciudad, filtro):
+    template = 'libros/busqueda.html'
+
+    # entry_query = get_query(query_string, ['libro__titulo', ])
+    query_string = ""
+    libros_disponibles = None
+
+    if ('q' in request.GET) and request.GET['q'].strip():
+        query_string = request.GET['q']
+        if query_string:
+            if filtro == "autor":
+                libros_disponibles = LibrosDisponibles.objects.filter(libro__autor__icontains=query_string)
+            else:
+                libros_disponibles = LibrosDisponibles.objects.filter(libro__titulo__icontains=query_string)
+
+        context = {'query_string': query_string,
+                   'libros_disponibles': libros_disponibles,
+                   'filtro': filtro,
+                   'ciudad': slug_ciudad.capitalize()}
+        return render(request, template, context)
+    else:
+        return redirect('libros:libros_ciudad', slug_ciudad='quito', id_ciudad=18, filtro='titulo')

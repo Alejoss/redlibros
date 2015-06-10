@@ -3,6 +3,7 @@
 {% block content %}
 
 <div class = "col-md-4 col-md-offset-1">
+	<hr class ="invisible">
 	<form class="form-horizontal" action="{% url 'perfiles:login' %}" method="post">
 	{% csrf_token %}		
 		<fieldset>
@@ -11,5 +12,6 @@
 		<br>
 		<input class = "btn btn-success pull-right" type="submit" value="Submit">
 	</form>
+	<hr class ="invisible">
 </div>
 {% endblock content %}

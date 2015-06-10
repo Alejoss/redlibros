@@ -1,8 +1,7 @@
 from django.conf.urls import url
 import views
 
-urlpatterns = [
-    url(r'^render_to_string_problem/$', views.render_to_string_problem, name="render_to_string_problem"),
+urlpatterns = [    
     url(r'^main/$', views.main, name="main"),
     url(r'^nuevo_libro/(?P<tipo_dueno>\w+)/(?P<username>[-\w.]+)/$', views.nuevo_libro, name="nuevo_libro"),
     url(r'^mi_biblioteca/$', views.mi_biblioteca, name="mi_biblioteca"),
@@ -33,6 +32,8 @@ urlpatterns = [
     url(r'^cancelar_pedido/$', views.cancelar_pedido, 
         name="cancelar_pedido"),
 
+    url(r'^buscar/(?P<slug_ciudad>\w+)/(?P<filtro>\w+)/$', views.buscar, name='buscar'),
+    
     # Ajax calls
     url(r'^marcar_no_disponible/$', views.marcar_no_disponible),
     url(r'^marcar_disponible/$', views.marcar_disponible),
