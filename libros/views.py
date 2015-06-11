@@ -6,16 +6,19 @@ from datetime import datetime
 
 from django.core.urlresolvers import reverse
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
 
 from cities_light.models import City
-from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
+from libros.models import LibrosDisponibles, LibrosPrestados, Libro, LibrosRequest, BibliotecaCompartida, \
+                          LibrosBibliotecaCompartida, LibrosPrestadosBibliotecaCompartida
 from perfiles.models import Perfil
 from forms import FormNuevoLibro, FormPedirLibro, NuevaBibliotecaCompartida, EditarBibliotecaCompartida, FormPrestarLibroBCompartida
-from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito, mail_pedir_libro, mail_anunciar_devolucion, mail_aceptar_prestamo
+from redlibros.utils import obtener_perfil, definir_fecha_devolucion, obtenerquito, mail_pedir_libro, mail_anunciar_devolucion, \
+                            mail_aceptar_prestamo, obtener_avatar_large, obtener_historial_libros
 
 
 def main(request):
@@ -99,19 +102,34 @@ def libros_ciudad(request, slug_ciudad, id_ciudad, filtro):
     """
 
     template = "libros/libros_ciudad.html"
-    ciudad = City.objects.get(pk=id_ciudad)
+    ciudad = City.objects.get(pk=id_ciudad)    
 
     if filtro == "autor":
-        libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False).order_by("libro__autor")
+        lista_libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False).order_by("libro__autor")
     else:
-        libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
+        lista_libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
 
     bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)
+
+    # paginator
+    paginator = Paginator(lista_libros_disponibles, 100)
+
+    page = request.GET.get("page")
+    
+    try:
+        libros_disponibles = paginator.page(page)
+    
+    except PageNotAnInteger:
+        libros_disponibles = paginator.page(1)
+
+    except EmptyPage:
+        libros_disponibles = paginator.page(paginator.num_pages)
 
     context = {
         'filtro': filtro,
         'ciudad': ciudad,
         'libros_disponibles': libros_disponibles,
+        'paginator': paginator,
         'bibliotecas_compartidas': bibliotecas_compartidas
         }
 
@@ -171,8 +189,7 @@ def pedir_libro(request, id_libro_disponible):
     template = "libros/pedir_libro.html"
     """
     Recibe un id de un objeto LibrosDisponibles, renderiza un form con un mensaje editable que le va a llegar
-    al dueño del libro
-    !!! id_libro es un bug pues puede que un libro este disponible en la biblioteca de 2 personas diferentes
+    al dueño del libro    
     """
     perfil_usuario = obtener_perfil(request.user)
 
@@ -232,7 +249,7 @@ def libro_request(request, libro_request_id):
             libro_request.aceptado = True
             libro_request.save()
             mensaje = strip_tags(request.POST.get("mensaje_aceptacion", ""))
-            tiempo_prestamo = request.POST.get("tiempo_max_devolucion", "")       
+            tiempo_prestamo = request.POST.get("tiempo_max_devolucion", "")
             fecha_max_devolucion = definir_fecha_devolucion(datetime.today(), tiempo_prestamo)
 
             fecha_prestamo = datetime.today()
@@ -247,8 +264,7 @@ def libro_request(request, libro_request_id):
 
             libro_disponible_obj.save()
 
-            if libro_prestado.perfil_receptor.usuario.email:
-                print "enviar mail aceptar prestamo"
+            if libro_prestado.perfil_receptor.usuario.email:                
                 mail_aceptar_prestamo(libro_prestado)
 
             return HttpResponseRedirect(reverse('libros:mi_biblioteca'))
@@ -263,8 +279,15 @@ def libro_request(request, libro_request_id):
         pass
 
     libro_request = LibrosRequest.objects.get(id=libro_request_id)
+    perfil_request = libro_request.perfil_envio
 
-    context = {'libro_request': libro_request}
+    historial_libros = obtener_historial_libros(perfil_request)
+    avatar = obtener_avatar_large(perfil_request)
+
+    ldisponibles_perfil_request = LibrosDisponibles.objects.filter(perfil=perfil_request, disponible=True, prestado=False).count()
+
+    context = {'libro_request': libro_request, 'avatar': avatar, 'historial_libros': historial_libros, 
+               'ldisponibles_perfil_request': ldisponibles_perfil_request}
 
     return render(request, template, context)
 

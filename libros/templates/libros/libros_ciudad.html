@@ -88,6 +88,24 @@
 			</div>
 		</div>
 	{% endfor %}
+
+	<ul class="pagination">
+	 	{% if paginator.has_previous %}
+		<li><a href="?page={{ paginator.previous_page_number }}">&laquo;</a></li>
+		{% else %}
+		<li class="disabled"><a>&laquo;</a></li>
+        {% endif %}
+       
+		{% for numero_pagina in paginator.page_range %}
+			<li class="{% if numero_pagina == libros_disponibles.number %}active{% endif %}"><a href="?page={{numero_pagina}}">{{numero_pagina}}</a></li>
+		{% endfor %}
+		
+		{% if paginator.has_next %}
+            <a href="?page={{ paginator.next_page_number }}">&raquo;</a>
+        {% else %}
+        <li class="disabled"><a class="disabled">&raquo;</a></li>
+        {% endif %}
+	</ul>
 </div>
 
 <div class = "col-md-4">

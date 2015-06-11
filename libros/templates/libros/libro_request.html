@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class = "col-md-8 col-md-offset-2">
+<div class = "col-md-7 col-md-offset-1">
 	<br>
 	<br>
 	<h2>
@@ -11,24 +11,31 @@
 	</h2>
 	<hr>
 	
-	<p>
+	<h4>
 		{{libro_request.perfil_envio.usuario}} - Datos de contacto:
-	</p>
+	</h4>
 		
-	<p>
-		Mensaje : <br> {{libro_request.mensaje}} <br><br>
-		Teléfono : {{libro_request.telefono}} <br>
-		Email : {{libro_request.email}} </br>
+	<p>		
+		<strong>Mensaje</strong>: <br>" {{libro_request.mensaje}} "<br><br>
+		<strong>Teléfono</strong>: {{libro_request.telefono}} <br>
+		<strong>Email</strong> : {{libro_request.email}} </br>
 		<br>
-		<p>Fecha: {{libro_request.fecha_request}}</p>
+		<p><strong>Fecha</strong>: {{libro_request.fecha_request}}</p>
 	</p>
 	<hr>
-	<p>
+	<h4>
 		Tus datos de contacto:
-	</p>
+	</h4>
 	<p>
-		Teléfono : {{perfil_usuario.numero_telefono_contacto}} <br>
-		Email : {{perfil_usuario.usuario.email}} </br>
+		{% if perfil_usuario.numero_telefono_contacto %}
+			<strong>Teléfono </strong> : {{perfil_usuario.numero_telefono_contacto}} <br>
+		{% else %}
+			No has registrado un número de teléfono de contacto, puedes hacerlo <a target="_blank" href="{% url 'perfil:editar_perfil' %} ">editando</a> tu perfil. Por ahora, recuerda incluir la manera en que {{libro_request.perfil_envio.usuario}} te puede contactar en el mensaje al final de este formulario.
+		{% endif %}
+
+		{% if perfil_usuario.usuario.email %}
+			<strong>Email </strong>: {{perfil_usuario.usuario.email}} </br>
+		{% endif %}
 	</p>
 	<form class="form-horizontal" action="{% url 'libros:libro_request' libro_request.id %}" method="post">
 			{% csrf_token %}
@@ -36,11 +43,11 @@
 			  <div class="controls">
 			    <label class="radio" for="aceptar">
 			      <input name="prestar" id="aceptar" value="prestado" checked="checked" type="radio">
-			      Aceptar - Prestar Libro. Se enviaran tus datos de contacto
+			       &nbsp Aceptar <i class="fa fa-smile-o"></i> Prestar Libro. Se enviaran tus datos de contacto
 			    </label>
 			    <label class="radio" for="radios-1">
 			      <input name="prestar" id="no_prestar" value="no_prestado" type="radio">
-			      No puedo prestarlo en este momento.
+			      &nbsp <i class="fa fa-meh-o"></i> No puedo prestarlo en este momento.
 			    </label>
 			  </div>
 			</div>
@@ -83,6 +90,76 @@
 		<input class = "btn btn-success pull-right" type="submit" value="Enviar">
 	</form>
 	<hr class = "invisible">
+</div>
+
+<div class ="col-md-4">
+
+	<hr class = "invisible half-margins">
+	<figure class="text-center margin-bottom8">		
+		<img class="img-responsive img-circle" src="{{libro_request.perfil_envio.imagen_perfil}}" width="260" height="260" alt="">
+	</figure>
+
+	<div class="row profile-activity hidden-xs">
+		<!-- activity item -->
+		<div class="col-xs-10 col-sm-11">			
+			
+			{% if historial_libros.libros_recibidos_usuario or historial_libros.libros_recibidos_bcompartida %}
+			<h4>Libros recibidos: </h4>
+
+				{% for libro_recibido in historial_libros.libros_recibidos_usuario %}
+				<div class="alert alert-default">
+					<div class="row">
+						<div class="col-md-9 col-sm-9"><!-- left text -->												
+							<p>{{libro_recibido.libro.titulo}} <br> <small> {{libro_recibido.libro.autor}} </small> <br>
+								{{libro_recibido.fecha_prestamo|date}} de <a href="{% url 'perfiles:perfil_usuario' libro_recibido.perfil_dueno.usuario.username %}">
+								{{libro_recibido.perfil_dueno.usuario.username}}</a> 
+							</p>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			
+			{% for libro_recibido in historial_libros.libros_recibidos_bcompartida %}
+			<div class="alert alert-default">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->
+						<p>{{libro_recibido.libro.titulo}} <small> {{libro_recibido.libro.autor}} </small> <br>
+							{{libro_recibido.fecha_prestamo|date}} de <a target="_blank" href="{% url 'libros:biblioteca_compartida' libro_recibido.biblioteca_compartida.slug %}">
+							{{libro_recibido.biblioteca_compartida.nombre}}</a>
+						</p>
+					</div><!-- /left text -->
+				</div>
+			</div>
+			{% endfor %}
+
+			{% else %}
+			<br>
+			<p> {{libro_request.perfil_envio.usuario}} no ha recibido un libro de Letras.Club. Sé el primero en prestarle un libro 
+			<i class ="fa fa-thumbs-o-up"></i> </p>
+
+			{% endif %}
+			
+			{% if historial_libros.libros_prestados_por_usuario %}
+			
+			<h4>{{libro_request.perfil_envio.usuario}} ha prestado los siguientes libros: </h4>
+			{% for libro_prestado in historial_libros.libros_prestados_por_usuario %}
+			<div class="alert alert-default">
+				<div class="row">
+					<div class="col-md-9 col-sm-9"><!-- left text -->
+						<p>{{libro_prestado.libro.titulo}} <br> <small> {{libro_prestado.libro.autor}} </small> <br>
+							{{libro_prestado.fecha_prestamo|date}} a <a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_prestado.perfil_receptor.usuario.username %}">
+							{{libro_prestado.perfil_receptor.usuario.username}}</a>
+						</p>
+					</div><!-- /left text -->
+				</div>
+			</div>
+			{% endfor %}
+
+			{% endif %}
+
+			<p> {{libro_request.perfil_envio.usuario}} tiene <strong>{{ldisponibles_perfil_request}}</strong> libros disponibles en su <a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_request.perfil_envio.usuario %}">biblioteca</a>.</p>
+		</div>
+	</div>
 </div>
 
 {% endblock content %}

@@ -14,6 +14,39 @@
 	<hr class = "invisible">
 </div>
 
+<div class ="col-md-4">
+	<hr class="invisible half-margins">
+	<p class ="well">
+	<i class = "fa fa-info-circle"></i>		
+		El usuario al que le prestes este libro en el futuro podrá contactarte de las siguientes maneras:
+		<br>
+		<br>
+
+		{% if user.email %}
+			Tu correo electrónico: {{user.email}}
+		{% else %}
+			No tienes un correo electrónico registrado
+		{% endif %}
+
+		<br>
+
+		{% if perfil_usuario.numero_telefono_contacto %}
+			Tu número de teléfono: {{perfil_usuario.numero_telefono_contacto}}
+		{% else %}
+			No tienes un número de contacto registrado. Por favor <a href="{% url 'perfil:editar_perfil' %}">edita tu perfil</a> y añade un número de teléfono de contacto.
+		{% endif %}
+
+		<br><br>
+
+		Además de las formas de contactarte que especifiques en tu mensaje de aceptación cuando le prestes el libro.
+
+		<br><br>
+
+		<i class ="fa fa-user-secret"></i> No usamos tus números de teléfono ni tu email para ningún otro fin.
+		
+	</p>
+</div>
+
 <script type="text/javascript">	
 </script>
 
