@@ -90,7 +90,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'letrasclublocal',
+            'NAME': 'letraslocaldb',
             'USER': 'alejandro',
             'PASSWORD': os.environ["POSTGRE_PSWD"]
         }
