@@ -33,7 +33,7 @@
 		{% if perfil_usuario.numero_telefono_contacto %}
 			Tu número de teléfono: {{perfil_usuario.numero_telefono_contacto}}
 		{% else %}
-			No tienes un número de contacto registrado. Por favor <a href="{% url 'perfil:editar_perfil' %}">edita tu perfil</a> y añade un número de teléfono de contacto.
+			No tienes un número de contacto registrado. Por favor <a href="{% url 'perfiles:editar_perfil' %}">edita tu perfil</a> y añade un número de teléfono de contacto.
 		{% endif %}
 
 		<br><br>
