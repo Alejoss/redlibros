@@ -90,11 +90,12 @@ def mail_pedir_libro(request_libro, mensaje):
 		% (request_libro.perfil_recepcion.usuario.username, request_libro.libro.titulo))
 	html_message = render_to_string("pedir_libro_mail.html", {'usuario_receptor_mail': request_libro.perfil_recepcion.usuario.username, 
 				'nombre_usuario_envio': request_libro.perfil_envio.usuario.username, 'mensaje': mensaje,
-				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor})
+				'titulo_libro': request_libro.libro.titulo, 'autor_libro': request_libro.libro.autor, 'telefono': request_libro.telefono})
 
 	send_mail(
 			subject=titulo,
 			message=mensaje_texto,
+			telefono=request_libro.telefono,
 			from_email="letras.club@no-reply.com",
 			recipient_list=[request_libro.perfil_recepcion.usuario.email],
 			fail_silently=True,
