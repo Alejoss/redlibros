@@ -1,0 +1,32 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+
+{% for libro_disp in libros %}
+	<ul>
+		<li class ="well"> {{libro_disp.libro.titulo}} </li>
+	</ul>
+{% endfor %}
+
+<form class="form-horizontal" method="post" action="{% url 'libros:cambiar_dueno_libros' %}">
+{% csrf_token %}
+
+<fieldset>
+	<!-- Form Name -->
+	<legend>Cambiar el dueño de los libros disponibles</legend>
+	<!-- Select Basic -->
+	<div class="control-group">
+	  <label class="control-label" for="nuevo_dueno">Perfiles</label>
+	  <div class="controls">
+	    <select name="nuevo_dueno" class="input-xlarge">
+		    {% for perfil in perfiles %}	
+		      <option value="{{perfil.usuario.username}}" >{{perfil.usuario.username}}</option>
+		    {% endfor %}
+	    </select>
+	  </div>
+	  <input type="submit" class="btn btn-success" value="Enviar">
+	</div>
+</fieldset>
+</form>
+
+{% endblock content %}

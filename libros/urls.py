@@ -33,6 +33,8 @@ urlpatterns = [
         name="cancelar_pedido"),
 
     url(r'^buscar/(?P<slug_ciudad>\w+)/(?P<filtro>\w+)/$', views.buscar, name='buscar'),
+
+    url(r'^cambiar_dueno_libros/$', views.cambiar_dueno_libros, name="cambiar_dueno_libros"),
     
     # Ajax calls
     url(r'^marcar_no_disponible/$', views.marcar_no_disponible),

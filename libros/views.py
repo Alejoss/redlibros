@@ -619,8 +619,7 @@ def get_query(query_string, search_fields):
 
 def buscar(request, slug_ciudad, filtro):
     template = 'libros/busqueda.html'
-
-    # entry_query = get_query(query_string, ['libro__titulo', ])
+    
     query_string = ""
     libros_disponibles = None
 
@@ -639,3 +638,40 @@ def buscar(request, slug_ciudad, filtro):
         return render(request, template, context)
     else:
         return redirect('libros:libros_ciudad', slug_ciudad='quito', id_ciudad=18, filtro='titulo')
+
+
+@login_required
+def cambiar_dueno_libros(request):
+    template = 'cambiar_dueno_libro.html'
+
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
+    libros_ids = request.session['libros']
+    libros = []
+
+    for l_id in libros_ids:
+        libro = LibrosDisponibles.objects.get(id=l_id)
+        libros.append(libro)
+
+    if request.method == "POST":
+
+        nuevo_usuario = request.POST.get('nuevo_dueno', '')
+
+        if nuevo_usuario:
+            perfil_dueno = Perfil.objects.get(usuario__username=nuevo_usuario)
+
+            for libro in libros:
+                libro.perfil = perfil_dueno
+                libro.save()
+
+            return redirect('admin:index')
+
+        else:
+            pass
+
+    perfiles = Perfil.objects.all()
+
+    context = {'libros': libros, 'perfiles': perfiles}
+
+    return render(request, template, context)
