@@ -218,8 +218,8 @@ def pedir_libro(request, id_libro_disponible):
             return HttpResponseRedirect(reverse('perfiles:perfil_propio'))
         else:
             print "form not valid!"
-    else:
-        libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
+    
+    libro_disponible_obj = LibrosDisponibles.objects.get(id=id_libro_disponible)
     
     form_pedir_libro = FormPedirLibro(initial={
         'libro_id': libro_disponible_obj.libro.id,
@@ -227,7 +227,9 @@ def pedir_libro(request, id_libro_disponible):
         'email': request.user.email
         })
 
-    context = {'libro_disponible': libro_disponible_obj, 'form_pedir_libro': form_pedir_libro}
+    avatar = obtener_avatar_large(libro_disponible_obj.perfil)
+
+    context = {'libro_disponible': libro_disponible_obj, 'form_pedir_libro': form_pedir_libro, 'avatar': avatar}
 
     return render(request, template, context)
 

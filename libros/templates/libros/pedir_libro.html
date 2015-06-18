@@ -3,8 +3,8 @@
 {% block content %}
 <br>
 <div class = "col-md-6 col-md-offset-1">
-	<h2> Pedir prestado '{{libro_disponible.libro.titulo}}'' de {{libro_disponible.libro.autor}} al usuario 
-	<a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_disponible.perfil.usuario.username %}">{{libro_disponible.perfil.usuario.username}}</a></h2>
+	<h3> Pedir prestado '{{libro_disponible.libro.titulo}}'' de {{libro_disponible.libro.autor}} al usuario 
+	<a target="_blank" href="{% url 'perfiles:perfil_usuario' libro_disponible.perfil.usuario.username %}">{{libro_disponible.perfil.usuario.username}}</a></h3>
 	<form class="form-horizontal" action="{% url 'libros:pedir_libro' libro_disponible.id %}" method="post">
 		{% csrf_token %}		
 			<fieldset>
@@ -18,7 +18,14 @@
 </div>	
 
 <div class ="col-md-4">
-	<hr class ="invisible">
+
+	<figure class="text-center margin-bottom8">		
+		<img class="img-responsive img-circle" src="{{avatar}}" width="260" height="260" alt="">
+	</figure>
+
+	<p>{{libro_disponible.perfil.descripcion}}</p>
+
+	<hr class = "invisible half-margins">
 	<p class ="well">
 	<i class ="fa fa-info-circle"></i> Recuerda que {{libro_disponible.perfil.usuario.username}} verá tu perfil antes de prestarte el libro. Importa cuántos libros has prestado, cuántos has tomado prestado, cuántos has devuelto y cuántos están disponibles en tu biblioteca. <br>
 	<br>
