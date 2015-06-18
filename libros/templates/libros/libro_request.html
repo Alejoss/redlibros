@@ -30,7 +30,7 @@
 		{% if perfil_usuario.numero_telefono_contacto %}
 			<strong>Teléfono </strong> : {{perfil_usuario.numero_telefono_contacto}} <br>
 		{% else %}
-			No has registrado un número de teléfono de contacto, puedes hacerlo <a target="_blank" href="{% url 'perfil:editar_perfil' %} ">editando</a> tu perfil. Por ahora, recuerda incluir la manera en que {{libro_request.perfil_envio.usuario}} te puede contactar en el mensaje al final de este formulario.
+			No has registrado un número de teléfono de contacto, puedes hacerlo <a target="_blank" href="{% url 'perfiles:editar_perfil' %} ">editando</a> tu perfil. Por ahora, recuerda incluir la manera en que {{libro_request.perfil_envio.usuario}} te puede contactar en el mensaje al final de este formulario.
 		{% endif %}
 
 		{% if perfil_usuario.usuario.email %}
