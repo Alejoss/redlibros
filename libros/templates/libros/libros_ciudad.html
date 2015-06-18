@@ -80,7 +80,7 @@
 					</a>
 				</div><!-- /left text -->
 				
-				{% if l.perfil != perfil_usuario %}
+				{% if l.perfil != perfil_usuario and user.is_authenticated %}
 				<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
 					<a href="{% url 'libros:pedir_libro' l.id %}" rel="nofollow" target="_blank" class="btn btn-default btn-lg">Pedir Libro</a>
 				</div><!-- /right btn -->

@@ -1,4 +1,5 @@
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
+from django.core.urlresolvers import reverse
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -134,7 +135,8 @@ if not HEROKU:
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Login settings
-LOGIN_REDIRECT_URL = '/perfil/mi_perfil/'
+LOGIN_URL = "/libros/main/"
+LOGIN_REDIRECT_URL = "/perfil/mi_perfil/"
 
 if HEROKU:
     SOCIAL_AUTH_FACEBOOK_KEY = os.environ["SOCIAL_AUTH_FACEBOOK_KEY"]
