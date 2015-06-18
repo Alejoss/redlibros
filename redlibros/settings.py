@@ -114,6 +114,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 TEMPLATE_DIRS = (BASE_DIR + "/templates/",)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATIC_ROOT = '/'
 
 if HEROKU:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
@@ -124,11 +126,8 @@ if HEROKU:
     STATIC_URL = S3_URL
     STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-else:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+if not HEROKU:
     STATIC_URL = '/static/'
-    STATIC_ROOT = '/'
-
 
 # Heroku
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
