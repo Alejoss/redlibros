@@ -95,7 +95,6 @@ def mail_pedir_libro(request_libro, mensaje):
 	send_mail(
 			subject=titulo,
 			message=mensaje_texto,
-			telefono=request_libro.telefono,
 			from_email="letras.club@no-reply.com",
 			recipient_list=[request_libro.perfil_recepcion.usuario.email],
 			fail_silently=True,
