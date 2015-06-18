@@ -240,7 +240,7 @@ def libro_request(request, libro_request_id):
     view en la que el usuario acepta o niega el pedido de préstamo de libro
     """
     template = "libros/libro_request.html"
-    libro_request = get_object_or_404(LibrosRequest, id=libro_request_id)
+    libro_request = get_object_or_404(LibrosRequest, id=libro_request_id, eliminado=False)
 
     if request.user != libro_request.perfil_recepcion.usuario:
         raise PermissionDenied
@@ -280,7 +280,6 @@ def libro_request(request, libro_request_id):
     else:
         pass
 
-    libro_request = LibrosRequest.objects.get(id=libro_request_id)
     perfil_request = libro_request.perfil_envio
 
     historial_libros = obtener_historial_libros(perfil_request)
