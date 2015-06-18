@@ -21,39 +21,6 @@
 <div class = "col-md-10 col-md-offset-1">
 	<br>
 	<br>
-	<h3>Disponibles en tu biblioteca </h3>
-	{% for l in libros_disponibles %}
-	<div class="alert callout alert-default">
-		<div class="row">
-			<div class="col-md-9 col-sm-9"><!-- left text -->
-				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-			</div><!-- /left text -->			
-			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-				<a href="" rel="nofollow" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
-				No Disponible</a>
-			</div><!-- /right btn -->
-		</div>
-	</div>
-	{% endfor %}
-
-	<hr>
-
-	<h3> No Disponibles </h3>
-	{% for l in libros_no_disponibles %}
-	<div class="alert callout alert-default">
-		<div class="row">
-			<div class="col-md-9 col-sm-9"><!-- left text -->
-				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
-			</div><!-- /left text -->			
-			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
-				<a href="" rel="nofollow" class="btn btn-success btn-lg marcar_disponible" data-id="{{l.id}}">
-				Disponible</a>
-			</div><!-- /right btn -->
-		</div>
-	</div>
-	{% endfor %}
-
-	<hr>
 
 	<h3>Tus libros prestados a otros usuarios</h3>
 	{% for l in libros_prestados %}
@@ -91,6 +58,40 @@
 					<a href="" rel="nofollow" class="btn btn-info btn-lg marcar_devuelto" data-id="{{l.id}}">
 					Marcar como Devuelto</a>
 				{% endif %}
+			</div><!-- /right btn -->
+		</div>
+	</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3>Disponibles en tu biblioteca </h3>
+	{% for l in libros_disponibles %}
+	<div class="alert callout alert-default">
+		<div class="row">
+			<div class="col-md-9 col-sm-9"><!-- left text -->
+				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+			</div><!-- /left text -->			
+			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+				<a href="" rel="nofollow" class="btn btn-warning btn-lg marcar_no_disponible" data-id="{{l.id}}">
+				No Disponible</a>
+			</div><!-- /right btn -->
+		</div>
+	</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3> No Disponibles </h3>
+	{% for l in libros_no_disponibles %}
+	<div class="alert callout alert-default">
+		<div class="row">
+			<div class="col-md-9 col-sm-9"><!-- left text -->
+				<h4><strong>{{l.libro.titulo}}</strong> {{l.libro.autor}}</h4>
+			</div><!-- /left text -->			
+			<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+				<a href="" rel="nofollow" class="btn btn-success btn-lg marcar_disponible" data-id="{{l.id}}">
+				Disponible</a>
 			</div><!-- /right btn -->
 		</div>
 	</div>
