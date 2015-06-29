@@ -27,9 +27,12 @@ def main(request):
     y algo más
     """
     template = "libros/main.html"
-    
-    libros = LibrosDisponibles.objects.all()
-    context = {'libros': libros}
+
+    ultimos_libros_compartidos = LibrosDisponibles.objects.filter(disponible=True).order_by('-id')[:5]
+    ultimos_libros_prestados = LibrosPrestados.objects.filter().order_by('-id')
+    print ultimos_libros_prestados
+
+    context = {'ultimos_libros_compartidos': ultimos_libros_compartidos, 'ultimos_libros_prestados': ultimos_libros_prestados}
     return render(request, template, context)
 
 
@@ -110,6 +113,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad, filtro):
         lista_libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False)
 
     bibliotecas_compartidas = BibliotecaCompartida.objects.filter(ciudad=ciudad, eliminada=False)
+    num_libros_disponibles = LibrosDisponibles.objects.filter(ciudad=ciudad, disponible=True, prestado=False).count()
 
     # paginator
     paginator = Paginator(lista_libros_disponibles, 100)
@@ -129,6 +133,7 @@ def libros_ciudad(request, slug_ciudad, id_ciudad, filtro):
         'filtro': filtro,
         'ciudad': ciudad,
         'libros_disponibles': libros_disponibles,
+        'num_libros_disponibles': num_libros_disponibles,
         'paginator': paginator,
         'bibliotecas_compartidas': bibliotecas_compartidas
         }

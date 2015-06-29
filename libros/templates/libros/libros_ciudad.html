@@ -110,6 +110,13 @@
 
 <div class = "col-md-4">
 	<hr class="half-margins invisible" /><!-- divider 30px -->
+
+	<p class ="well">
+	Actualmente hay <strong>{{num_libros_disponibles}}</strong> libros compartidos en {{ciudad.name}}. Nuestra meta es <strong>10.000</strong>! Sé parte de de nuestra comunidad, 
+	<a href="{% url 'libros:nuevo_libro' 'perfil' user.username %}">comparte</a> tus libros <i class="fa fa-smile-o"></i>.
+
+	</p>
+
 	<!-- facebook -->
 	<div class="fb-page" data-href="https://www.facebook.com/letras.club" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/facebook"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div></div>
 	

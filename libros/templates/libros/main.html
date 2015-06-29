@@ -36,6 +36,51 @@
 				<div class="fb-page" data-width="500" data-href="https://www.facebook.com/letras.club" data-hide-cover="false" data-show-facepile="true" data-show-posts="false"><div class="fb-xfbml-parse-ignore"><blockquote cite="https://www.facebook.com/facebook"><a href="https://www.facebook.com/facebook">Facebook</a></blockquote></div></div>				
 			</div>
 		</div>
+		<div class ="row">
+			<div class="divider"><!-- divider -->
+				<i class="fa fa-chevron-down"></i>
+			</div>
+
+			<div class ="col-md-10 col-md-offset-1">
+				{% for lcompartido in ultimos_libros_compartidos %}
+					<div class="alert callout alert-default">
+						<div class="row">
+							<div class="col-md-9 col-sm-9"><!-- left text -->
+								<h4>{{lcompartido.perfil.usuario.username}} compartió <strong>{{lcompartido.libro.titulo}}</strong> de {{lcompartido.libro.autor}}. </h4>
+							</div><!-- /left text -->
+													
+							<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+								<img src="{{lcompartido.perfil.imagen_perfil}}" class="img-responsive img-circle">
+							</div><!-- /right btn -->
+
+						</div>
+					</div>
+				{% endfor %}
+
+				<div class="divider"><!-- divider -->
+					<i class="fa fa-book"></i>
+				</div>				
+
+				{% for lprestado in ultimos_libros_prestados %}
+					<div class="alert callout alert-default">
+						<div class="row">
+							<div class="col-md-9 col-sm-9"><!-- left text -->
+								<h4>{{lprestado.perfil_dueno.usuario.username}} prestó <strong>{{lprestado.libro.titulo}}</strong> de {{lprestado.libro.autor}} a 
+								{{lprestado.perfil_receptor.usuario.username}}. </h4>
+							</div><!-- /left text -->
+													
+							<div class="col-md-3 col-sm-3 text-right"><!-- right btn -->
+								<img src="{{lprestado.perfil_dueno.imagen_perfil}}" class="img-responsive img-circle">
+								<img src="{{lprestado.perfil_receptor.imagen_perfil}}" class="img-responsive img-circle">
+							</div><!-- /right btn -->
+
+						</div>
+					</div>
+				{% endfor %}
+
+			</div>
+
+		</div>
 	</div>
 </section>
 <!-- /WELCOME -->
