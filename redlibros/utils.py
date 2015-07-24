@@ -44,9 +44,9 @@ def definir_fecha_devolucion(fecha_prestamo, tiempo_prestamo):
 	elif tiempo_prestamo == "1_mes":
 		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)
 	elif tiempo_prestamo == "2_meses":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)		
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=9)
 	elif tiempo_prestamo == "3_meses":
-		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=5)
+		fecha_devolucion = fecha_prestamo + datetime.timedelta(weeks=13)
 	else:
 		pass
 
@@ -64,7 +64,9 @@ def obtener_historial_libros(perfil):
 
 
 def crear_perfil(backend, user, response, *args, **kwargs):
-
+	"""
+	Pipeline de Python Social Auth, crea el perfil y le asigna un avatar que extrae de la red social
+	"""
 	perfil, creado = Perfil.objects.get_or_create(usuario=user)
 
 	perfil.ciudad = obtenerquito()
@@ -84,6 +86,9 @@ def crear_perfil(backend, user, response, *args, **kwargs):
 
 
 def mail_pedir_libro(request_libro, mensaje):
+	"""
+	Envía un mail al dueño del libro notificándole del pedido
+	"""
 
 	titulo = "%s te ha pedido un libro" % (request_libro.perfil_envio.usuario.username)
 	mensaje_texto = ("%s te ha pedido que le prestes el libro %s, por favor visita tu perfil en Letras.Club" 
@@ -105,6 +110,10 @@ def mail_pedir_libro(request_libro, mensaje):
 
 
 def mail_anunciar_devolucion(libro_prestado):
+	"""
+	Envía un mail al dueño del libro notificándole que el usuario que lo recibió
+	ya lo marcó como devuelto
+	"""
 
 	titulo = "%s ha marcado un libro tuyo como devuelto" % (libro_prestado.perfil_receptor.usuario.username)
 	mensaje_texto = ("%s ha marcado tu libro %s como devuelto, si ya lo tienes,\
@@ -126,6 +135,9 @@ def mail_anunciar_devolucion(libro_prestado):
 
 
 def mail_aceptar_prestamo(libro_prestado):
+	"""
+	Envía un mail al usuario que pidió el libro notificándole que sí le van a prestar el libro
+	"""
 
 	titulo = "%s ha aceptado prestarte el libro %s" % (libro_prestado.perfil_dueno.usuario.username, libro_prestado.libro.titulo)
 	mensaje_texto = "%s ha aceptado prestarte el libro %s de %s, por favor visita tu perfil en Letras.Club"

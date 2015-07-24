@@ -30,7 +30,6 @@ def main(request):
 
     ultimos_libros_compartidos = LibrosDisponibles.objects.filter(disponible=True).order_by('-id')[:5]
     ultimos_libros_prestados = LibrosPrestados.objects.filter().order_by('-id')
-    print ultimos_libros_prestados
 
     context = {'ultimos_libros_compartidos': ultimos_libros_compartidos, 'ultimos_libros_prestados': ultimos_libros_prestados}
     return render(request, template, context)
@@ -38,6 +37,11 @@ def main(request):
 
 @login_required
 def nuevo_libro(request, tipo_dueno, username):
+    """
+    Muestra un formulario para la creación de un nuevo Libro.
+    Recibe tipo_dueno que puede ser 'perfil' o 'biblioteca compartida' y el username del dueno
+    """
+
     template = "libros/nuevo_libro.html"
 
     if request.method == "POST":
@@ -142,6 +146,9 @@ def libros_ciudad(request, slug_ciudad, id_ciudad, filtro):
 
 
 def libro(request, slug):
+    """
+    Esta view no está en uso, muestra el libro.
+    """
     template = "libros/libro.html"
     libro = Libro.objects.get(slug=slug)
 
@@ -149,18 +156,10 @@ def libro(request, slug):
     return render(request, template, context)
 
 
-def libros_usuario(request, username):
-    template = "libros/libros_usuario.html"
-
-    libros_disponibles = LibrosDisponibles.objects.filter(username=username)
-    libros_prestados = LibrosPrestados.objects.filter(username=username)
-
-    context = {'libros_disponibles': libros_disponibles, 'libros_prestados': libros_prestados}
-
-    return render(request, template, context)
-
-
 def buscar_ciudad(request):
+    """
+    Esta view no está en uso. Muestra un form de búsqueda de ciudad y procesa la búsqeda
+    """
     template = "libros/buscar_ciudad.html"
 
     if request.method == "POST":
@@ -315,6 +314,9 @@ def prestar_libro(request, libro_request_id):
 
 @login_required
 def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
+    """
+    Muestra formulario para creacion de BibliotecaCompartida
+    """
 
     template = "libros/nueva_biblioteca_compartida.html"
 
@@ -341,7 +343,10 @@ def nueva_biblioteca_compartida(request, slug_ciudad, id_ciudad):
 
 
 def biblioteca_compartida(request, slug_biblioteca_compartida):
-
+    """
+    Esta view tampoco está en uso, muestra los libros disponibles en una biblioteca compartida
+    """    
+ 
     template = "libros/biblioteca_compartida.html"
 
     perfil_usuario = obtener_perfil(request.user)
@@ -362,6 +367,9 @@ def biblioteca_compartida(request, slug_biblioteca_compartida):
 
 @login_required
 def editar_info_bcompartida(request, slug_biblioteca_compartida):
+    """
+    Esta view sirve para editar la info de la biblioteca compartida
+    """
 
     template = "libros/editar_info_bcompartida.html"
 
@@ -398,6 +406,9 @@ def editar_info_bcompartida(request, slug_biblioteca_compartida):
 
 @login_required
 def editar_libros_bcompartida(request, slug_biblioteca_compartida):
+    """
+    Esta view no está en uso, permite editar el estado de los libros de la biblioteca compartida
+    """
 
     template = "libros/editar_libros_bcompartida.html"
     
@@ -414,6 +425,10 @@ def editar_libros_bcompartida(request, slug_biblioteca_compartida):
 
 @login_required
 def prestar_libro_bcompartida(request, id_libro_compartido):
+    """
+    View no está en uso. Permite al admin de la biblioteca compartida aceptar el requiest de prestar libro
+    posiblemente cambie, depende de cómo decidamos implementar las bibliotecas compartidas en la página
+    """
 
     template = "libros/prestar_libro_bcompartida.html"
 
@@ -451,7 +466,9 @@ def prestar_libro_bcompartida(request, id_libro_compartido):
 
 @login_required
 def marcar_no_disponible(request):
-    
+    """
+    Ajax view que procesa un libro disponible y la marca como no disponible"
+    """
     if request.is_ajax():
         id_libro_disponible = request.POST.get('id_libro_disp', '')
         tipo = request.POST.get('tipo', '')
@@ -476,9 +493,11 @@ def marcar_no_disponible(request):
 
 @login_required
 def marcar_disponible(request):
+    """
+    Ajax request, marca el libro como disponible
+    """
 
-    if request.is_ajax():
-        print "request ajax a marcar_disponible"
+    if request.is_ajax():        
 
         id_libro = request.POST.get('id_libro', '')
         tipo = request.POST.get('tipo', '')
@@ -506,7 +525,10 @@ def marcar_disponible(request):
 
 @login_required
 def marcar_devuelto(request):
-
+    """
+    Marca un libro no disponible como disponible 
+    Marca el objeto correspondiente al libro prestado como devuelto y guarda la fecha
+    """
     if request.is_ajax():
         id_libro_prestado = request.POST.get('id_libro', '')
         tipo = request.POST.get('tipo', '')
@@ -543,6 +565,10 @@ def marcar_devuelto(request):
 
 @login_required
 def anunciar_devolucion(request):
+    """
+    Sirve para enviar un mail al dueño del libro cuando el que recibió el libro_id
+    ya lo devolvió. 
+    """
 
     if request.method == "POST":
         id_libro_prestado = request.POST.get("id_libro_prestado")
@@ -555,8 +581,6 @@ def anunciar_devolucion(request):
             libro_prestado.receptor_anuncio_devolucion = True
             libro_prestado.save()
 
-            print libro_prestado.perfil_dueno.usuario
-            print "email usuario: %s" % (libro_prestado.perfil_dueno.usuario.email)
             if libro_prestado.perfil_dueno.usuario.email:
                 print "enviar mail devolucion"
                 mail_anunciar_devolucion(libro_prestado)
@@ -568,7 +592,9 @@ def anunciar_devolucion(request):
 
 @login_required
 def cancelar_pedido(request):
-
+    """
+    Cancela un pedido de préstamo de un libro
+    """
     if request.method == "POST":
         request_id = request.POST.get("request_id", "")
         perfil_usuario = obtener_perfil(request.user)
@@ -585,45 +611,10 @@ def cancelar_pedido(request):
         raise PermissionDenied
 
 
-# Para el search de temas
-def normalize_query(query_string,
-                    findterms=re.compile(r'"([^"]+)"|(\S+)').findall,
-                    normspace=re.compile(r'\s{2,}').sub):
-    ''' Splits the query string in invidual keywords, getting rid of unecessary spaces
-        and grouping quoted words together.
-        Example:
-
-        >>> normalize_query('  some random  words "with   quotes  " and   spaces')
-        ['some', 'random', 'words', 'with quotes', 'and', 'spaces']
-
-    '''
-    return [normspace(' ', (t[0] or t[1]).strip()) for t in findterms(query_string)]
-
-
-# Para el search de temas
-def get_query(query_string, search_fields):
-    ''' Returns a query, that is a combination of Q objects. That combination
-        aims to search keywords within a model by testing the given search fields.
-
-    '''
-    query = None  # Query to search for every search term
-    terms = normalize_query(query_string)
-    for term in terms:
-        or_query = None  # Query to search for a given term in each field
-        for field_name in search_fields:
-            q = Q(**{"%s__icontains" % field_name: term})
-            if or_query is None:
-                or_query = q
-            else:
-                or_query = or_query | q
-        if query is None:
-            query = or_query
-        else:
-            query = query & or_query
-    return query
-
-
 def buscar(request, slug_ciudad, filtro):
+    """
+    busca un libro disponible
+    """
     template = 'libros/busqueda.html'
     
     query_string = ""
@@ -633,9 +624,9 @@ def buscar(request, slug_ciudad, filtro):
         query_string = request.GET['q']
         if query_string:
             if filtro == "autor":
-                libros_disponibles = LibrosDisponibles.objects.filter(libro__autor__icontains=query_string)
+                libros_disponibles = LibrosDisponibles.objects.filter(libro__autor__icontains=query_string, disponible=True)
             else:
-                libros_disponibles = LibrosDisponibles.objects.filter(libro__titulo__icontains=query_string)
+                libros_disponibles = LibrosDisponibles.objects.filter(libro__titulo__icontains=query_string, disponible=True)
 
         context = {'query_string': query_string,
                    'libros_disponibles': libros_disponibles,
@@ -648,6 +639,9 @@ def buscar(request, slug_ciudad, filtro):
 
 @login_required
 def cambiar_dueno_libros(request):
+    """
+    Acción para el admin, cambia el dueño de los libros seleccionados
+    """
     template = 'cambiar_dueno_libro.html'
 
     if not request.user.is_superuser:

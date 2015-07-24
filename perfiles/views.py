@@ -13,6 +13,9 @@ from redlibros.utils import obtener_perfil, obtener_historial_libros, obtener_av
 
 
 def registro(request):
+	"""
+	View no está en uso, registro de nuevo usuario
+	"""
 	template = "perfiles/registro.html"
 
 	if request.method == "POST":
@@ -33,6 +36,9 @@ def registro(request):
 
 @login_required
 def perfil_propio(request):
+	"""
+	Muestra el perfil del usuario que está hecho login
+	"""
 	template = "perfiles/perfil_propio.html"
 	perfil_usuario = obtener_perfil(request.user)
 	libros_perfil = {
@@ -74,6 +80,9 @@ def perfil_propio(request):
 
 
 def perfil_usuario(request, username):
+	"""
+	Muestra el perfil de un usuario tercero
+	"""
 	template = "perfiles/perfil_usuario.html"
 	libros_perfil = {'tiene_libros_prestados': False, 'tiene_libros_disponibles': False}
 
@@ -115,6 +124,9 @@ def logout_view(request):
 
 @login_required
 def editar_perfil(request):
+	"""
+	Procesa el view y el form para que el usuario edite su perfil
+	"""
 	template = "perfiles/editar_perfil.html"
 	perfil_usuario = obtener_perfil(request.user)
 
